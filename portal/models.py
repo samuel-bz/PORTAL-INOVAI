@@ -2,8 +2,8 @@ from django.db import models
 
 # Modelo de noticias
 class Noticia(models.Model):
-    image_banner = models.ImageField("Imagem de apresentação", upload_to=None)
-    image_content = models.ImageField("Imagem de conteudo", upload_to=None, blank=True, null=True)
+    banner_image = models.ImageField("Imagem de apresentação", upload_to=None)
+    content_image = models.ImageField("Imagem de conteudo", upload_to=None, blank=True, null=True)
     title = models.CharField("Titulo", max_length=100)
     subtitle = models.CharField("Subtítulo", max_length=100)
     content = models.TextField("Conteudo")

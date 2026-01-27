@@ -1,16 +1,19 @@
 from django.db import models
 
-# Create your models here.
-
 # Modelo de noticias
-class Noticias(models.Model):
-    image_Banner = models.ImageField(("Imagem de apresentação"), upload_to=None, blank=False, null=False)
-    image_content = models.ImageField(("Imagem de conteudo"), upload_to=None, blank=True, null=True)
-    title = models.CharField(("Titulo"), max_length=100, blank=False, null=False)
-    subtitle = models.CharField(("Subtitulo"), max_length=100, blank=False, null=False)
-    content = models.TextField(("Conteudo"), blank=False, null=False)
-    date_publish = models.DateField(("Data de publicação"), blank=False, null=False)
-    author = models.CharField(("Autor"), max_length=100, blank=False, null=False)
+class Noticia(models.Model):
+    image_banner = models.ImageField("Imagem de apresentação", upload_to=None)
+    image_content = models.ImageField("Imagem de conteudo", upload_to=None, blank=True, null=True)
+    title = models.CharField("Titulo", max_length=100)
+    subtitle = models.CharField("Subtítulo", max_length=100)
+    content = models.TextField("Conteudo")
+    publish_date = models.DateField("Data de publicação")
+    author = models.CharField("Autor", max_length=100)
 
+    class Meta:
+        verbose_name = "Notícia"
+        verbose_name_plural = "Notícias"
+        ordering = ('-publish_date')
+        
     def __str__(self):
         return self.title

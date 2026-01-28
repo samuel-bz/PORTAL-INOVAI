@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Inovaí - Mulheres na Ciência</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones do Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#0d6efd',
+                            dark: '#0a58ca',
+                        },
+                        mulheres: {
+                            purple: '#6a0080', // Roxo mais escuro para melhor contraste de texto
+                            primary: '#8803A3', // Roxo original da marca
+                            pink: '#F2B9FE',
+                            dark: '#2e0836', // Roxo muito escuro para fundos/texto
+                            light: '#ffffff', // Branco puro para melhor contraste
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out',
+                        'fade-in': 'fadeIn 1s ease-out',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+        }
+        /* Barra de Rolagem Personalizada */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8803A3; /* Polegar roxo para esta página */
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6a0080; 
+        }
+        
+        /* Forçar estilos do Tema Mulheres */
+        body {
+            --tw-bg-opacity: 1;
+            background-color: rgb(253 250 250 / var(--tw-bg-opacity)); /* mulheres-light */
+            color: #4a0258;
+        }
+        .dark body {
+            background-color: #2e0836;
+            color: #F2B9FE;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-mulheres-light text-mulheres-dark dark:bg-[#2e0836] dark:text-mulheres-pink transition-colors duration-300 font-sans flex flex-col min-h-screen">
+
+    <!-- Barra de Navegação (Tema Mulheres) -->
+    <nav id="navbar"
+        class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent text-white border-b border-white/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <a href="index.html" class="flex items-center gap-3">
+                        <img src="logo_2021.png" alt="Portal Inovaí Logo"
+                            class="h-16 w-auto transition-all duration-300">
+                        <img src="logoinovai.png" alt="Portal Inovaí Text"
+                            class="h-16 w-auto transition-all duration-300">
+                    </a>
+                </div>
+
+                <!-- Menu Desktop -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html"
+                        class="text-white hover:text-mulheres-pink font-medium transition border-b-2 border-transparent">Início</a>
+                    <a href="#" class="text-white font-extrabold border-b-2 border-mulheres-pink">Mulheres</a>
+                    <a href="#"
+                        class="text-white hover:text-mulheres-pink font-medium transition border-b-2 border-transparent">Projetos</a>
+
+                    <div class="flex items-center gap-3 border-l pl-6 border-mulheres-pink/30">
+                        <!-- Botão de Alternância do Modo Escuro -->
+                        <button id="darkModeBtn"
+                            class="w-10 h-10 rounded-full border border-mulheres-pink/30 flex items-center justify-center text-mulheres-pink hover:bg-white/10 transition"
+                            title="Alternar Modo Escuro">
+                            <i class="bi bi-moon-fill"></i>
+                        </button>
+
+                        <!-- Link de Voltar -->
+                        <a href="index.html"
+                            class="bg-brand-blue hover:bg-blue-700 text-white px-5 py-2 rounded-full font-bold transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                            Voltar ao Portal
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Botão do Menu Móvel -->
+                <div class="md:hidden flex items-center gap-4">
+                    <button id="mobileMenuBtn" class="text-mulheres-pink hover:text-white focus:outline-none">
+                        <i class="bi bi-list text-3xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Painel do Menu Móvel -->
+        <div id="mobileMenu"
+            class="hidden md:hidden bg-mulheres-dark dark:bg-[#1a021f] border-t border-mulheres-pink/10 pb-4">
+            <div class="px-4 pt-2 pb-3 space-y-1">
+                <a href="index.html"
+                    class="block px-3 py-2 text-mulheres-pink hover:bg-white/20 rounded-md font-medium">Início</a>
+                <a href="#" class="block px-3 py-2 font-bold bg-white/10 text-white rounded-md">Mulheres
+                    na Ciência</a>
+                <a href="#"
+                    class="block px-3 py-2 text-mulheres-pink hover:bg-white/20 rounded-md font-medium">Projetos</a>
+
+                <div class="mt-4 flex flex-col gap-3 px-3">
+                    <button id="darkModeMobileBtn"
+                        class="flex items-center justify-center gap-2 w-full py-2 border border-mulheres-pink/30 rounded-lg text-mulheres-pink font-medium">
+                        <i class="bi bi-moon-fill"></i> Alternar Modo Escuro
+                    </button>
+                    <a href="index.html" class="w-full text-center bg-brand-blue text-white py-2 rounded-lg font-bold">
+                        Voltar ao Portal
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo (Principal) -->
+    <div class="relative w-full h-[500px] overflow-hidden group bg-mulheres-dark">
+        <!-- Interior do Carrossel -->
+        <div id="carouselWrapper" class="flex transition-transform duration-700 ease-in-out h-full">
+            <!-- Slide 1 -->
+            <div class="min-w-full h-full relative">
+                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1600"
+                    class="w-full h-full object-cover opacity-60" alt="Mulheres Tech">
+                <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
+                    <div class="max-w-2xl text-white animate-fade-in-up">
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Mulheres na Computação</h2>
+                        <p class="text-xl md:text-2xl mb-6 text-gray-100 font-medium text-shadow">Incentivando a
+                            presença feminina no setor de
+                            tecnologia da informação.</p>
+                        <a href="#"
+                            class="bg-mulheres-primary hover:bg-mulheres-purple text-white px-8 py-3 rounded-lg font-bold text-lg transition shadow-lg border border-white/20">Nossos
+                            Projetos</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="min-w-full h-full relative">
+                <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&q=80&w=1600"
+                    class="w-full h-full object-cover opacity-60" alt="Liderança">
+                <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
+                    <div class="max-w-2xl text-white">
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Liderança e Gestão</h2>
+                        <p class="text-xl md:text-2xl mb-6 text-gray-100 font-medium text-shadow">Formando as líderes do
+                            futuro para a inovação.
+                        </p>
+                        <a href="#"
+                            class="bg-white text-mulheres-primary hover:bg-gray-100 px-8 py-3 rounded-lg font-bold text-lg transition shadow-lg">Workshops</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 3 -->
+            <div class="min-w-full h-full relative">
+                <img src="https://images.unsplash.com/photo-1623912111329-3735c05c6d3d?auto=format&fit=crop&q=80&w=1600"
+                    class="w-full h-full object-cover opacity-60" alt="Pesquisa">
+                <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
+                    <div class="max-w-2xl text-white">
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Pesquisa de Ponta</h2>
+                        <p class="text-xl md:text-2xl mb-6 text-gray-100 font-medium text-shadow">Resultados impactantes
+                            gerados por nossas
+                            pesquisadoras.</p>
+                        <a href="#"
+                            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-bold text-lg transition shadow-lg">Publicações</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles -->
+        <button id="prevBtn"
+            class="absolute top-1/2 left-4 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 focus:opacity-100">
+            <i class="bi bi-chevron-left text-2xl"></i>
+        </button>
+        <button id="nextBtn"
+            class="absolute top-1/2 right-4 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 focus:opacity-100">
+            <i class="bi bi-chevron-right text-2xl"></i>
+        </button>
+
+        <!-- Indicadores -->
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3">
+            <button class="w-3 h-3 rounded-full bg-white opacity-100 indicator" data-slide="0"></button>
+            <button class="w-3 h-3 rounded-full bg-white opacity-50 indicator" data-slide="1"></button>
+            <button class="w-3 h-3 rounded-full bg-white opacity-50 indicator" data-slide="2"></button>
+        </div>
+    </div>
+
+    <!-- Seção de Notícias -->
+    <main class="flex-grow container mx-auto px-4 py-16">
+        <div class="flex items-center gap-4 mb-10">
+            <h2 class="text-3xl font-bold text-mulheres-purple dark:text-mulheres-pink">Destaques Femininos</h2>
+            <div class="h-1 flex-grow bg-mulheres-pink rounded-full opacity-50">
+                <div class="h-full w-24 bg-mulheres-purple dark:bg-mulheres-pink"></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cartão 1 -->
+            <div
+                class="group bg-white dark:bg-[#3e1247] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-mulheres-pink/40">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        alt="News">
+                    <div
+                        class="absolute top-4 right-4 bg-mulheres-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        Prêmio</div>
+                </div>
+                <div class="p-6">
+                    <h5
+                        class="text-xl font-bold mb-3 text-purple-900 dark:text-mulheres-pink group-hover:text-mulheres-primary transition-colors">
+                        Prêmio Ada Lovelace</h5>
+                    <p class="text-mulheres-dark/80 dark:text-mulheres-pink/80 mb-4 line-clamp-3">Inscrições abertas
+                        para o prêmio que reconhece programadoras de destaque na região.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-mulheres-purple dark:text-mulheres-pink font-semibold hover:underline">
+                        Ler edital <i class="bi bi-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cartão 2 -->
+            <div
+                class="group bg-white dark:bg-[#3e1247] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-mulheres-pink/40">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=800"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        alt="News">
+                </div>
+                <div class="p-6">
+                    <h5
+                        class="text-xl font-bold mb-3 text-purple-900 dark:text-mulheres-pink group-hover:text-mulheres-primary transition-colors">
+                        Entrevista: Dra. Julia Silva</h5>
+                    <p class="text-mulheres-dark/80 dark:text-mulheres-pink/80 mb-4 line-clamp-3">Confira a trajetória
+                        inspiradora da pesquisadora chefe do laboratório de IA.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-mulheres-primary dark:text-mulheres-pink font-semibold hover:underline">
+                        Ler entrevista <i class="bi bi-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cartão 3 -->
+            <div
+                class="group bg-white dark:bg-[#3e1247] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-mulheres-pink/40">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        alt="News">
+                    <div
+                        class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        Oportunidade</div>
+                </div>
+                <div class="p-6">
+                    <h5
+                        class="text-xl font-bold mb-3 text-purple-900 dark:text-mulheres-pink group-hover:text-mulheres-primary transition-colors">
+                        Mentoria para Meninas</h5>
+                    <p class="text-mulheres-dark/80 dark:text-mulheres-pink/80 mb-4 line-clamp-3">Novo programa conecta
+                        estudantes do ensino médio a cientistas da universidade.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-mulheres-primary dark:text-mulheres-pink font-semibold hover:underline">
+                        Saiba como participar <i class="bi bi-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-mulheres-dark dark:bg-[#1a021f] text-mulheres-pink py-12 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h5 class="text-white text-lg font-bold mb-4">Portal Inovaí - Mulheres</h5>
+                    <p class="text-sm opacity-80 leading-relaxed">Fortalecendo a presença feminina na ciência,
+                        tecnologia e inovação para um futuro mais igualitário.</p>
+                </div>
+                <div>
+                    <h5 class="text-white text-lg font-bold mb-4">Links Rápidos</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="hover:text-white transition">Portal Principal</a></li>
+                        <li><a href="#" class="hover:text-white transition">Comitê de Diversidade</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contato</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white text-lg font-bold mb-4">Contato</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-2"><i class="bi bi-envelope"></i> mulheres@portalinovai.com.br
+                        </li>
+                        <li class="flex items-center gap-2"><i class="bi bi-geo-alt"></i> Itajubá, MG</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-mulheres-pink/20 mt-10 pt-6 text-center text-xs opacity-70">
+                &copy; 2026 Portal Inovaí. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts (Mesma lógica) -->
+    <script>
+        // --- Lógica do Modo Escuro ---
+        const darkModeBtn = document.getElementById('darkModeBtn');
+        const darkModeMobileBtn = document.getElementById('darkModeMobileBtn');
+        const html = document.documentElement;
+
+        function toggleDarkMode() {
+            html.classList.toggle('dark');
+            updateIcons();
+        }
+        function updateIcons() {
+            const isDark = html.classList.contains('dark');
+            const iconClass = isDark ? 'bi-sun-fill' : 'bi-moon-fill';
+            if (darkModeBtn) {
+                const icon = darkModeBtn.querySelector('i');
+                icon.className = `bi ${iconClass}`;
+                darkModeBtn.title = isDark ? "Modo Claro" : "Modo Escuro";
+            }
+            if (darkModeMobileBtn) {
+                const icon = darkModeMobileBtn.querySelector('i');
+                icon.className = `bi ${iconClass}`;
+            }
+        }
+        if (darkModeBtn) darkModeBtn.addEventListener('click', toggleDarkMode);
+        if (darkModeMobileBtn) darkModeMobileBtn.addEventListener('click', toggleDarkMode);
+
+        // --- Menu Móvel ---
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // --- Lógica do Carrossel (Compartilhada) ---
+        const carouselWrapper = document.getElementById('carouselWrapper');
+        const slides = carouselWrapper.children;
+        const totalSlides = slides.length;
+        let currentSlide = 0;
+        let autoSlideInterval;
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicators = document.querySelectorAll('.indicator');
+
+        function updateCarousel() {
+            const offset = currentSlide * -100;
+            carouselWrapper.style.transform = `translateX(${offset}%)`;
+            indicators.forEach((ind, index) => {
+                if (index === currentSlide) {
+                    ind.style.opacity = '1';
+                    ind.classList.add('w-6');
+                } else {
+                    ind.style.opacity = '0.5';
+                    ind.classList.remove('w-6');
+                }
+            });
+        }
+        function nextSlide() { currentSlide = (currentSlide + 1) % totalSlides; updateCarousel(); }
+        function prevSlide() { currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; updateCarousel(); }
+        if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); resetAutoSlide(); });
+        if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetAutoSlide(); });
+        indicators.forEach((ind, index) => {
+            ind.addEventListener('click', () => {
+                currentSlide = index;
+                updateCarousel();
+                resetAutoSlide();
+            });
+        });
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = setInterval(nextSlide, 5000);
+        }
+        // Iniciar Slide Automático
+        resetAutoSlide();
+
+        // --- Lógica de Rolagem da Navbar ---
+        const navbar = document.getElementById('navbar');
+        const navLinks = navbar.querySelectorAll('div.hidden.md\\:flex > a');
+        const logoImgs = navbar.querySelectorAll('.flex-shrink-0 img');
+        // darkModeBtn is already defined globally
+
+        function updateNavbar() {
+            if (window.scrollY > 20) {
+                // Estado Rolado (Sólido)
+                navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
+                navbar.classList.add('bg-mulheres-dark', 'dark:bg-[#1a021f]', 'shadow-md');
+
+                // Filtro de Logo (Redefinir)
+                logoImgs.forEach(img => img.style.filter = 'none');
+
+                // Cor do Botão de Modo Escuro
+                if (darkModeBtn) {
+                    darkModeBtn.classList.remove('text-white', 'border-white/20');
+                    darkModeBtn.classList.add('text-mulheres-pink', 'border-mulheres-pink/30'); // Reverter para cores originais
+                }
+
+                // Cor dos links - Manter como está (branco/rosa) ou reverter para cores específicas do tema?
+                navLinks.forEach(link => {
+                    if (!link.classList.contains('border-mulheres-pink')) {
+                        link.classList.remove('text-white');
+                        link.classList.add('text-mulheres-pink/90');
+                    }
+                });
+
+            } else {
+                // Estado Superior (Transparente)
+                navbar.classList.add('bg-transparent', 'text-white', 'border-white/20');
+                navbar.classList.remove('bg-mulheres-dark', 'dark:bg-[#1a021f]', 'shadow-md');
+
+                // Filtro de Logo (Branco)
+                logoImgs.forEach(img => img.style.filter = 'brightness(0) invert(1)');
+
+                // Cor do Botão de Modo Escuro
+                if (darkModeBtn) {
+                    darkModeBtn.classList.add('text-white', 'border-white/20');
+                    darkModeBtn.classList.remove('text-mulheres-pink', 'border-mulheres-pink/30');
+                }
+
+                // Cor dos links
+                navLinks.forEach(link => {
+                    if (!link.classList.contains('border-mulheres-pink')) {
+                        link.classList.add('text-white');
+                        link.classList.remove('text-mulheres-pink/90');
+                    }
+                });
+            }
+        }
+
+        window.addEventListener('scroll', updateNavbar);
+        updateNavbar(); // Verificação Inicial
+    </script>
+</body>
+
+</html>

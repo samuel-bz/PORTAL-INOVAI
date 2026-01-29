@@ -18,11 +18,11 @@
             <div class="hidden md:flex items-center space-x-8">
                 <a href="{% url 'portal:index' %}" id="nav-active"
                     class="text-white font-semibold dark:text-blue-400 border-b-2 border-white">Início</a>
-                <a href="#"
+                <a href="{% url 'portal:noticias' %}"
                     class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Notícias</a>
-                <a href="#"
+                <a href="{% url 'portal:projetos' %}"
                     class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Projetos</a>
-                <a href="#" class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Sobre</a>
+                <a href="{% url 'portal:about' %}" class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Sobre</a>
 
                 <div class="flex items-center gap-3 border-l pl-6 border-gray-300 dark:border-gray-600">
                     <!-- Botão de Alternância do Modo Escuro -->
@@ -57,11 +57,11 @@
         <div class="px-4 pt-2 pb-3 space-y-1">
             <a href="{% url 'portal:index' %}"
                 class="block px-3 py-2 text-brand-blue font-semibold rounded-md bg-blue-50 dark:bg-gray-700 dark:text-blue-400">Início</a>
-            <a href="#"
+            <a href="{% url 'portal:noticias' %}"
                 class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Notícias</a>
-            <a href="#"
+            <a href="{% url 'portal:projetos' %}"
                 class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Projetos</a>
-            <a href="#"
+            <a href="{% url 'portal:about' %}"
                 class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Sobre</a>
 
             <div class="mt-4 flex flex-col gap-3 px-3">

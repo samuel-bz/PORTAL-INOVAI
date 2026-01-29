@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}Sobre | Portal Inovaí{% endblock %}
+
+{% block navbar_scroll_logic %}
+const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
+const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
+const activeHref = '{% url "portal:about" %}';
+const mobileLinks = document.querySelectorAll('#mobileMenu a');
+function updateNavbar() {
+    if (!navbar) return;
+    navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
+    navbar.classList.add('bg-white', 'dark:bg-gray-800', 'shadow-md');
+    logoImgs.forEach(img => img.style.filter = 'none');
+    if (darkModeBtn) {
+        darkModeBtn.classList.remove('text-white', 'border-white/20');
+        darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+    }
+    navLinks.forEach(link => {
+        link.classList.remove('text-white', 'text-brand-blue', 'border-white', 'border-brand-blue', 'border-transparent');
+        link.classList.add('text-gray-600', 'dark:text-gray-300');
+        if (link.getAttribute('href') === activeHref) {
+            link.classList.remove('text-gray-600', 'dark:text-gray-300');
+            link.classList.add('text-brand-blue', 'dark:text-blue-400', 'border-b-2', 'border-brand-blue');
+        }
+    });
+    mobileLinks.forEach(link => {
+        link.classList.remove('text-brand-blue', 'font-semibold', 'bg-blue-50', 'dark:bg-gray-700', 'dark:text-blue-400');
+        link.classList.add('text-gray-600', 'hover:text-brand-blue', 'hover:bg-gray-50', 'dark:text-gray-300', 'dark:hover:bg-gray-700', 'rounded-md');
+        if (link.getAttribute('href') === activeHref) {
+            link.classList.remove('text-gray-600', 'hover:text-brand-blue', 'hover:bg-gray-50', 'dark:text-gray-300', 'dark:hover:bg-gray-700');
+            link.classList.add('text-brand-blue', 'font-semibold', 'bg-blue-50', 'dark:bg-gray-700', 'dark:text-blue-400');
+        }
+    });
+}
+window.addEventListener('scroll', updateNavbar);
+updateNavbar();
+{% endblock %}
+
+{% block content %}
+<!-- Hero / Banner da página -->
+<div class="relative w-full h-64 md:h-80 overflow-hidden bg-gray-900 mt-20">
+    <img src="https://i.postimg.cc/W3yhjShr/Whats-App-Image-2026-01-29-at-15-23-43.jpg"
+        class="w-full h-full object-cover opacity-50" alt="">
+    <div class="absolute inset-0 flex items-center justify-center">
+        <div class="text-center text-white">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2 text-shadow">Projeto Inovaí</h1>
+            <p class="text-lg md:text-xl text-gray-200">Saiba mais sobre o projeto da Prefeitura Municipal de Piraí</p>
+        </div>
+    </div>
+</div>
+
+<main class="flex-grow container mx-auto px-4 py-16">
+    <!-- Seção: Quem somos -->
+    <section class="mb-20">
+        <div class="flex items-center gap-4 mb-8">
+            <h2 class="text-3xl font-bold text-brand-blue dark:text-blue-400">Equipe</h2>
+            <div class="h-1 flex-grow bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full w-24 bg-brand-blue dark:bg-blue-400"></div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <img src="https://i.postimg.cc/d0KRcszw/Whats-App-Image-2026-01-29-at-15-23-432.jpg"
+                    class="w-full h-64 object-cover" alt="">
+            </div>
+            <div>
+                <p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-4">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+                <p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Valores -->
+    <section class="mb-20">
+        <div class="flex items-center gap-4 mb-10">
+            <div class="h-1 flex-grow min-w-0 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full w-24 bg-brand-blue dark:bg-blue-400 ml-auto"></div>
+            </div>
+            <h2 class="text-3xl font-bold text-brand-blue dark:text-blue-400 flex-shrink-0">Nossos valores</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 text-center hover:-translate-y-1 transition-transform">
+                <i class="bi bi-lightning-charge-fill text-3xl text-brand-blue dark:text-blue-400 mb-3"></i>
+                <h3 class="font-bold text-gray-800 dark:text-white mb-2">Inovação</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 text-center hover:-translate-y-1 transition-transform">
+                <i class="bi bi-people-fill text-3xl text-brand-blue dark:text-blue-400 mb-3"></i>
+                <h3 class="font-bold text-gray-800 dark:text-white mb-2">Colaboração</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 text-center hover:-translate-y-1 transition-transform">
+                <i class="bi bi-award-fill text-3xl text-brand-blue dark:text-blue-400 mb-3"></i>
+                <h3 class="font-bold text-gray-800 dark:text-white mb-2">Excelência</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Ut enim ad minim veniam, quis nostrud exercitation.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 text-center hover:-translate-y-1 transition-transform">
+                <i class="bi bi-shield-check text-3xl text-brand-blue dark:text-blue-400 mb-3"></i>
+                <h3 class="font-bold text-gray-800 dark:text-white mb-2">Integridade</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Duis aute irure dolor in reprehenderit in voluptate.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Números / Destaques (placeholder) -->
+    <section class="mb-20">
+        <div class="flex items-center gap-4 mb-10">
+            <h2 class="text-3xl font-bold text-brand-blue dark:text-blue-400">Números que nos orgulham</h2>
+            <div class="h-1 flex-grow bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full w-24 bg-brand-blue dark:bg-blue-400"></div>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 text-center">
+                <span class="block text-3xl md:text-4xl font-bold text-brand-blue dark:text-blue-400">Lorem</span>
+                <span class="text-sm text-gray-600 dark:text-gray-300 mt-1 block">Lorem ipsum</span>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 text-center">
+                <span class="block text-3xl md:text-4xl font-bold text-brand-blue dark:text-blue-400">Ipsum</span>
+                <span class="text-sm text-gray-600 dark:text-gray-300 mt-1 block">Dolor sit amet</span>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 text-center">
+                <span class="block text-3xl md:text-4xl font-bold text-brand-blue dark:text-blue-400">Dolor</span>
+                <span class="text-sm text-gray-600 dark:text-gray-300 mt-1 block">Consectetur</span>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 text-center">
+                <span class="block text-3xl md:text-4xl font-bold text-brand-blue dark:text-blue-400">Sit</span>
+                <span class="text-sm text-gray-600 dark:text-gray-300 mt-1 block">Adipiscing elit</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção: Contato / CTA -->
+    <section>
+        <div class="bg-brand-blue dark:bg-blue-900/40 rounded-2xl shadow-lg border border-brand-blue/20 dark:border-blue-700 p-8 md:p-12 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold text-white dark:text-white mb-4">Lorem ipsum dolor sit amet?</h2>
+            <p class="text-white/90 dark:text-gray-200 mb-6 max-w-2xl mx-auto">
+                Consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+            </p>
+            <a href="#"
+                class="inline-flex items-center bg-white text-brand-blue hover:bg-gray-100 px-8 py-3 rounded-full font-bold transition shadow-lg">
+                Entre em contato <i class="bi bi-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+</main>
+{% endblock %}

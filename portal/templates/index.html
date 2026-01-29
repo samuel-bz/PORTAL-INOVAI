@@ -1,13 +1,15 @@
+{% load static%}
+
 <!DOCTYPE html>
 <html lang="pt-br" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Inovaí - Mulheres na Ciência</title>
+    <title>Portal Inovaí</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Ícones do Bootstrap -->
+    <!-- Ícones do Bootstrap (Mantendo para simplicidade) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Google Fonts: Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,11 +30,8 @@
                             dark: '#0a58ca',
                         },
                         mulheres: {
-                            purple: '#6a0080', // Roxo mais escuro para melhor contraste de texto
-                            primary: '#8803A3', // Roxo original da marca
+                            purple: '#8803A3',
                             pink: '#F2B9FE',
-                            dark: '#2e0836', // Roxo muito escuro para fundos/texto
-                            light: '#ffffff', // Branco puro para melhor contraste
                         }
                     },
                     animation: {
@@ -67,30 +66,25 @@
             background: #f1f1f1; 
         }
         ::-webkit-scrollbar-thumb {
-            background: #8803A3; /* Polegar roxo para esta página */
+            background: #888; 
             border-radius: 5px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #6a0080; 
+            background: #555; 
         }
-        
-        /* Forçar estilos do Tema Mulheres */
-        body {
-            --tw-bg-opacity: 1;
-            background-color: rgb(253 250 250 / var(--tw-bg-opacity)); /* mulheres-light */
-            color: #4a0258;
+        .dark ::-webkit-scrollbar-track {
+            background: #2d3748; 
         }
-        .dark body {
-            background-color: #2e0836;
-            color: #F2B9FE;
+        .dark ::-webkit-scrollbar-thumb {
+            background: #4a5568; 
         }
     </style>
 </head>
 
 <body
-    class="bg-mulheres-light text-mulheres-dark dark:bg-[#2e0836] dark:text-mulheres-pink transition-colors duration-300 font-sans flex flex-col min-h-screen">
+    class="bg-slate-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 font-sans flex flex-col min-h-screen">
 
-    <!-- Barra de Navegação (Tema Mulheres) -->
+    <!-- Barra de Navegação -->
     <nav id="navbar"
         class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent text-white border-b border-white/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -98,41 +92,45 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center gap-3">
                     <a href="index.html" class="flex items-center gap-3">
-                        <img src="logo_2021.png" alt="Portal Inovaí Logo"
+                        <img src="{% static '/images/logo_2021.png' %}" alt="Portal Inovaí Logo"
                             class="h-16 w-auto transition-all duration-300">
-                        <img src="logoinovai.png" alt="Portal Inovaí Text"
+                        <img src="{% static '/images/logoinovai.png' %}" alt="Portal Inovaí Text"
                             class="h-16 w-auto transition-all duration-300">
                     </a>
                 </div>
 
                 <!-- Menu Desktop -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html"
-                        class="text-white hover:text-mulheres-pink font-medium transition border-b-2 border-transparent">Início</a>
-                    <a href="#" class="text-white font-extrabold border-b-2 border-mulheres-pink">Mulheres</a>
+                    <a href="#" id="nav-active"
+                        class="text-white font-semibold dark:text-blue-400 border-b-2 border-white">Início</a>
                     <a href="#"
-                        class="text-white hover:text-mulheres-pink font-medium transition border-b-2 border-transparent">Projetos</a>
+                        class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Notícias</a>
+                    <a href="#"
+                        class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Projetos</a>
+                    <a href="#"
+                        class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Sobre</a>
 
-                    <div class="flex items-center gap-3 border-l pl-6 border-mulheres-pink/30">
+                    <div class="flex items-center gap-3 border-l pl-6 border-gray-300 dark:border-gray-600">
                         <!-- Botão de Alternância do Modo Escuro -->
                         <button id="darkModeBtn"
-                            class="w-10 h-10 rounded-full border border-mulheres-pink/30 flex items-center justify-center text-mulheres-pink hover:bg-white/10 transition"
+                            class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                             title="Alternar Modo Escuro">
                             <i class="bi bi-moon-fill"></i>
                         </button>
 
-                        <!-- Link de Voltar -->
-                        <a href="index.html"
-                            class="bg-brand-blue hover:bg-blue-700 text-white px-5 py-2 rounded-full font-bold transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
-                            <i class="bi bi-arrow-counterclockwise"></i>
-                            Voltar ao Portal
+                        <!-- Link da Página Mulheres -->
+                        <a href="{% url 'portal:mulheres' %}"
+                            class="bg-mulheres-purple hover:bg-purple-800 text-white px-5 py-2 rounded-full font-medium transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <i class="bi bi-stars"></i>
+                            Mulheres na Ciência
                         </a>
                     </div>
                 </div>
 
                 <!-- Botão do Menu Móvel -->
                 <div class="md:hidden flex items-center gap-4">
-                    <button id="mobileMenuBtn" class="text-mulheres-pink hover:text-white focus:outline-none">
+                    <button id="mobileMenuBtn"
+                        class="text-gray-600 dark:text-gray-300 hover:text-gray-900 focus:outline-none">
                         <i class="bi bi-list text-3xl"></i>
                     </button>
                 </div>
@@ -141,75 +139,77 @@
 
         <!-- Painel do Menu Móvel -->
         <div id="mobileMenu"
-            class="hidden md:hidden bg-mulheres-dark dark:bg-[#1a021f] border-t border-mulheres-pink/10 pb-4">
+            class="hidden md:hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 pb-4">
             <div class="px-4 pt-2 pb-3 space-y-1">
-                <a href="index.html"
-                    class="block px-3 py-2 text-mulheres-pink hover:bg-white/20 rounded-md font-medium">Início</a>
-                <a href="#" class="block px-3 py-2 font-bold bg-white/10 text-white rounded-md">Mulheres
-                    na Ciência</a>
                 <a href="#"
-                    class="block px-3 py-2 text-mulheres-pink hover:bg-white/20 rounded-md font-medium">Projetos</a>
+                    class="block px-3 py-2 text-brand-blue font-semibold rounded-md bg-blue-50 dark:bg-gray-700 dark:text-blue-400">Início</a>
+                <a href="#"
+                    class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Notícias</a>
+                <a href="#"
+                    class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Projetos</a>
+                <a href="#"
+                    class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Sobre</a>
 
                 <div class="mt-4 flex flex-col gap-3 px-3">
                     <button id="darkModeMobileBtn"
-                        class="flex items-center justify-center gap-2 w-full py-2 border border-mulheres-pink/30 rounded-lg text-mulheres-pink font-medium">
+                        class="flex items-center justify-center gap-2 w-full py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300">
                         <i class="bi bi-moon-fill"></i> Alternar Modo Escuro
                     </button>
-                    <a href="index.html" class="w-full text-center bg-brand-blue text-white py-2 rounded-lg font-bold">
-                        Voltar ao Portal
+                    <a href="mulheres.html"
+                        class="w-full text-center bg-mulheres-purple text-white py-2 rounded-lg font-medium">
+                        Mulheres na Ciência
                     </a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Conteúdo (Principal) -->
-    <div class="relative w-full h-[500px] overflow-hidden group bg-mulheres-dark">
+    <!-- Carrossel Principal -->
+    <div class="relative w-full h-[500px] overflow-hidden group bg-gray-900">
         <!-- Interior do Carrossel -->
         <div id="carouselWrapper" class="flex transition-transform duration-700 ease-in-out h-full">
             <!-- Slide 1 -->
             <div class="min-w-full h-full relative">
-                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1600"
-                    class="w-full h-full object-cover opacity-60" alt="Mulheres Tech">
+                <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=1600"
+                    class="w-full h-full object-cover opacity-60" alt="Tech">
                 <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
                     <div class="max-w-2xl text-white animate-fade-in-up">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Mulheres na Computação</h2>
-                        <p class="text-xl md:text-2xl mb-6 text-gray-100 font-medium text-shadow">Incentivando a
-                            presença feminina no setor de
-                            tecnologia da informação.</p>
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Inovação Tecnológica</h2>
+                        <p class="text-xl md:text-2xl mb-6 text-gray-200">Transformando Itajubá em um polo de referência
+                            mundial em tecnologia.</p>
                         <a href="#"
-                            class="bg-mulheres-primary hover:bg-mulheres-purple text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg border border-white/20">Nossos
-                            Projetos</a>
+                            class="bg-brand-blue hover:bg-brand-dark text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg hover:shadow-brand-blue/50">Saiba
+                            Mais</a>
                     </div>
                 </div>
             </div>
             <!-- Slide 2 -->
             <div class="min-w-full h-full relative">
-                <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&q=80&w=1600"
-                    class="w-full h-full object-cover opacity-60" alt="Liderança">
+                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1600"
+                    class="w-full h-full object-cover opacity-60" alt="Women">
                 <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
                     <div class="max-w-2xl text-white">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Liderança e Gestão</h2>
-                        <p class="text-xl md:text-2xl mb-6 text-gray-100 font-medium text-shadow">Formando as líderes do
-                            futuro para a inovação.
-                        </p>
-                        <a href="#"
-                            class="bg-white text-mulheres-primary hover:bg-gray-100 px-8 py-3 rounded-full font-bold text-lg transition shadow-lg">Workshops</a>
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Mulheres na Ciência</h2>
+                        <p class="text-xl md:text-2xl mb-6 text-gray-200">Impulsionando a equidade e o protagonismo
+                            feminino na pesquisa.</p>
+                        <a href="mulheres.html"
+                            class="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-full font-bold text-lg transition shadow-lg">Conheça
+                            o Projeto</a>
                     </div>
                 </div>
             </div>
             <!-- Slide 3 -->
             <div class="min-w-full h-full relative">
-                <img src="https://images.unsplash.com/photo-1623912111329-3735c05c6d3d?auto=format&fit=crop&q=80&w=1600"
-                    class="w-full h-full object-cover opacity-60" alt="Pesquisa">
+                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=1600"
+                    class="w-full h-full object-cover opacity-60" alt="Parcerias">
                 <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
                     <div class="max-w-2xl text-white">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Pesquisa de Ponta</h2>
-                        <p class="text-xl md:text-2xl mb-6 text-gray-100 font-medium text-shadow">Resultados impactantes
-                            gerados por nossas
-                            pesquisadoras.</p>
+                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Parcerias Estratégicas</h2>
+                        <p class="text-xl md:text-2xl mb-6 text-gray-200">União entre universidade, governo e empresas
+                            para o desenvolvimento.</p>
                         <a href="#"
-                            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg">Publicações</a>
+                            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg">Seja
+                            Parceiro</a>
                     </div>
                 </div>
             </div>
@@ -236,78 +236,78 @@
     <!-- Seção de Notícias -->
     <main class="flex-grow container mx-auto px-4 py-16">
         <div class="flex items-center gap-4 mb-10">
-            <h2 class="text-3xl font-bold text-mulheres-purple dark:text-mulheres-pink">Destaques Femininos</h2>
-            <div class="h-1 flex-grow bg-mulheres-pink rounded-full opacity-50">
-                <div class="h-full w-24 bg-mulheres-purple dark:bg-mulheres-pink"></div>
+            <h2 class="text-3xl font-bold text-brand-blue dark:text-blue-400">Últimas Notícias</h2>
+            <div class="h-1 flex-grow bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full w-24 bg-brand-blue dark:bg-blue-400"></div>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Cartão 1 -->
             <div
-                class="group bg-white dark:bg-[#3e1247] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-mulheres-pink/40">
+                class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
                 <div class="relative h-48 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc"
+                    <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31"
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         alt="News">
                     <div
-                        class="absolute top-4 right-4 bg-mulheres-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                        Prêmio</div>
+                        class="absolute top-4 right-4 bg-brand-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        Inovação</div>
                 </div>
                 <div class="p-6">
                     <h5
-                        class="text-xl font-bold mb-3 text-purple-900 dark:text-mulheres-pink group-hover:text-mulheres-primary transition-colors">
-                        Prêmio Ada Lovelace</h5>
-                    <p class="text-mulheres-dark/80 dark:text-mulheres-pink/80 mb-4 line-clamp-3">Inscrições abertas
-                        para o prêmio que reconhece programadoras de destaque na região.</p>
+                        class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
+                        Edital de Inovação Aberto</h5>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">Novas oportunidades de fomento para
+                        startups da região. Confira os prazos, mentorias disponíveis e requisitos para participação.</p>
                     <a href="#"
-                        class="inline-flex items-center text-mulheres-purple dark:text-mulheres-pink font-semibold hover:underline">
-                        Ler edital <i class="bi bi-arrow-right ml-2"></i>
+                        class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
+                        Ler mais <i class="bi bi-arrow-right ml-2"></i>
                     </a>
                 </div>
             </div>
 
             <!-- Cartão 2 -->
             <div
-                class="group bg-white dark:bg-[#3e1247] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-mulheres-pink/40">
+                class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
                 <div class="relative h-48 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=800"
+                    <img src="https://images.unsplash.com/photo-1562774053-701939374585"
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         alt="News">
                 </div>
                 <div class="p-6">
                     <h5
-                        class="text-xl font-bold mb-3 text-purple-900 dark:text-mulheres-pink group-hover:text-mulheres-primary transition-colors">
-                        Entrevista: Dra. Julia Silva</h5>
-                    <p class="text-mulheres-dark/80 dark:text-mulheres-pink/80 mb-4 line-clamp-3">Confira a trajetória
-                        inspiradora da pesquisadora chefe do laboratório de IA.</p>
+                        class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
+                        Workshop de Robótica</h5>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">Evento reuniu estudantes e
+                        pesquisadores para discutir o futuro da automação industrial e robótica colaborativa.</p>
                     <a href="#"
-                        class="inline-flex items-center text-mulheres-primary dark:text-mulheres-pink font-semibold hover:underline">
-                        Ler entrevista <i class="bi bi-arrow-right ml-2"></i>
+                        class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
+                        Ler mais <i class="bi bi-arrow-right ml-2"></i>
                     </a>
                 </div>
             </div>
 
             <!-- Cartão 3 -->
             <div
-                class="group bg-white dark:bg-[#3e1247] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-mulheres-pink/40">
+                class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
                 <div class="relative h-48 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800"
+                    <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc"
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         alt="News">
                     <div
-                        class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                        Oportunidade</div>
+                        class="absolute top-4 right-4 bg-mulheres-purple text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        Destaque</div>
                 </div>
                 <div class="p-6">
                     <h5
-                        class="text-xl font-bold mb-3 text-purple-900 dark:text-mulheres-pink group-hover:text-mulheres-primary transition-colors">
-                        Mentoria para Meninas</h5>
-                    <p class="text-mulheres-dark/80 dark:text-mulheres-pink/80 mb-4 line-clamp-3">Novo programa conecta
-                        estudantes do ensino médio a cientistas da universidade.</p>
+                        class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
+                        Premiação "Mulheres que Inspiram"</h5>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">Cerimônia de premiação para cientistas
+                        que se destacaram no último ano por suas contribuições acadêmicas e sociais.</p>
                     <a href="#"
-                        class="inline-flex items-center text-mulheres-primary dark:text-mulheres-pink font-semibold hover:underline">
-                        Saiba como participar <i class="bi bi-arrow-right ml-2"></i>
+                        class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
+                        Ler mais <i class="bi bi-arrow-right ml-2"></i>
                     </a>
                 </div>
             </div>
@@ -315,38 +315,39 @@
     </main>
 
     <!-- Rodapé -->
-    <footer class="bg-mulheres-dark dark:bg-[#1a021f] text-mulheres-pink py-12 mt-auto">
+    <footer class="bg-gray-800 dark:bg-gray-950 text-gray-300 py-12 mt-auto">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                    <h5 class="text-white text-lg font-bold mb-4">Portal Inovaí - Mulheres</h5>
-                    <p class="text-sm opacity-80 leading-relaxed">Fortalecendo a presença feminina na ciência,
-                        tecnologia e inovação para um futuro mais igualitário.</p>
+                    <h5 class="text-white text-lg font-bold mb-4">Portal Inovaí</h5>
+                    <p class="text-sm opacity-80 leading-relaxed">Conectando inovação, tecnologia e pessoas para
+                        transformar o futuro da nossa sociedade através do conhecimento.</p>
                 </div>
                 <div>
                     <h5 class="text-white text-lg font-bold mb-4">Links Rápidos</h5>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="index.html" class="hover:text-white transition">Portal Principal</a></li>
-                        <li><a href="#" class="hover:text-white transition">Comitê de Diversidade</a></li>
-                        <li><a href="#" class="hover:text-white transition">Contato</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition">Sobre Nós</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition">Parceiros</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition">Contato</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition">Política de Privacidade</a></li>
                     </ul>
                 </div>
                 <div>
                     <h5 class="text-white text-lg font-bold mb-4">Contato</h5>
                     <ul class="space-y-3 text-sm">
-                        <li class="flex items-center gap-2"><i class="bi bi-envelope"></i> mulheres@portalinovai.com.br
+                        <li class="flex items-center gap-2"><i class="bi bi-envelope"></i> contato@portalinovai.com.br
                         </li>
-                        <li class="flex items-center gap-2"><i class="bi bi-geo-alt"></i> Itajubá, MG</li>
+                        <li class="flex items-center gap-2"><i class="bi bi-geo-alt"></i> Itajubá, MG - Brasil</li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-mulheres-pink/20 mt-10 pt-6 text-center text-xs opacity-70">
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-xs text-gray-500">
                 &copy; 2026 Portal Inovaí. Todos os direitos reservados.
             </div>
         </div>
     </footer>
 
-    <!-- Scripts (Mesma lógica) -->
+    <!-- Scripts para Interatividade -->
     <script>
         // --- Lógica do Modo Escuro ---
         const darkModeBtn = document.getElementById('darkModeBtn');
@@ -357,32 +358,39 @@
             html.classList.toggle('dark');
             updateIcons();
         }
+
         function updateIcons() {
             const isDark = html.classList.contains('dark');
             const iconClass = isDark ? 'bi-sun-fill' : 'bi-moon-fill';
+
+            // Atualizar Ícone Desktop
             if (darkModeBtn) {
                 const icon = darkModeBtn.querySelector('i');
                 icon.className = `bi ${iconClass}`;
                 darkModeBtn.title = isDark ? "Modo Claro" : "Modo Escuro";
             }
+
+            // Atualizar Ícone Móvel
             if (darkModeMobileBtn) {
                 const icon = darkModeMobileBtn.querySelector('i');
                 icon.className = `bi ${iconClass}`;
             }
         }
+
         if (darkModeBtn) darkModeBtn.addEventListener('click', toggleDarkMode);
         if (darkModeMobileBtn) darkModeMobileBtn.addEventListener('click', toggleDarkMode);
 
-        // --- Menu Móvel ---
+        // --- Lógica do Menu Móvel ---
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
+
         if (mobileMenuBtn && mobileMenu) {
             mobileMenuBtn.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
             });
         }
 
-        // --- Lógica do Carrossel (Compartilhada) ---
+        // --- Lógica do Carrossel (JS Puro) ---
         const carouselWrapper = document.getElementById('carouselWrapper');
         const slides = carouselWrapper.children;
         const totalSlides = slides.length;
@@ -396,20 +404,41 @@
         function updateCarousel() {
             const offset = currentSlide * -100;
             carouselWrapper.style.transform = `translateX(${offset}%)`;
+
+            // Atualizar indicadores
             indicators.forEach((ind, index) => {
                 if (index === currentSlide) {
                     ind.style.opacity = '1';
-                    ind.classList.add('w-6');
+                    ind.classList.add('w-6'); // Esticar indicador ativo
                 } else {
                     ind.style.opacity = '0.5';
                     ind.classList.remove('w-6');
                 }
             });
+
+            // Reativar animação para texto se necessário (Opcional, mais simples deixar o CSS lidar com o fade-in)
         }
-        function nextSlide() { currentSlide = (currentSlide + 1) % totalSlides; updateCarousel(); }
-        function prevSlide() { currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; updateCarousel(); }
-        if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); resetAutoSlide(); });
-        if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetAutoSlide(); });
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoSlide();
+        });
+
+        if (nextBtn) nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoSlide();
+        });
+
         indicators.forEach((ind, index) => {
             ind.addEventListener('click', () => {
                 currentSlide = index;
@@ -417,10 +446,12 @@
                 resetAutoSlide();
             });
         });
+
         function resetAutoSlide() {
             clearInterval(autoSlideInterval);
             autoSlideInterval = setInterval(nextSlide, 5000);
         }
+
         // Iniciar Slide Automático
         resetAutoSlide();
 
@@ -434,7 +465,7 @@
             if (window.scrollY > 20) {
                 // Estado Rolado (Sólido)
                 navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
-                navbar.classList.add('bg-mulheres-dark', 'dark:bg-[#1a021f]', 'shadow-md');
+                navbar.classList.add('bg-white', 'dark:bg-gray-800', 'shadow-md');
 
                 // Filtro de Logo (Redefinir)
                 logoImgs.forEach(img => img.style.filter = 'none');
@@ -442,21 +473,26 @@
                 // Cor do Botão de Modo Escuro
                 if (darkModeBtn) {
                     darkModeBtn.classList.remove('text-white', 'border-white/20');
-                    darkModeBtn.classList.add('text-mulheres-pink', 'border-mulheres-pink/30'); // Reverter para cores originais
+                    darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
                 }
 
-                // Cor dos links - Manter como está (branco/rosa) ou reverter para cores específicas do tema?
+                // Cor dos links
                 navLinks.forEach(link => {
-                    if (!link.classList.contains('border-mulheres-pink')) {
+                    if (link.id === 'nav-active') {
+                        // Link Ativo Rolado (Texto Azul, Borda Transparente)
+                        link.classList.remove('text-white', 'border-white');
+                        link.classList.add('text-brand-blue', 'border-transparent');
+                    } else {
+                        // Links não ativos
                         link.classList.remove('text-white');
-                        link.classList.add('text-mulheres-pink/90');
+                        link.classList.add('text-gray-600', 'dark:text-gray-300');
                     }
                 });
 
             } else {
                 // Estado Superior (Transparente)
                 navbar.classList.add('bg-transparent', 'text-white', 'border-white/20');
-                navbar.classList.remove('bg-mulheres-dark', 'dark:bg-[#1a021f]', 'shadow-md');
+                navbar.classList.remove('bg-white', 'dark:bg-gray-800', 'shadow-md');
 
                 // Filtro de Logo (Branco)
                 logoImgs.forEach(img => img.style.filter = 'brightness(0) invert(1)');
@@ -464,14 +500,19 @@
                 // Cor do Botão de Modo Escuro
                 if (darkModeBtn) {
                     darkModeBtn.classList.add('text-white', 'border-white/20');
-                    darkModeBtn.classList.remove('text-mulheres-pink', 'border-mulheres-pink/30');
+                    darkModeBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
                 }
 
                 // Cor dos links
                 navLinks.forEach(link => {
-                    if (!link.classList.contains('border-mulheres-pink')) {
+                    if (link.id === 'nav-active') {
+                        // Link Ativo Transparente (Texto Branco, Borda Branca)
+                        link.classList.add('text-white', 'border-white');
+                        link.classList.remove('text-brand-blue', 'border-transparent');
+                    } else {
+                        // Não ativo
                         link.classList.add('text-white');
-                        link.classList.remove('text-mulheres-pink/90');
+                        link.classList.remove('text-gray-600', 'dark:text-gray-300');
                     }
                 });
             }
@@ -479,6 +520,7 @@
 
         window.addEventListener('scroll', updateNavbar);
         updateNavbar(); // Verificação Inicial
+
     </script>
 </body>
 

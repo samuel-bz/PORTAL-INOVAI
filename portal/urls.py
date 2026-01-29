@@ -6,5 +6,7 @@ app_name = 'portal'
 
 urlpatterns = [
     path('', index, name='index'),
-    path('mulheres/', mulheres, name='mulheres')
+    path('mulheres/', mulheres, name='mulheres'),
+    path('login/', PortalLoginView.as_view(), name='login'),
+    path('logout/', logout_view, name='logout'),
 ]

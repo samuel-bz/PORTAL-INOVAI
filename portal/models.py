@@ -37,7 +37,7 @@ class NewsBlock(models.Model):
     block_type = models.CharField("Tipo", max_length=31, choices=BLOCK_TYPES)
     content = models.TextField("Conteúdo", blank=True)
     order = models.PositiveIntegerField("Ordem", default=0)
-    related_post = models.ForeignKey("NewsPost", on_delete=models.CASCADE, related_name='news_post')
+    related_post = models.ForeignKey("NewsPost", on_delete=models.CASCADE, related_name='blocks')
 
     class Meta:
         verbose_name = "Bloco de conteúdo"

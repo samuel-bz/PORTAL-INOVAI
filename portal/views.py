@@ -18,3 +18,17 @@ def logout_view(request):
     """Log out and redirect; no template."""
     logout(request)
     return redirect(settings.LOGOUT_REDIRECT_URL)
+
+def criar_noticia(request):
+    return render(request, 'index.html')
+
+def about_view(request):
+    return render(request, 'about.html')
+
+
+def news_list_view(request):
+    return render(request, 'noticias.html')
+
+
+def projects_view(request):
+    return render(request, 'projetos.html')

@@ -55,8 +55,7 @@ ROOT_URLCONF = 'portal_inovai.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'portal_inovai' / 'templates',
-                 BASE_DIR / 'portal' / 'templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

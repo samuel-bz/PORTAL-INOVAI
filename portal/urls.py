@@ -8,7 +8,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('home/', index, name='home'),
     path('mulheres/', mulheres, name='mulheres'),
-    path('editor/', news_editor, name='news_editor'),,
+    path('editor/', news_editor, name='news_editor'),
     path('login/', PortalLoginView.as_view(), name='login'),
     path('logout/', logout_view, name='logout'),
 ]

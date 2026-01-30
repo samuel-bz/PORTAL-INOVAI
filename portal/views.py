@@ -2,9 +2,15 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
+from .models import *
 
 def index(request):
-    return render(request, 'index.html')
+    noticias = NewsPost.objects.all()[:3]
+
+    context = {
+        'news_posts': noticias
+    }
+    return render(request, 'index.html', context)
 
 def mulheres(request):
     return render(request, 'mulheres.html')

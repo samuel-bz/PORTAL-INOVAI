@@ -1,0 +1,79 @@
+{% load static %}
+<!-- Barra de Navegação -->
+<nav id="navbar"
+    class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent text-white border-b border-white/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20 items-center">
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center gap-3">
+                <a href="{% url 'portal:index' %}" class="flex items-center gap-3">
+                    <img src="{% static '/images/logo_2021.png' %}" alt="Portal Inovaí Logo"
+                        class="h-16 w-auto transition-all duration-300">
+                    <img src="{% static '/images/logoinovai.png' %}" alt="Portal Inovaí Text"
+                        class="h-16 w-auto transition-all duration-300">
+                </a>
+            </div>
+
+            <!-- Menu Desktop -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="{% url 'portal:index' %}" id="nav-active"
+                    class="text-white font-semibold dark:text-blue-400 border-b-2 border-white">Início</a>
+                <a href="#"
+                    class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Notícias</a>
+                <a href="#"
+                    class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Projetos</a>
+                <a href="#" class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Sobre</a>
+
+                <div class="flex items-center gap-3 border-l pl-6 border-gray-300 dark:border-gray-600">
+                    <!-- Botão de Alternância do Modo Escuro -->
+                    <button id="darkModeBtn"
+                        class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                        title="Alternar Modo Escuro">
+                        <i class="bi bi-moon-fill"></i>
+                    </button>
+
+                    <!-- Link da Página Mulheres -->
+                    <a href="{% url 'portal:mulheres' %}"
+                        class="bg-mulheres-primary hover:bg-purple-800 text-white px-5 py-2 rounded-full font-medium transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+                        <i class="bi bi-stars"></i>
+                        Mulheres na Ciência
+                    </a>
+                </div>
+            </div>
+
+            <!-- Botão do Menu Móvel -->
+            <div class="md:hidden flex items-center gap-4">
+                <button id="mobileMenuBtn"
+                    class="text-gray-600 dark:text-gray-300 hover:text-gray-900 focus:outline-none">
+                    <i class="bi bi-list text-3xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painel do Menu Móvel -->
+    <div id="mobileMenu"
+        class="hidden md:hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 pb-4">
+        <div class="px-4 pt-2 pb-3 space-y-1">
+            <a href="{% url 'portal:index' %}"
+                class="block px-3 py-2 text-brand-blue font-semibold rounded-md bg-blue-50 dark:bg-gray-700 dark:text-blue-400">Início</a>
+            <a href="#"
+                class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Notícias</a>
+            <a href="#"
+                class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Projetos</a>
+            <a href="#"
+                class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Sobre</a>
+
+            <div class="mt-4 flex flex-col gap-3 px-3">
+                <button id="darkModeMobileBtn"
+                    class="flex items-center justify-center gap-2 w-full py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300">
+                    <i class="bi bi-moon-fill"></i> Alternar Modo Escuro
+                </button>
+                <a href="{% url 'portal:mulheres' %}"
+                    class="w-full text-center bg-mulheres-primary text-white py-2 rounded-lg font-medium">
+                    Mulheres na Ciência
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

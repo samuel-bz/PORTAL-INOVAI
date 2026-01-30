@@ -1,0 +1,73 @@
+{% load static %}
+<!-- Barra de Navegação (Tema Mulheres) -->
+<nav id="navbar"
+    class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent text-white border-b border-white/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20 items-center">
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center gap-3">
+                <a href="{% url 'portal:index' %}" class="flex items-center gap-3">
+                    <img src="{% static '/images/logo_2021.png' %}" alt="Portal Inovaí Logo"
+                        class="h-16 w-auto transition-all duration-300">
+                    <img src="{% static '/images/logoinovai.png' %}" alt="Portal Inovaí Text"
+                        class="h-16 w-auto transition-all duration-300">
+                </a>
+            </div>
+
+            <!-- Menu Desktop -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="{% url 'portal:index' %}"
+                    class="text-white hover:text-mulheres-pink font-medium transition border-b-2 border-transparent">Início</a>
+                <a href="#" class="text-white font-extrabold border-b-2 border-mulheres-pink">Mulheres</a>
+                <a href="#"
+                    class="text-white hover:text-mulheres-pink font-medium transition border-b-2 border-transparent">Projetos</a>
+
+                <div class="flex items-center gap-3 border-l pl-6 border-mulheres-pink/30">
+                    <!-- Botão de Alternância do Modo Escuro -->
+                    <button id="darkModeBtn"
+                        class="w-10 h-10 rounded-full border border-mulheres-pink/30 flex items-center justify-center text-mulheres-pink hover:bg-white/10 transition"
+                        title="Alternar Modo Escuro">
+                        <i class="bi bi-moon-fill"></i>
+                    </button>
+
+                    <!-- Link de Voltar -->
+                    <a href="{% url 'portal:index' %}"
+                        class="bg-brand-blue hover:bg-blue-700 text-white px-5 py-2 rounded-full font-bold transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        Voltar ao Portal
+                    </a>
+                </div>
+            </div>
+
+            <!-- Botão do Menu Móvel -->
+            <div class="md:hidden flex items-center gap-4">
+                <button id="mobileMenuBtn" class="text-mulheres-pink hover:text-white focus:outline-none">
+                    <i class="bi bi-list text-3xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painel do Menu Móvel -->
+    <div id="mobileMenu"
+        class="hidden md:hidden bg-mulheres-dark dark:bg-[#1a021f] border-t border-mulheres-pink/10 pb-4">
+        <div class="px-4 pt-2 pb-3 space-y-1">
+            <a href="{% url 'portal:index' %}"
+                class="block px-3 py-2 text-mulheres-pink hover:bg-white/20 rounded-md font-medium">Início</a>
+            <a href="#" class="block px-3 py-2 font-bold bg-white/10 text-white rounded-md">Mulheres
+                na Ciência</a>
+            <a href="#" class="block px-3 py-2 text-mulheres-pink hover:bg-white/20 rounded-md font-medium">Projetos</a>
+
+            <div class="mt-4 flex flex-col gap-3 px-3">
+                <button id="darkModeMobileBtn"
+                    class="flex items-center justify-center gap-2 w-full py-2 border border-mulheres-pink/30 rounded-lg text-mulheres-pink font-medium">
+                    <i class="bi bi-moon-fill"></i> Alternar Modo Escuro
+                </button>
+                <a href="{% url 'portal:index' %}"
+                    class="w-full text-center bg-brand-blue text-white py-2 rounded-lg font-bold">
+                    Voltar ao Portal
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

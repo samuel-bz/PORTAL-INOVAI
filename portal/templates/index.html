@@ -1,246 +1,149 @@
-{% load static%}
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="pt-br" class="scroll-smooth">
+{% block navbar_scroll_logic %}
+const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
+const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Inovaí</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Ícones do Bootstrap (Mantendo para simplicidade) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <!-- Google Fonts: Outfit -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+function updateNavbar() {
+if (!navbar) return;
+if (window.scrollY > 20) {
+// Estado Rolado (Sólido)
+navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
+navbar.classList.add('bg-white', 'dark:bg-gray-800', 'shadow-md');
 
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        display: ['Outfit', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            blue: '#0d6efd',
-                            dark: '#0a58ca',
-                        },
-                        mulheres: {
-                            purple: '#8803A3',
-                            pink: '#F2B9FE',
-                        }
-                    },
-                    animation: {
-                        'fade-in-up': 'fadeInUp 0.8s ease-out',
-                        'fade-in': 'fadeIn 1s ease-out',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .text-shadow {
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            }
-        }
-        /* Barra de Rolagem Personalizada */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #888; 
-            border-radius: 5px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555; 
-        }
-        .dark ::-webkit-scrollbar-track {
-            background: #2d3748; 
-        }
-        .dark ::-webkit-scrollbar-thumb {
-            background: #4a5568; 
-        }
-    </style>
-</head>
+// Filtro de Logo (Redefinir)
+logoImgs.forEach(img => img.style.filter = 'none');
 
-<body
-    class="bg-slate-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 font-sans flex flex-col min-h-screen">
+// Cor do Botão de Modo Escuro
+if (darkModeBtn) {
+darkModeBtn.classList.remove('text-white', 'border-white/20');
+darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+}
 
-    <!-- Barra de Navegação -->
-    <nav id="navbar"
-        class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent text-white border-b border-white/20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center gap-3">
-                    <a href="index.html" class="flex items-center gap-3">
-                        <img src="{% static '/images/logo_2021.png' %}" alt="Portal Inovaí Logo"
-                            class="h-16 w-auto transition-all duration-300">
-                        <img src="{% static '/images/logoinovai.png' %}" alt="Portal Inovaí Text"
-                            class="h-16 w-auto transition-all duration-300">
-                    </a>
-                </div>
+// Cor dos links
+navLinks.forEach(link => {
+if (link.id === 'nav-active') {
+// Link Ativo Rolado (Texto Azul, Borda Transparente)
+link.classList.remove('text-white', 'border-white');
+link.classList.add('text-brand-blue', 'border-transparent');
+} else {
+// Links não ativos
+link.classList.remove('text-white');
+link.classList.add('text-gray-600', 'dark:text-gray-300');
+}
+});
 
-                <!-- Menu Desktop -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#" id="nav-active"
-                        class="text-white font-semibold dark:text-blue-400 border-b-2 border-white">Início</a>
+} else {
+// Estado Superior (Transparente)
+navbar.classList.add('bg-transparent', 'text-white', 'border-white/20');
+navbar.classList.remove('bg-white', 'dark:bg-gray-800', 'shadow-md');
+
+// Filtro de Logo (Branco)
+logoImgs.forEach(img => img.style.filter = 'brightness(0) invert(1)');
+
+// Cor do Botão de Modo Escuro
+if (darkModeBtn) {
+darkModeBtn.classList.add('text-white', 'border-white/20');
+darkModeBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+}
+
+// Cor dos links
+navLinks.forEach(link => {
+if (link.id === 'nav-active') {
+// Link Ativo Transparente (Texto Branco, Borda Branca)
+link.classList.add('text-white', 'border-white');
+link.classList.remove('text-brand-blue', 'border-transparent');
+} else {
+// Não ativo
+link.classList.add('text-white');
+link.classList.remove('text-gray-600', 'dark:text-gray-300');
+}
+});
+}
+}
+
+window.addEventListener('scroll', updateNavbar);
+updateNavbar(); // Verificação Inicial
+{% endblock %}
+
+{% block content %}
+<!-- Carrossel Principal -->
+<div class="relative w-full h-[500px] overflow-hidden group bg-gray-900">
+    <!-- Interior do Carrossel -->
+    <div id="carouselWrapper" class="flex transition-transform duration-700 ease-in-out h-full">
+        <!-- Slide 1 -->
+        <div class="min-w-full h-full relative">
+            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=1600"
+                class="w-full h-full object-cover opacity-60" alt="Tech">
+            <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
+                <div class="max-w-2xl text-white animate-fade-in-up">
+                    <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Inovação Tecnológica</h2>
+                    <p class="text-xl md:text-2xl mb-6 text-gray-200">Transformando Itajubá em um polo de referência
+                        mundial em tecnologia.</p>
                     <a href="#"
-                        class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Notícias</a>
-                    <a href="#"
-                        class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Projetos</a>
-                    <a href="#"
-                        class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Sobre</a>
-
-                    <div class="flex items-center gap-3 border-l pl-6 border-gray-300 dark:border-gray-600">
-                        <!-- Botão de Alternância do Modo Escuro -->
-                        <button id="darkModeBtn"
-                            class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                            title="Alternar Modo Escuro">
-                            <i class="bi bi-moon-fill"></i>
-                        </button>
-
-                        <!-- Link da Página Mulheres -->
-                        <a href="{% url 'portal:mulheres' %}"
-                            class="bg-mulheres-purple hover:bg-purple-800 text-white px-5 py-2 rounded-full font-medium transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
-                            <i class="bi bi-stars"></i>
-                            Mulheres na Ciência
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Botão do Menu Móvel -->
-                <div class="md:hidden flex items-center gap-4">
-                    <button id="mobileMenuBtn"
-                        class="text-gray-600 dark:text-gray-300 hover:text-gray-900 focus:outline-none">
-                        <i class="bi bi-list text-3xl"></i>
-                    </button>
+                        class="bg-brand-blue hover:bg-brand-dark text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg hover:shadow-brand-blue/50">Saiba
+                        Mais</a>
                 </div>
             </div>
         </div>
-
-        <!-- Painel do Menu Móvel -->
-        <div id="mobileMenu"
-            class="hidden md:hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 pb-4">
-            <div class="px-4 pt-2 pb-3 space-y-1">
-                <a href="#"
-                    class="block px-3 py-2 text-brand-blue font-semibold rounded-md bg-blue-50 dark:bg-gray-700 dark:text-blue-400">Início</a>
-                <a href="#"
-                    class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Notícias</a>
-                <a href="#"
-                    class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Projetos</a>
-                <a href="#"
-                    class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Sobre</a>
-
-                <div class="mt-4 flex flex-col gap-3 px-3">
-                    <button id="darkModeMobileBtn"
-                        class="flex items-center justify-center gap-2 w-full py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300">
-                        <i class="bi bi-moon-fill"></i> Alternar Modo Escuro
-                    </button>
-                    <a href="mulheres.html"
-                        class="w-full text-center bg-mulheres-purple text-white py-2 rounded-lg font-medium">
-                        Mulheres na Ciência
-                    </a>
+        <!-- Slide 2 -->
+        <div class="min-w-full h-full relative">
+            <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1600"
+                class="w-full h-full object-cover opacity-60" alt="Women">
+            <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
+                <div class="max-w-2xl text-white">
+                    <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Mulheres na Ciência</h2>
+                    <p class="text-xl md:text-2xl mb-6 text-gray-200">Impulsionando a equidade e o protagonismo
+                        feminino na pesquisa.</p>
+                    <a href="{% url 'portal:mulheres' %}"
+                        class="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-full font-bold text-lg transition shadow-lg">Conheça
+                        o Projeto</a>
                 </div>
             </div>
         </div>
-    </nav>
-
-    <!-- Carrossel Principal -->
-    <div class="relative w-full h-[500px] overflow-hidden group bg-gray-900">
-        <!-- Interior do Carrossel -->
-        <div id="carouselWrapper" class="flex transition-transform duration-700 ease-in-out h-full">
-            <!-- Slide 1 -->
-            <div class="min-w-full h-full relative">
-                <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=1600"
-                    class="w-full h-full object-cover opacity-60" alt="Tech">
-                <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
-                    <div class="max-w-2xl text-white animate-fade-in-up">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Inovação Tecnológica</h2>
-                        <p class="text-xl md:text-2xl mb-6 text-gray-200">Transformando Itajubá em um polo de referência
-                            mundial em tecnologia.</p>
-                        <a href="#"
-                            class="bg-brand-blue hover:bg-brand-dark text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg hover:shadow-brand-blue/50">Saiba
-                            Mais</a>
-                    </div>
+        <!-- Slide 3 -->
+        <div class="min-w-full h-full relative">
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=1600"
+                class="w-full h-full object-cover opacity-60" alt="Parcerias">
+            <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
+                <div class="max-w-2xl text-white">
+                    <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Parcerias Estratégicas</h2>
+                    <p class="text-xl md:text-2xl mb-6 text-gray-200">União entre universidade, governo e empresas
+                        para o desenvolvimento.</p>
+                    <a href="#"
+                        class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg">Seja
+                        Parceiro</a>
                 </div>
             </div>
-            <!-- Slide 2 -->
-            <div class="min-w-full h-full relative">
-                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1600"
-                    class="w-full h-full object-cover opacity-60" alt="Women">
-                <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
-                    <div class="max-w-2xl text-white">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Mulheres na Ciência</h2>
-                        <p class="text-xl md:text-2xl mb-6 text-gray-200">Impulsionando a equidade e o protagonismo
-                            feminino na pesquisa.</p>
-                        <a href="mulheres.html"
-                            class="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-full font-bold text-lg transition shadow-lg">Conheça
-                            o Projeto</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Slide 3 -->
-            <div class="min-w-full h-full relative">
-                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=1600"
-                    class="w-full h-full object-cover opacity-60" alt="Parcerias">
-                <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
-                    <div class="max-w-2xl text-white">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">Parcerias Estratégicas</h2>
-                        <p class="text-xl md:text-2xl mb-6 text-gray-200">União entre universidade, governo e empresas
-                            para o desenvolvimento.</p>
-                        <a href="#"
-                            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg">Seja
-                            Parceiro</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Controles -->
-        <button id="prevBtn"
-            class="absolute top-1/2 left-4 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 focus:opacity-100">
-            <i class="bi bi-chevron-left text-2xl"></i>
-        </button>
-        <button id="nextBtn"
-            class="absolute top-1/2 right-4 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 focus:opacity-100">
-            <i class="bi bi-chevron-right text-2xl"></i>
-        </button>
-
-        <!-- Indicadores -->
-        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3">
-            <button class="w-3 h-3 rounded-full bg-white opacity-100 indicator" data-slide="0"></button>
-            <button class="w-3 h-3 rounded-full bg-white opacity-50 indicator" data-slide="1"></button>
-            <button class="w-3 h-3 rounded-full bg-white opacity-50 indicator" data-slide="2"></button>
         </div>
     </div>
 
-    <!-- Seção de Notícias -->
-    <main class="flex-grow container mx-auto px-4 py-16">
-        <div class="flex items-center gap-4 mb-10">
-            <h2 class="text-3xl font-bold text-brand-blue dark:text-blue-400">Últimas Notícias</h2>
-            <div class="h-1 flex-grow bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                <div class="h-full w-24 bg-brand-blue dark:bg-blue-400"></div>
-            </div>
+    <!-- Controles -->
+    <button id="prevBtn"
+        class="absolute top-1/2 left-4 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 focus:opacity-100">
+        <i class="bi bi-chevron-left text-2xl"></i>
+    </button>
+    <button id="nextBtn"
+        class="absolute top-1/2 right-4 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 focus:opacity-100">
+        <i class="bi bi-chevron-right text-2xl"></i>
+    </button>
+
+    <!-- Indicadores -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3">
+        <button class="w-3 h-3 rounded-full bg-white opacity-100 indicator" data-slide="0"></button>
+        <button class="w-3 h-3 rounded-full bg-white opacity-50 indicator" data-slide="1"></button>
+        <button class="w-3 h-3 rounded-full bg-white opacity-50 indicator" data-slide="2"></button>
+    </div>
+</div>
+
+<!-- Seção de Notícias -->
+<main class="flex-grow container mx-auto px-4 py-16">
+    <div class="flex items-center gap-4 mb-10">
+        <h2 class="text-3xl font-bold text-brand-blue dark:text-blue-400">Últimas Notícias</h2>
+        <div class="h-1 flex-grow bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full w-24 bg-brand-blue dark:bg-blue-400"></div>
         </div>
+    </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for news in news_posts %}

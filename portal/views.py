@@ -3,8 +3,10 @@ from .models import *
 
 # Create your views here.
 def index(request):
+    noticias = NewsPost.objects.all()[:3]
+
     context = {
-        'news_posts': NewsPost.objects.all()
+        'news_posts': noticias
     }
     return render(request, 'index.html', context)
 

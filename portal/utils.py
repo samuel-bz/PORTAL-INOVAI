@@ -5,5 +5,3 @@ def upload_image_path(instance, filename):
        os.remove(f'{filename}')
 
     return f'{filename}'
-    
-    

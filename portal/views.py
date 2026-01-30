@@ -9,3 +9,6 @@ def mulheres(request):
 
 def criar_noticia(request):
     return render(request, 'index.html')
+
+def news_editor(request):
+    return render(request, 'news_editor.html')

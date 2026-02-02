@@ -25,7 +25,75 @@ import json
 
 # ... imports ...
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
+from datetime import datetime
+
+@login_required
 def news_editor(request, news_id=None):
+    if request.method == 'POST':
+        try:
+            data = request.POST
+            
+            # 1. Create/Update NewsPost
+            # Note: For now assuming create only or simple update if I added that logic. 
+            # Plan only specified saving. Ideally if news_id exists we update.
+            
+            title = data.get('title')
+            description = data.get('description')
+            tags = data.get('tags')
+            
+            if news_id:
+                news_item = get_object_or_404(NewsPost, pk=news_id)
+            else:
+                news_item = NewsPost()
+            
+            news_item.title = title
+            news_item.description = description
+            news_item.tags = tags
+            news_item.author = request.user
+            
+            if 'thumbnail' in request.FILES:
+                news_item.thumbnail = request.FILES['thumbnail']
+            
+            news_item.save()
+            
+            # 2. Handle Blocks
+            # Delete existing blocks if updating (simplest strategy)
+            if news_id:
+                 news_item.blocks.all().delete()
+            
+            blocks_json = data.get('blocks', '[]')
+            blocks = json.loads(blocks_json)
+            
+            for index, block_data in enumerate(blocks):
+                block = NewsBlock(
+                    related_post=news_item,
+                    block_type=block_data.get('type', 'paragraph'),
+                    content=block_data.get('content', ''),
+                    order=index
+                )
+                block.save()
+                
+                # 3. Handle Block Images
+                # We expect files named 'block_{index}_image'
+                image_key = f'block_{index}_image'
+                if image_key in request.FILES:
+                    img_file = request.FILES[image_key]
+                    BlockImage.objects.create(
+                        block=block,
+                        image=img_file
+                    )
+            
+            return JsonResponse({'success': True, 'redirect_url': '/news/'}) # or news detail
+            
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    # GET Request
     context = {}
     if news_id:
         news_item = get_object_or_404(NewsPost, pk=news_id)
@@ -40,20 +108,6 @@ def news_editor(request, news_id=None):
                 'images': []
             }
             
-            # Fetch images if applicable
-            if block.block_type in ['image', 'carousel', 'image_with_text', 'paragraph_with_image']: # Check exact choices from model
-                 # Model choices: paragraph, paragraph_with_image, subtitle, hr, image
-                 # Wait, choices in models.py were:
-                 # ('paragraph', 'Parágrafo'), ('paragraph_with_image', 'Parágrafo com imagem'), ('subtitle', 'Subtítulo'), ('hr', 'Separador horizontal'), ('image', 'Imagem')
-                 # But template uses: title, subtitle, paragraph, image, carousel, image-text
-                 # This indicates a mismatch or the template has types not yet in backend choices, or mapped differently.
-                 # Let's map template types to backend types if possible, or just serialize what we have.
-                 # Assuming backend has 'image' type which uses BlockImage.
-                 pass
-
-            # Getting Related Images
-            # Using 'image' related_name from BlockImage model: block = ForeignKey(..., related_name="image")
-            # So block.image.all()
             for img in block.image.all():
                  blocks_data[-1]['images'].append({
                      'url': img.image.url if img.image else '',

@@ -3,6 +3,7 @@
 {% block title %}Portal Inovaí - Mulheres na Ciência{% endblock %}
 
 {% block extra_styles %}
+<style>
 /* Forçar estilos do Tema Mulheres */
 body {
 --tw-bg-opacity: 1;
@@ -21,6 +22,7 @@ border-radius: 5px;
 ::-webkit-scrollbar-thumb:hover {
 background: #6a0080;
 }
+</style>
 {% endblock %}
 
 {% block body_class %}bg-mulheres-light text-mulheres-dark dark:bg-[#2e0836] dark:text-mulheres-pink transition-colors
@@ -35,6 +37,7 @@ duration-300 font-sans flex flex-col min-h-screen{% endblock %}
 {% endblock %}
 
 {% block navbar_scroll_logic %}
+<script>
 const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
 const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
 
@@ -88,6 +91,7 @@ link.classList.remove('text-mulheres-pink/90');
 
 window.addEventListener('scroll', updateNavbar);
 updateNavbar(); // Verificação Inicial
+</script>
 {% endblock %}
 
 {% block content %}

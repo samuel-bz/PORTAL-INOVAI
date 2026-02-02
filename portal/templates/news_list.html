@@ -3,15 +3,31 @@
 
 {% block title %}Notícias - Portal Inovaí{% endblock %}
 
+{% block navbar_scroll_logic %}
+<script>
+// News List page: navbar solid (no hero), same as index scrolled state
+const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
+const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
+if (navbar) {
+    navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
+    navbar.classList.add('bg-white', 'dark:bg-gray-800', 'shadow-md');
+    logoImgs.forEach(img => img.style.filter = 'none');
+    if (typeof darkModeBtn !== 'undefined' && darkModeBtn) {
+        darkModeBtn.classList.remove('text-white', 'border-white/20');
+        darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+    }
+    navLinks.forEach(link => {
+        link.classList.remove('text-white');
+        link.classList.add('text-gray-600', 'dark:text-gray-300');
+    });
+}
+</script>
+{% endblock %}
+
 {% block content %}
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 pt-28 pb-8">
     <div class="container mx-auto px-4">
 
-        <!-- Header Section -->
-        <div class="mb-8 text-center">
-            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">Portal de Notícias</h1>
-            <p class="text-gray-600 dark:text-gray-400">Fique por dentro das últimas novidades</p>
-        </div>
 
         <!-- Filters Section -->
         <div

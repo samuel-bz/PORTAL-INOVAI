@@ -38,6 +38,7 @@ duration-300 font-sans flex flex-col min-h-screen{% endblock %}
 const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
 const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
 const logoutBtn = navbar ? navbar.querySelector('#logoutBtn') : null;
+const newsAddBtn = navbar ? navbar.querySelector('#newsAddBtn') : null;
 
 function updateNavbar() {
 if (!navbar) return;
@@ -60,6 +61,12 @@ if (logoutBtn) {
     logoutBtn.classList.remove('text-white', 'border-white');
     logoutBtn.classList.add('text-mulheres-pink/90', 'border-mulheres-pink/30');
 } 
+
+// Cor do Botão de Adicionar Notícia
+if (newsAddBtn) {
+    newsAddBtn.classList.remove('text-white', 'border-transparent');
+    newsAddBtn.classList.add('text-mulheres-pink/90', 'border-mulheres-pink/30');
+}
 
 // Cor dos links - Manter como está (branco/rosa) ou reverter para cores específicas do tema?
 navLinks.forEach(link => {

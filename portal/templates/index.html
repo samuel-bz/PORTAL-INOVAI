@@ -4,6 +4,7 @@
 const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
 const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
 const logoutBtn = navbar ? navbar.querySelector('#logoutBtn') : null;
+const newsAddBtn = navbar ? navbar.querySelector('#newsAddBtn') : null;
 
 function updateNavbar() {
 if (!navbar) return;
@@ -26,6 +27,12 @@ if (logoutBtn) {
     logoutBtn.classList.remove('text-white', 'border-white');
     logoutBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300');
 } 
+
+// Cor do Botão de Adicionar Notícia
+if (newsAddBtn) {
+    newsAddBtn.classList.remove('text-white');
+    newsAddBtn.classList.add('text-gray-600', 'dark:text-gray-300');
+}
 
 // Cor dos links
 navLinks.forEach(link => {
@@ -59,6 +66,12 @@ if (logoutBtn) {
     logoutBtn.classList.add('text-white', 'border-white');
     logoutBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'border-gray-300');
 } 
+
+// Cor do Botão de Adicionar Notícia
+if (newsAddBtn) {
+    newsAddBtn.classList.add('text-white');
+    newsAddBtn.classList.remove('text-gray-600', 'dark:text-gray-300');
+}
 
 // Cor dos links
 navLinks.forEach(link => {

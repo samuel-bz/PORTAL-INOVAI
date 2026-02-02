@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 
 BLOCK_TYPES = (
     ('paragraph', 'Parágrafo'),
@@ -7,6 +8,11 @@ BLOCK_TYPES = (
     ('subtitle', 'Subtítulo'),
     ('hr', 'Separador horizontal'),
     ('image', 'Imagem'),
+)
+
+PORTAIS = (
+    ('portal_inovai', 'Portal Inovaí'),
+    ('portal_mulheres_ciencia', 'Portal Meninas e Mulheres na Ciência'),
 )
 
 # Modelo de noticias
@@ -59,3 +65,24 @@ class BlockImage(models.Model):
 
     def __str__(self):
         return f"(Imagem) - {self.captions}"
+
+class Destaque(models.Model):
+    title = models.CharField("Título", max_length=127)
+    image = models.ImageField("Imagem", upload_to="destaques")
+    description = models.CharField("Descrição", max_length=255, null=True, blank=True)
+    portal = models.CharField("Portal", max_length=31, choices=PORTAIS, default="portal_inovai")
+    points_to_noticia = models.BooleanField("Aponta para notícia", default=False)
+    related_post = models.ForeignKey("NewsPost", on_delete=models.CASCADE, related_name='destaques', null=True, blank=True)
+    link_url = models.URLField("URL de destino", max_length=255, null=True, blank=True)
+    button_color = models.CharField("Cor do botão", max_length=15, validators=[RegexValidator(regex=r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$', message="Cor inválida. Use formato hexadecimal (ex: #FFFFFF ou #FFF).")], default="#FFFFFF")
+    button_text = models.CharField("Texto do botão", max_length=127, default="Saiba mais")
+    created_at = models.DateTimeField("Criado em:", auto_now_add=True)
+    updated_at = models.DateTimeField("Atualizado em:", auto_now=True)
+
+    class Meta:
+        verbose_name = "Destaque"
+        verbose_name_plural = "Destaques"
+        ordering = ('-created_at',)
+
+    def __str__(self):
+        return f"{self.get_portal_display()} --- {self.title} - {self.created_at.strftime('%d/%m/%Y %H:%M:%S')}"

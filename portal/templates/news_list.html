@@ -54,8 +54,8 @@
                     <label for="sort" class="text-sm font-medium text-gray-700 dark:text-gray-300">Ordenação</label>
                     <select name="sort" id="sort"
                         class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition">
-                        <option value="desc" {% if request.GET.sort=='desc' %}selected{% endif %}>Mais Recentes</option>
-                        <option value="asc" {% if request.GET.sort=='asc' %}selected{% endif %}>Mais Antigos</option>
+                        <option value="desc" {% if request.GET.sort == 'desc' %}selected{% endif %}>Mais Recentes</option>
+                        <option value="asc" {% if request.GET.sort == 'asc' %}selected{% endif %}>Mais Antigos</option>
                     </select>
                 </div>
 
@@ -102,8 +102,7 @@
                     <!-- Author & Tag -->
                     <div class="flex justify-between items-center mb-3 text-xs text-gray-500 dark:text-gray-400">
                         <span class="flex items-center gap-1">
-                            <i class="bi bi-person-circle"></i> {{
-                            news.author.get_full_name|default:news.author.username|default:"Desconhecido" }}
+                            <i class="bi bi-person-circle"></i> {{ news.author.get_full_name|default:news.author.username|default:"Desconhecido" }}
                         </span>
                         {% if news.tags %}
                         <span

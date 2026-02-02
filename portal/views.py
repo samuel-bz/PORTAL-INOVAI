@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
-from .models import NewsPost
+from .models import NewsPost, NewsBlock, BlockImage
 
 def index(request):
     return render(request, 'index.html')
@@ -36,9 +36,9 @@ def news_editor(request, news_id=None):
         try:
             data = request.POST
             
-            # 1. Create/Update NewsPost
-            # Note: For now assuming create only or simple update if I added that logic. 
-            # Plan only specified saving. Ideally if news_id exists we update.
+            # 1. Criar/Atualizar Notícia
+            # Nota: Por enquanto assumindo apenas criação ou atualização simples se adicionada essa lógica. 
+            # Plano especificou apenas salvar. Idealmente, se news_id existir, atualizamos.
             
             title = data.get('title')
             description = data.get('description')
@@ -59,8 +59,8 @@ def news_editor(request, news_id=None):
             
             news_item.save()
             
-            # 2. Handle Blocks
-            # Delete existing blocks if updating (simplest strategy)
+            # 2. Manipular Blocos
+            # Deletar blocos existentes se estiver atualizando (estratégia mais simples)
             if news_id:
                  news_item.blocks.all().delete()
             
@@ -76,8 +76,8 @@ def news_editor(request, news_id=None):
                 )
                 block.save()
                 
-                # 3. Handle Block Images
-                # We expect files named 'block_{index}_image'
+                # 3. Manipular Imagens dos Blocos
+                # Esperamos arquivos nomeados 'block_{index}_image'
                 image_key = f'block_{index}_image'
                 if image_key in request.FILES:
                     img_file = request.FILES[image_key]
@@ -86,20 +86,20 @@ def news_editor(request, news_id=None):
                         image=img_file
                     )
             
-            return JsonResponse({'success': True, 'redirect_url': '/news/'}) # or news detail
+            return JsonResponse({'success': True, 'redirect_url': '/news/'}) # ou detalhe da notícia
             
         except Exception as e:
             import traceback
             traceback.print_exc()
             return JsonResponse({'success': False, 'error': str(e)})
 
-    # GET Request
+    # Requisição GET
     context = {}
     if news_id:
         news_item = get_object_or_404(NewsPost, pk=news_id)
         context['news_item'] = news_item
         
-        # Serialize Blocks
+        # Serializar Blocos
         blocks_data = []
         for block in news_item.blocks.all().order_by('order'):
             block_data = {
@@ -127,7 +127,7 @@ def news_list(request):
     """
     news_query = NewsPost.objects.all()
 
-    # Filters
+    # Filtros
     title_query = request.GET.get('title')
     if title_query:
         news_query = news_query.filter(title__icontains=title_query)
@@ -144,7 +144,7 @@ def news_list(request):
     if date_query:
         news_query = news_query.filter(publish_date=date_query)
 
-    # Sorting
+    # Ordenação
     sort_order = request.GET.get('sort', 'desc')
     if sort_order == 'asc':
         news_query = news_query.order_by('publish_date')

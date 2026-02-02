@@ -283,6 +283,9 @@
 </div>
 
 <!-- Template Scripts -->
+<script id="existing-blocks-data" type="application/json">
+    {{ existing_blocks_json|default:"[]"|safe }}
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const tools = document.querySelectorAll('.tool-item');
@@ -294,7 +297,14 @@
         let draggedType = null;
         let insertionIndex = -1; // -1 significa fim, senão index do filho
 
-        // --- Drag & Drop Start ---
+        // Restaura inicialização de blocos
+        const existingBlocks = JSON.parse(document.getElementById('existing-blocks-data')?.textContent || '[]');
+        // Inicializa os blocos existentes
+        existingBlocks.forEach(block => {
+            createBlock(block.type, block.content, block.images);
+        });
+
+        // --- Início Drag & Drop ---
         tools.forEach(tool => {
             tool.addEventListener('dragstart', (e) => {
                 draggedType = tool.dataset.type;
@@ -317,7 +327,7 @@
             canvas.style.borderColor = '';
         });
 
-        // --- Drop on Canvas ---
+        // --- Soltar no Canvas ---
         canvas.addEventListener('drop', (e) => {
             e.preventDefault();
             canvas.style.borderColor = '';
@@ -328,7 +338,7 @@
             }
         });
 
-        // --- Floating Button Logic ---
+        // --- Lógica do Botão Flutuante ---
         // O botão deve seguir o último elemento ou ser posicionado manualmente?
         // A especificação diz: "botão com sinal de + ... irá descer a cada novo elemento".
         // Vamos posicioná-lo no final do container sempre.
@@ -341,8 +351,8 @@
             const rect = floatingBtn.getBoundingClientRect();
             // Ajustar posição do menu relativo ao canvas
             // Mas nosso menu está dentro do canvas absolute
-            // addMenu.style.display = 'block'; // REMOVED: Conflicts with .hidden class
-            addMenu.style.removeProperty('display'); // Ensure no inline style persists
+            // addMenu.style.display = 'block'; // REMOVIDO: Conflita com a classe .hidden
+            addMenu.style.removeProperty('display'); // Garante que nenhum estilo inline persista
             addMenu.style.top = (floatingBtn.offsetTop + 40) + 'px';
             addMenu.style.left = (floatingBtn.offsetLeft) + 'px';
             addMenu.classList.remove('hidden');
@@ -361,12 +371,13 @@
             addMenu.classList.add('hidden');
         }
 
-        // --- Block Creation Logic ---
-        function createBlock(type) {
+        // --- Lógica de Criação de Blocos ---
+        function createBlock(type, content = null, images = []) {
             if (emptyState) emptyState.remove();
 
             const block = document.createElement('div');
             block.className = 'editor-block mb-4 group relative py-2 px-4 hover:bg-gray-50 rounded-lg';
+            block.dataset.type = type;
 
             // Botões de Ação do Bloco (Excluir/Mover)
             const actions = document.createElement('div');
@@ -382,24 +393,42 @@
 
             switch (type) {
                 case 'title':
-                    contentHTML = `<h1 class="text-4xl font-bold text-gray-900 outline-none" contenteditable="true">Título da Notícia</h1>`;
+                    contentHTML = `<h1 class="text-4xl font-bold text-gray-900 outline-none" contenteditable="true">${content || 'Título da Notícia'}</h1>`;
                     break;
                 case 'subtitle':
-                    contentHTML = `<h2 class="text-2xl font-semibold text-gray-700 outline-none mt-2" contenteditable="true">Subtítulo Explicativo</h2>`;
+                    contentHTML = `<h2 class="text-2xl font-semibold text-gray-700 outline-none mt-2" contenteditable="true">${content || 'Subtítulo Explicativo'}</h2>`;
                     break;
                 case 'paragraph':
-                    contentHTML = `<p class="text-gray-600 leading-relaxed outline-none" contenteditable="true">Comece a escrever o conteúdo do parágrafo aqui...</p>`;
+                    contentHTML = `<p class="text-gray-600 leading-relaxed outline-none" contenteditable="true">${content || 'Comece a escrever o conteúdo do parágrafo aqui...'}</p>`;
                     break;
                 case 'image':
-                    contentHTML = `
-                        <div class="w-full h-64 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 cursor-pointer hover:bg-gray-200 transition" onclick="this.querySelector('input').click()">
-                            <i class="bi bi-image text-3xl mb-2"></i>
-                            <span class="text-sm pointer-events-none">Clique ou arraste uma imagem</span>
-                            <input type="file" class="hidden" accept="image/*" onchange="previewImage(this)">
-                        </div>
-                    `;
+                    // Se tivermos uma URL de imagem
+                    const imgUrl = (images && images.length > 0) ? images[0].url : '';
+                    if (imgUrl) {
+                        contentHTML = `
+                            <div class="w-full h-96 relative rounded-lg overflow-hidden group cursor-pointer">
+                                <img src="${imgUrl}" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                    <span class="text-white font-medium flex items-center gap-2"><i class="bi bi-pencil"></i> Trocar Imagem</span>
+                                </div>
+                                <input type="file" class="hidden" accept="image/*" onchange="previewImage(this)">
+                            </div>
+                        `;
+                    } else {
+                        contentHTML = `
+                            <div class="w-full h-64 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 cursor-pointer hover:bg-gray-200 transition" onclick="this.querySelector('input').click()">
+                                <i class="bi bi-image text-3xl mb-2"></i>
+                                <span class="text-sm pointer-events-none">Clique ou arraste uma imagem</span>
+                                <input type="file" class="hidden" accept="image/*" onchange="previewImage(this)">
+                            </div>
+                        `;
+                    }
                     break;
                 case 'carousel':
+                    // Manipulação de carrossel com imagens existentes
+                    // Lógica simples de placeholder por enquanto
+                    // Mas renderCarousel precisa de container.
+                    // Vou criar container e então chamar init/render se imagens existirem.
                     contentHTML = `
                         <div class="w-full relative bg-gray-100 rounded-xl overflow-hidden h-72 group-carousel cursor-pointer" onclick="this.querySelector('input').click()">
                             <div class="absolute inset-0 flex items-center justify-center text-gray-400 group-hover:bg-gray-200 transition">
@@ -413,18 +442,42 @@
                             </div>
                         </div>
                     `;
+                    // Nota: Carregamento de imagem do carrossel é complexo sem pós-processamento.
+                    // Por enquanto, se existirem imagens, devemos processá-las após anexar o bloco.
                     break;
                 case 'image-text':
+                    const itImgUrl = (images && images.length > 0) ? images[0].url : '';
+                    const itContent = content || 'Texto descritivo ao lado da imagem...';
+                    // Precisamos de uma maneira de separar o título? Ou apenas colocar o conteúdo no P.
+                    // content tipicamente tem o texto. Título?
+                    // Meu parser salva apenas UMA string de conteúdo.
+                    // Então vou colocar no P. Título padrão.
+
+                    let imgPart = '';
+                    if (itImgUrl) {
+                        imgPart = `
+                            <img src="${itImgUrl}" class="w-full h-full object-cover">
+                            <!-- Overlay de troca -->
+                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                <span class="text-white font-medium flex items-center gap-2"><i class="bi bi-pencil"></i> Trocar Imagem</span>
+                            </div>
+                        `;
+                    } else {
+                        imgPart = `
+                            <i class="bi bi-image text-2xl mb-1 pointer-events-none"></i>
+                            <span class="text-xs pointer-events-none">Adicionar Imagem</span>
+                        `;
+                    }
+
                     contentHTML = `
                         <div class="flex flex-col md:flex-row gap-6 items-center">
-                            <div class="w-full md:w-1/2 h-48 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 border-2 border-dashed border-gray-300 cursor-pointer hover:bg-gray-200 transition" onclick="this.querySelector('input').click()">
-                                <i class="bi bi-image text-2xl mb-1 pointer-events-none"></i>
-                                <span class="text-xs pointer-events-none">Adicionar Imagem</span>
+                            <div class="w-full md:w-1/2 h-48 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 border-2 border-dashed border-gray-300 cursor-pointer hover:bg-gray-200 transition overflow-hidden relative group" onclick="this.querySelector('input').click()">
+                                ${imgPart}
                                 <input type="file" class="hidden" accept="image/*" onchange="previewImage(this)">
                             </div>
                             <div class="w-full md:w-1/2">
                                 <h3 class="text-xl font-bold mb-2 outline-none" contenteditable="true">Título da Seção</h3>
-                                <p class="text-gray-600 outline-none" contenteditable="true">Texto descritivo ao lado da imagem...</p>
+                                <p class="text-gray-600 outline-none" contenteditable="true">${itContent}</p>
                             </div>
                         </div>
                     `;
@@ -438,14 +491,23 @@
             // Inserir antes do botão flutuante e menu
             canvas.insertBefore(block, floatingBtn);
 
-            // Animação de entrada
+            // Trata pós-inicialização do carrossel se necessário
+            if (type === 'carousel' && images && images.length > 0) {
+                const container = contentWrapper.querySelector('.group-carousel');
+                // Converter {url, ...} apenas para strings de url para renderCarousel
+                const imageUrls = images.map(img => img.url);
+                container.storedImages = imageUrls;
+                renderCarousel(container, imageUrls);
+            }
+
+            // Animação de entrada (apenas para novos blocos, talvez pular para existentes? não, parece legal)
             block.animate([
                 { opacity: 0, transform: 'translateY(10px)' },
                 { opacity: 1, transform: 'translateY(0)' }
             ], { duration: 300, easing: 'ease-out' });
         }
 
-        // --- Helper: Preview Image ---
+        // --- Auxiliar: Pré-visualização de Imagem ---
         window.previewImage = function (input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -470,11 +532,11 @@
             }
         }
 
-        // --- Helper: Preview Carousel ---
+        // --- Auxiliar: Pré-visualização de Carrossel ---
         window.previewCarousel = function (input) {
             if (input.files && input.files.length > 0) {
                 const parent = input.parentElement;
-                const mode = parent.dataset.uploadMode || 'replace'; // 'replace' or 'append'
+                const mode = parent.dataset.uploadMode || 'replace'; // 'substituir' ou 'anexar'
 
                 // Manter estilos base
                 parent.className = 'w-full h-96 relative rounded-xl overflow-hidden bg-gray-900 group cursor-default';
@@ -509,7 +571,7 @@
             }
         }
 
-        // --- Helper: Render Carousel ---
+        // --- Auxiliar: Renderizar Carrossel ---
         function renderCarousel(parent, images) {
             // Gerar HTML dos Slides
             let slidesHTML = images.map((src, index) => `
@@ -574,7 +636,7 @@
             }
         }
 
-        // --- Helper: Init Carousel Logic ---
+        // --- Auxiliar: Inicializar Lógica do Carrossel ---
         function initCarouselLogic(container, totalSlides) {
             let currentSlide = 0;
             const slidesContainer = container.querySelector('.slides');
@@ -587,7 +649,7 @@
                 // Garantir bounds
                 if (totalSlides === 0) {
                     currentSlide = 0;
-                    return; // No slides to update
+                    return; // Sem slides para atualizar
                 }
                 if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
                 if (currentSlide < 0) currentSlide = 0;
@@ -637,11 +699,11 @@
             indicators.forEach((ind, index) => {
                 ind.addEventListener('click', (e) => { e.stopPropagation(); currentSlide = index; updateSlide(); });
             });
-            updateSlide(); // Initial update to set correct slide and indicators
+            updateSlide(); // Atualização inicial para definir slide e indicadores corretos
         }
     });
 
-    // --- Save Logic ---
+    // --- Lógica de Salvar ---
     window.saveNews = async function () {
         const btn = document.querySelector('button[onclick="saveNews()"]');
         const originalText = btn.innerHTML;
@@ -651,7 +713,7 @@
         try {
             const formData = new FormData();
 
-            // Metadata
+            // Metadados
             formData.append('title', document.getElementById('meta-title').value);
             formData.append('description', document.getElementById('meta-description').value);
             formData.append('tags', document.getElementById('meta-tags').value);
@@ -661,21 +723,14 @@
                 formData.append('thumbnail', thumbInput.files[0]);
             }
 
-            // Blocks
+            // Blocos
             const blocks = [];
             document.querySelectorAll('.editor-block').forEach((blockEl, index) => {
-                const type = blockEl.querySelector('[data-type]')?.dataset.type
-                    || blockEl.querySelector('.tool-item')?.dataset.type // Fallback if we stored type there
-                    || deduceType(blockEl); // Or helper
+                const type = blockEl.dataset.type
+                    || blockEl.querySelector('[data-type]')?.dataset.type
+                    || 'unknown';
 
-                // Better way: we attached data-type to the block logic or classes? 
-                // In createBlock we didn't explicitly store data-type on root .editor-block. 
-                // Let's rely on structure or add a hidden input/data-attribute in createBlock. 
-                // Wait, createBlock didn't add data-type to the root div. I should deduce it or save it.
-                // Re-analyzing createBlock... it checks type to generate contentHTML.
-                // I will add a parser here to deduce content.
-
-                // Helper to get type from content structure
+                // Auxiliar para obter tipo da estrutura de conteúdo
                 let blockData = { order: index, type: 'unknown', content: '', images: [] };
 
                 if (blockEl.querySelector('h1')) {
@@ -685,32 +740,32 @@
                     blockData.type = 'subtitle';
                     blockData.content = blockEl.querySelector('h2').innerText;
                 } else if (blockEl.querySelector('p') && !blockEl.querySelector('img')) {
-                    // Simple paragraph
+                    // Parágrafo simples
                     blockData.type = 'paragraph';
                     blockData.content = blockEl.querySelector('p').innerText;
                 } else if (blockEl.querySelector('.group-carousel')) {
                     blockData.type = 'carousel';
-                    // Carousel images are handled via storedImages property on the container
+                    // Imagens do carrossel são manipuladas via propriedade storedImages no container
                     const container = blockEl.querySelector('.group-carousel');
                     if (container.storedImages) {
-                        // These are base64 strings or URLs. 
-                        // If base64, we need to convert to file or send as is? 
-                        // Sending base64 is heavy. Ideally we upload files. 
-                        // But previewCarousel reads to DataURL. 
-                        // Let's assume for now we skip complex carousel file handling in this turn OR 
-                        // we try to grab the file input if it's still populated (only works for last add).
-                        // BETTER: The input[type=file] multiple might hold files if not reset?
-                        // No, we reset it. 
-                        // WORKAROUND: For this iteration, we might fail to save NEW carousel images unless we change how we store them.
-                        // I will add a TODO/Warning. OR I can try to find if we can reconstruct.
-                        // Actually, I can allow the user to just upload one batch?
-                        // Let's stick to simple blocks first.
+                        // Estas são strings base64 ou URLs. 
+                        // Se base64, precisamos converter para arquivo ou enviar como está? 
+                        // Enviando base64 é pesado. Idealmente enviamos arquivos. 
+                        // Mas previewCarousel lê para DataURL. 
+                        // Vamos assumir por enquanto que pulamos carrossel complexo nesta rodada OU 
+                        // tentamos pegar o input file se ele ainda estiver preenchido (só funciona para último add).
+                        // MELHOR: O input[type=file] multiple pode manter arquivos se não resetado?
+                        // Não, nós o resetamos. 
+                        // WORKAROUND: Para esta iteração, podemos falhar ao salvar NOVAS imagens de carrossel a menos que mudemos como armazenamos.
+                        // Vou adicionar um TODO/Warning. OU posso tentar ver se conseguimos reconstruir.
+                        // Na verdade, posso permitir que o usuário faça upload de apenas um lote?
+                        // Vamos manter blocos simples primeiro.
                         blockData.content = 'Carousel (WIP)';
                     }
                 } else if (blockEl.querySelector('img') && blockEl.querySelector('p')) {
                     blockData.type = 'image-text';
                     blockData.content = blockEl.querySelector('p').innerText;
-                    // Image?
+                    // Imagem?
                     const imgInput = blockEl.querySelector('input[type="file"]');
                     if (imgInput && imgInput.files[0]) {
                         formData.append(`block_${index}_image`, imgInput.files[0]);

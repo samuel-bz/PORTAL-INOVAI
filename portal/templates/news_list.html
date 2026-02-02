@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Notícias - Portal Inovaí{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div class="container mx-auto px-4">
+
+        <!-- Header Section -->
+        <div class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">Portal de Notícias</h1>
+            <p class="text-gray-600 dark:text-gray-400">Fique por dentro das últimas novidades</p>
+        </div>
+
+        <!-- Filters Section -->
+        <div
+            class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-10 border border-gray-100 dark:border-gray-700">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+
+                <!-- Filter by Title -->
+                <div class="flex flex-col gap-1">
+                    <label for="title" class="text-sm font-medium text-gray-700 dark:text-gray-300">Título</label>
+                    <input type="text" name="title" id="title" value="{{ request.GET.title|default:'' }}"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
+                        placeholder="Buscar por título...">
+                </div>
+
+                <!-- Filter by Author -->
+                <div class="flex flex-col gap-1">
+                    <label for="author" class="text-sm font-medium text-gray-700 dark:text-gray-300">Autor</label>
+                    <input type="text" name="author" id="author" value="{{ request.GET.author|default:'' }}"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
+                        placeholder="Nome do autor...">
+                </div>
+
+                <!-- Filter by Tag -->
+                <div class="flex flex-col gap-1">
+                    <label for="tag" class="text-sm font-medium text-gray-700 dark:text-gray-300">Tag</label>
+                    <input type="text" name="tag" id="tag" value="{{ request.GET.tag|default:'' }}"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
+                        placeholder="Ex: Tecnologia">
+                </div>
+
+                <!-- Filter by Date -->
+                <div class="flex flex-col gap-1">
+                    <label for="date" class="text-sm font-medium text-gray-700 dark:text-gray-300">Data</label>
+                    <input type="date" name="date" id="date" value="{{ request.GET.date|default:'' }}"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition">
+                </div>
+
+                <!-- Sort by Date -->
+                <div class="flex flex-col gap-1">
+                    <label for="sort" class="text-sm font-medium text-gray-700 dark:text-gray-300">Ordenação</label>
+                    <select name="sort" id="sort"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition">
+                        <option value="desc" {% if request.GET.sort=='desc' %}selected{% endif %}>Mais Recentes</option>
+                        <option value="asc" {% if request.GET.sort=='asc' %}selected{% endif %}>Mais Antigos</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="md:col-span-2 lg:col-span-5 flex justify-end gap-2 mt-2">
+                    <a href="{% url 'portal:news_list' %}"
+                        class="px-6 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        Limpar
+                    </a>
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-8 py-2 rounded-lg hover:bg-blue-700 transition shadow-md flex items-center gap-2">
+                        <i class="bi bi-filter"></i> Filtrar Notícias
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- News Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for news in news_list %}
+            <div
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 border border-gray-100 dark:border-gray-700 flex flex-col h-full group">
+
+                <!-- Thumbnail -->
+                <div class="h-48 overflow-hidden relative">
+                    {% if news.thumbnail %}
+                    <img src="{{ news.thumbnail.url }}" alt="{{ news.title }}"
+                        class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
+                    {% else %}
+                    <div
+                        class="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white">
+                        <i class="bi bi-newspaper text-5xl opacity-50"></i>
+                    </div>
+                    {% endif %}
+                    <div
+                        class="absolute top-4 right-4 bg-white/90 dark:bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-sm">
+                        {{ news.formatted_publish_date }}
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="p-6 flex flex-col flex-grow">
+                    <!-- Author & Tag -->
+                    <div class="flex justify-between items-center mb-3 text-xs text-gray-500 dark:text-gray-400">
+                        <span class="flex items-center gap-1">
+                            <i class="bi bi-person-circle"></i> {{
+                            news.author.get_full_name|default:news.author.username|default:"Desconhecido" }}
+                        </span>
+                        {% if news.tags %}
+                        <span
+                            class="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded">
+                            {{ news.tags }}
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <h2
+                        class="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                        {{ news.title }}
+                    </h2>
+
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+                        {{ news.description }}
+                    </p>
+
+                    <div
+                        class="mt-auto border-t border-gray-100 dark:border-gray-700 pt-4 flex justify-between items-center">
+                        <a href="#" class="text-blue-600 dark:text-blue-400 text-sm font-semibold hover:underline">
+                            Ler mais <i class="bi bi-arrow-right ml-1"></i>
+                        </a>
+                        <!-- Edit Button (Context: View/Edit Page) -->
+                        <a href="{% url 'portal:news_editor_edit' news.id|default:0 %}"
+                            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition"
+                            title="Editar">
+                            <i class="bi bi-pencil-square text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-20">
+                <div class="inline-block p-6 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+                    <i class="bi bi-search text-4xl text-gray-400"></i>
+                </div>
+                <h3 class="text-xl font-medium text-gray-700 dark:text-gray-300">Nenhuma notícia encontrada</h3>
+                <p class="text-gray-500 dark:text-gray-500 mt-2">Tente ajustar os filtros da sua busca.</p>
+                <a href="{% url 'portal:news_list' %}" class="inline-block mt-4 text-blue-600 hover:underline">Limpar
+                    filtros</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

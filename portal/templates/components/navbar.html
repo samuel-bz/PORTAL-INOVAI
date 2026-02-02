@@ -38,9 +38,15 @@
                         <i class="bi bi-stars"></i>
                         Mulheres na Ciência
                     </a>
+                    {% if user.is_authenticated%}
+                    <!-- Botão para logout-->
+                    <a href="{% url 'portal:logout' %}" id="logoutBtn" class="text-white hover:text-[#fd0e6f] transition border-2 border-white rounded-full hover:border-[#fd0e6f] px-3 py-1">
+                        <i class="bi bi-box-arrow-right mr-2"></i> Sair
+                    </a>
+                    {% endif %}
                 </div>
             </div>
-
+            
             <!-- Botão do Menu Móvel -->
             <div class="md:hidden flex items-center gap-4">
                 <button id="mobileMenuBtn"

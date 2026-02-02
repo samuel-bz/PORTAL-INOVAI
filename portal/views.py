@@ -1,3 +1,4 @@
+from pyexpat.errors import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth import logout
@@ -17,7 +18,7 @@ class PortalLoginView(LoginView):
 def logout_view(request):
     """Log out and redirect; no template."""
     logout(request)
-    return redirect(settings.LOGOUT_REDIRECT_URL)
+    return redirect('portal:index')
 
 def news_editor(request):
     return render(request, 'news_editor.html')

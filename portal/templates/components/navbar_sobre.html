@@ -1,7 +1,7 @@
 {% load static %}
 <!-- Barra de Navegação -->
 <nav id="navbar"
-    class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent text-white border-b border-white/20">
+    class="fixed w-full top-0 z-50 transition-all duration-300 bg-transparent text-black border-b border-black/20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20 items-center">
             <!-- Logo -->
@@ -16,35 +16,32 @@
 
             <!-- Menu Desktop -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="{% url 'portal:index' %}" id="nav-active"
-                    class="text-white font-semibold dark:text-blue-400 border-b-2 border-white">Início</a>
+                <a href="{% url 'portal:index' %}"
+                    class="text-black hover:text-brand-blue font-medium transition border-b-2 border-transparent">Início</a>
+                <a href="#" class="text-black font-extrabold border-b-2 border-brand-blue">Inovaí</a>
                 <a href="#"
-                    class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Notícias</a>
-                <a href="#"
-                    class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Projetos</a>
-                <a href="{% url 'portal:sobre' %}" class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Sobre Nós</a>
+                    class="text-black hover:text-brand-blue font-medium transition border-b-2 border-transparent">Projetos</a>
 
-                <div class="flex items-center gap-3 border-l pl-6 border-gray-300 dark:border-gray-600">
+                <div class="flex items-center gap-3 border-l pl-6 border-white/30">
                     <!-- Botão de Alternância do Modo Escuro -->
                     <button id="darkModeBtn"
-                        class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                        class="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-black hover:bg-blue-50/10 transition"
                         title="Alternar Modo Escuro">
                         <i class="bi bi-moon-fill"></i>
                     </button>
 
-                    <!-- Link da Página Mulheres -->
-                    <a href="{% url 'portal:mulheres' %}"
-                        class="bg-mulheres-primary hover:bg-purple-800 text-white px-5 py-2 rounded-full font-medium transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
-                        <i class="bi bi-stars"></i>
-                        Mulheres na Ciência
+                    <!-- Link de Voltar -->
+                    <a href="{% url 'portal:index' %}"
+                        class="bg-brand-blue hover:bg-blue-700 text-black px-5 py-2 rounded-full font-bold transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        Voltar ao Portal
                     </a>
                 </div>
             </div>
 
             <!-- Botão do Menu Móvel -->
             <div class="md:hidden flex items-center gap-4">
-                <button id="mobileMenuBtn"
-                    class="text-gray-600 dark:text-gray-300 hover:text-gray-900 focus:outline-none">
+                <button id="mobileMenuBtn" class="text-white hover:text-white focus:outline-none">
                     <i class="bi bi-list text-3xl"></i>
                 </button>
             </div>

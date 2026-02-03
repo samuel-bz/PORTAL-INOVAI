@@ -6,5 +6,6 @@ app_name = 'portal'
 
 urlpatterns = [
     path('', index, name='index'),
-    path('mulheres/', mulheres, name='mulheres')
+    path('mulheres/', mulheres, name='mulheres'),
+    path('sobre/', sobre, name='sobre')
 ]

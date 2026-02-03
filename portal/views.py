@@ -7,5 +7,8 @@ def index(request):
 def mulheres(request):
     return render(request, 'mulheres.html')
 
+def sobre(request):
+    return render(request, 'sobre.html')
+
 def criar_noticia(request):
     return render(request, 'index.html')

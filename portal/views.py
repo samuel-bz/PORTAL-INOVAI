@@ -13,8 +13,6 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .forms import DestaqueForm
 from .models import NewsPost, NewsBlock, BlockImage, Destaque
 
-from .models import NewsPost
-
 
 def index(request):
     noticias = NewsPost.objects.all()[:3]

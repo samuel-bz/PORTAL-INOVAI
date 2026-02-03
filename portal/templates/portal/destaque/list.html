@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Destaques – Portal Inovaí{% endblock %}
+
+{% block content %}
+<main class="flex-grow container mx-auto px-4 pt-24 pb-10">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold text-brand-blue dark:text-blue-400">Destaques</h1>
+        <a href="{% url 'portal:destaque_create' %}"
+            class="bg-brand-blue hover:bg-brand-dark text-white px-6 py-2 rounded-full font-semibold transition">
+            Novo destaque
+        </a>
+    </div>
+
+    {% regroup destaques by portal as by_portal %}
+    {% for group in by_portal %}
+    <section class="mb-10">
+        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+            {{ group.list.0.get_portal_display }}
+        </h2>
+        <ul class="space-y-4">
+            {% for destaque in group.list %}
+            <li class="flex items-center justify-between gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <div class="flex items-center gap-4 min-w-0">
+                    {% if destaque.image %}
+                    <img src="{{ destaque.image.url }}" alt="{{ destaque.title }}"
+                        class="w-20 h-14 object-cover rounded-lg flex-shrink-0">
+                    {% else %}
+                    <div class="w-20 h-14 bg-gray-200 dark:bg-gray-700 rounded-lg flex-shrink-0 flex items-center justify-center text-gray-400">
+                        <i class="bi bi-image text-2xl"></i>
+                    </div>
+                    {% endif %}
+                    <div class="min-w-0">
+                        <p class="font-semibold text-gray-900 dark:text-white truncate">{{ destaque.title }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 truncate">{{ destaque.description|default:"—" }}</p>
+                    </div>
+                </div>
+                <a href="{% url 'portal:destaque_detail' destaque.pk %}"
+                    class="text-brand-blue dark:text-blue-400 hover:underline font-medium flex-shrink-0">
+                    Ver detalhes
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% empty %}
+    <p class="text-gray-500 dark:text-gray-400">Nenhum destaque cadastrado.</p>
+    {% endfor %}
+</main>
+{% endblock %}

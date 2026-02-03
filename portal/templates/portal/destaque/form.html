@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if object %}Editar destaque{% else %}Novo destaque{% endif %} – Portal Inovaí{% endblock %}
+
+{% block content %}
+<main class="flex-grow container mx-auto px-4 pt-24 pb-10">
+    <div class="max-w-2xl mx-auto">
+        <div class="mb-6">
+            <a href="{% url 'portal:destaque_list' %}" class="inline-flex items-center gap-2 text-brand-blue dark:text-blue-400 hover:underline font-medium">
+                <i class="bi bi-arrow-left"></i> Voltar à lista
+            </a>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div class="px-6 md:px-8 py-6 border-b border-gray-100 dark:border-gray-700">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                    {% if object %}Editar destaque{% else %}Novo destaque{% endif %}
+                </h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Preencha os campos abaixo.</p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" id="destaqueForm" class="p-6 md:p-8 space-y-6">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-sm flex items-start gap-3">
+                    <i class="bi bi-exclamation-circle text-lg flex-shrink-0 mt-0.5"></i>
+                    <div>{{ form.non_field_errors }}</div>
+                </div>
+                {% endif %}
+
+                {% with field=form.title %}
+                <div class="space-y-1.5">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }} <span class="text-red-500">*</span></label>
+                    {{ field }}
+                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                </div>
+                {% endwith %}
+
+                {% with field=form.image %}
+                <div class="space-y-1.5">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }} <span class="text-red-500">*</span></label>
+                    {{ field }}
+                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                </div>
+                {% endwith %}
+
+                {% with field=form.description %}
+                <div class="space-y-1.5">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                </div>
+                {% endwith %}
+
+                {% with field=form.portal %}
+                <div class="space-y-1.5">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }} <span class="text-red-500">*</span></label>
+                    {{ field }}
+                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                </div>
+                {% endwith %}
+
+                {# Aponta para notícia: mostra related_post ou link_url #}
+                {% with field=form.points_to_noticia %}
+                <div class="space-y-1.5 flex items-center gap-3">
+                    {{ field }}
+                    <label for="{{ field.id_for_label }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer select-none">{{ field.label }}</label>
+                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                </div>
+                {% endwith %}
+
+                <div id="related-post-wrap" class="space-y-1.5 destino-field" style="display: {% if form.points_to_noticia.value %}block{% else %}none{% endif %};">
+                    <label for="{{ form.related_post.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ form.related_post.label }} <span class="text-red-500">*</span></label>
+                    {{ form.related_post }}
+                    {% if form.related_post.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ form.related_post.help_text }}</p>{% endif %}
+                    {% if form.related_post.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ form.related_post.errors.0 }}</p>{% endif %}
+                </div>
+
+                <div id="link-url-wrap" class="space-y-1.5 destino-field" style="display: {% if form.points_to_noticia.value %}none{% else %}block{% endif %};">
+                    <label for="{{ form.link_url.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ form.link_url.label }}</label>
+                    {{ form.link_url }}
+                    {% if form.link_url.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ form.link_url.help_text }}</p>{% endif %}
+                    {% if form.link_url.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ form.link_url.errors.0 }}</p>{% endif %}
+                </div>
+
+                {% with field=form.button_color %}
+                <div class="space-y-1.5">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                </div>
+                {% endwith %}
+
+                {% with field=form.button_text %}
+                <div class="space-y-1.5">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                </div>
+                {% endwith %}
+
+                <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+                    <button type="submit" class="inline-flex items-center gap-2 bg-brand-blue hover:bg-brand-dark text-white px-6 py-2.5 rounded-xl font-semibold transition shadow-md hover:shadow-lg">
+                        <i class="bi bi-check-lg"></i>
+                        {% if object %}Salvar alterações{% else %}Criar destaque{% endif %}
+                    </button>
+                    <a href="{% url 'portal:destaque_list' %}" class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white py-2.5 font-medium transition">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var form = document.getElementById('destaqueForm');
+    if (!form) return;
+    var cb = form.querySelector('input[name="points_to_noticia"]');
+    var relatedWrap = document.getElementById('related-post-wrap');
+    var linkWrap = document.getElementById('link-url-wrap');
+    var relatedSelect = form.querySelector('select[name="related_post"]');
+    var linkInput = form.querySelector('input[name="link_url"]');
+
+    function toggleDestino() {
+        var pointsToNoticia = cb.checked;
+        if (pointsToNoticia) {
+            relatedWrap.style.display = 'block';
+            linkWrap.style.display = 'none';
+            if (linkInput) linkInput.value = '';
+        } else {
+            relatedWrap.style.display = 'none';
+            linkWrap.style.display = 'block';
+            if (relatedSelect) {
+                relatedSelect.selectedIndex = 0;
+                var opt = relatedSelect.options[0];
+                if (opt && opt.value === '') relatedSelect.value = '';
+            }
+        }
+    }
+
+    if (cb) {
+        cb.addEventListener('change', toggleDestino);
+        toggleDestino();
+    }
+});
+</script>
+{% endblock %}

@@ -116,7 +116,7 @@ updateNavbar(); // Verificação Inicial
 
 {% block content %}
 <!-- Conteúdo (Principal) -->
-<div class="relative w-full h-[500px] overflow-hidden group bg-mulheres-dark">
+<div class="relative w-full h-[400px] md:h-[500px] overflow-hidden group bg-mulheres-dark">
     <!-- Interior do Carrossel -->
     <div id="carouselWrapper" class="flex transition-transform duration-700 ease-in-out h-full">
         {% for destaque in destaques %}
@@ -124,13 +124,13 @@ updateNavbar(); // Verificação Inicial
                 <img src="{{ destaque.image.url }}" class="w-full h-full object-cover opacity-60">
                 <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
                     <div class="max-w-2xl text-white animate-fade-in-up">
-                        <h2 class="text-4xl md:text-6xl font-bold mb-4 text-shadow">{{ destaque.title }}</h2>
+                        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 text-shadow">{{ destaque.title }}</h2>
                         <p class="text-xl md:text-2xl mb-6 text-gray-200">
                             {{ destaque.description }}
                         </p>
                         <a
                         {% if destaque.points_to_noticia %} href="#" {# TODO: replace with news detail URL when page exists #} {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
-                        class="bg-brand-blue hover:bg-brand-dark text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg hover:shadow-brand-blue/50"
+                        class="bg-brand-blue hover:bg-brand-dark text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition shadow-lg hover:shadow-brand-blue/50 inline-block max-w-full truncate"
                         style="background-color:{{ destaque.button_color}}">
                         {{destaque.button_text }}
                         </a>
@@ -159,7 +159,7 @@ updateNavbar(); // Verificação Inicial
 </div>
 
 <!-- Seção de Notícias -->
-<main class="flex-grow container mx-auto px-4 py-16">
+<main class="flex-grow container mx-auto px-4 py-10 md:py-16">
     <div class="flex items-center gap-4 mb-10">
         <h2 class="text-3xl font-bold text-mulheres-purple dark:text-mulheres-pink">Destaques Femininos</h2>
         <div class="h-1 flex-grow bg-mulheres-pink rounded-full opacity-50">
@@ -167,7 +167,7 @@ updateNavbar(); // Verificação Inicial
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         <!-- Cartão 1 -->
         <div
             class="group bg-white dark:bg-[#3e1247] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-mulheres-pink/40">

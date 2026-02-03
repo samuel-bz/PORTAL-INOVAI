@@ -3,6 +3,15 @@
 
 {% block title %}{{ post.title }} — Portal Inovaí{% endblock %}
 
+{% block navbar %}
+    {% include 'components/navbar_news.html' %}
+{% endblock %}
+
+{% block navbar_scroll_logic %}
+    <!-- Navbar logic handled by navbar_news.html component -->
+{% endblock %}
+
+
 {% block content %}
 <article class="flex-grow">
     <!-- Cabeçalho da notícia -->

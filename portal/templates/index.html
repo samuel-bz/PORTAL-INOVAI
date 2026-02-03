@@ -6,6 +6,7 @@ const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : 
 const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
 const logoutBtn = navbar ? navbar.querySelector('#logoutBtn') : null;
 const newsAddBtn = navbar ? navbar.querySelector('#newsAddBtn') : null;
+const destaquesButton = navbar ? navbar.querySelector('#destaquesButton') : null;
 
 function updateNavbar() {
 if (!navbar) return;
@@ -35,8 +36,15 @@ if (newsAddBtn) {
     newsAddBtn.classList.add('text-gray-600', 'dark:text-gray-300');
 }
 
+// Cor do Botão de Destaques
+if (destaquesButton) {
+    destaquesButton.classList.remove('text-white');
+    destaquesButton.classList.add('text-gray-600', 'dark:text-gray-300');
+}
+
 // Cor dos links
 navLinks.forEach(link => {
+if (link.id === 'mulheresBtn') return;
 if (link.id === 'nav-active') {
 // Link Ativo Rolado (Texto Azul, Borda Transparente)
 link.classList.remove('text-white', 'border-white');
@@ -74,8 +82,15 @@ if (newsAddBtn) {
     newsAddBtn.classList.remove('text-gray-600', 'dark:text-gray-300');
 }
 
+// Cor do Botão de Destaques
+if (destaquesButton) {
+    destaquesButton.classList.add('text-white');
+    destaquesButton.classList.remove('text-gray-600', 'dark:text-gray-300');
+}
+
 // Cor dos links
 navLinks.forEach(link => {
+if (link.id === 'mulheresBtn') return;
 if (link.id === 'nav-active') {
 // Link Ativo Transparente (Texto Branco, Borda Branca)
 link.classList.add('text-white', 'border-white');

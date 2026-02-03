@@ -3,12 +3,15 @@
 
 {% block title %}Editor de Notícias - Portal Inovaí{% endblock %}
 
+{% block navbar %}
+    {% include 'components/navbar_editor.html' %}
+{% endblock %}
+
 {% block extra_styles %}
 <style>
     /* Estilos Específicos do Editor */
     #sidebar {
         height: calc(100vh - 80px);
-        /* Ajuste baseado na altura da navbar */
         position: sticky;
         top: 80px;
     }
@@ -85,48 +88,10 @@
         opacity: 1;
     }
 </style>
-<style>
-    /* Navbar Overrides for Editor */
-    #navbar {
-        position: relative !important;
-        background-color: white !important;
-        border-bottom: 1px solid #e5e7eb;
-        box-shadow: none !important;
-    }
-
-    .dark #navbar {
-        background-color: #111827 !important;
-        border-color: #374151;
-    }
-
-    #navbar a,
-    #navbar button,
-    #navbar i {
-        color: #374151 !important;
-        /* gray-700 */
-    }
-
-    .dark #navbar a,
-    .dark #navbar button,
-    .dark #navbar i {
-        color: #d1d5db !important;
-        /* gray-300 */
-    }
-
-    /* Logo Filter Reset */
-    #navbar img {
-        filter: none !important;
-    }
-
-    /* Adjust main container since navbar is relative */
-    .editor-container {
-        padding-top: 0 !important;
-    }
-</style>
 {% endblock %}
 
 {% block navbar_scroll_logic %}
-// Scroll logic disabled for Editor
+    <!-- Navbar logic handled by navbar_editor.html component -->
 {% endblock %}
 
 {% block content %}

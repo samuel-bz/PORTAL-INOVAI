@@ -29,6 +29,7 @@
                         brand: {
                             blue: '#0d6efd',
                             dark: '#0a58ca',
+                            red: '#fd0e6f',
                         },
                         mulheres: {
                             purple: '#6a0080', // Roxo mais escuro (Texto)
@@ -85,8 +86,8 @@
             background: #4a5568; 
         }
         
-        {% block extra_styles %}{% endblock %}
     </style>
+    {% block extra_styles %}{% endblock %}
 </head>
 
 <body
@@ -217,11 +218,13 @@
         // A lógica específica de rolagem será injetada pelos templates filhos
         // pois depende das cores e IDs específicos de cada tema.
 
-        {% block navbar_scroll_logic %}
-        // Lógica padrão se não for sobrescrita (opcional)
-        {% endblock %}
-
     </script>
+
+    {% block navbar_scroll_logic %}
+    <script>
+        // Lógica padrão se não for sobrescrita (opcional)
+    </script>
+    {% endblock %}
     {% endblock %}
 </body>
 

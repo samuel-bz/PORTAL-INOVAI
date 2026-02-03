@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ destaque.title }} – Destaque{% endblock %}
+
+{% block content %}
+<main class="flex-grow container mx-auto px-4 pt-24 pb-10">
+    <div class="max-w-3xl mx-auto">
+        <div class="flex items-center justify-between mb-6">
+            <a href="{% url 'portal:destaque_list' %}" class="text-brand-blue dark:text-blue-400 hover:underline flex items-center gap-2">
+                <i class="bi bi-arrow-left"></i> Voltar à lista
+            </a>
+            <a href="{% url 'portal:destaque_update' destaque.pk %}"
+                class="bg-brand-blue hover:bg-brand-dark text-white px-4 py-2 rounded-full font-medium transition">
+                Editar
+            </a>
+        </div>
+
+        <article class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden">
+            {% if destaque.image %}
+            <img src="{{ destaque.image.url }}" alt="{{ destaque.title }}"
+                class="w-full h-64 object-cover">
+            {% else %}
+            <div class="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-400">
+                <i class="bi bi-image text-6xl"></i>
+            </div>
+            {% endif %}
+            <div class="p-6 md:p-8">
+                <span class="text-sm font-medium text-brand-blue dark:text-blue-400">{{ destaque.get_portal_display }}</span>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mt-2">{{ destaque.title }}</h1>
+                <p class="text-gray-600 dark:text-gray-300 mt-4">{{ destaque.description|default:"—" }}</p>
+                <dl class="mt-6 grid gap-2 text-sm">
+                    <div class="flex gap-2">
+                        <dt class="text-gray-500 dark:text-gray-400">Aponta para notícia:</dt>
+                        <dd>{{ destaque.points_to_noticia|yesno:"Sim,Não" }}</dd>
+                    </div>
+                    {% if destaque.link_url %}
+                    <div class="flex gap-2">
+                        <dt class="text-gray-500 dark:text-gray-400">URL:</dt>
+                        <dd><a href="{{ destaque.link_url }}" target="_blank" rel="noopener" class="text-brand-blue dark:text-blue-400 hover:underline truncate max-w-xs inline-block">{{ destaque.link_url }}</a></dd>
+                    </div>
+                    {% endif %}
+                    <div class="flex gap-2">
+                        <dt class="text-gray-500 dark:text-gray-400">Texto do botão:</dt>
+                        <dd>{{ destaque.button_text }}</dd>
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <dt class="text-gray-500 dark:text-gray-400">Cor do botão:</dt>
+                        <dd><span class="inline-block w-6 h-6 rounded border border-gray-300 dark:border-gray-600" style="background-color: {{ destaque.button_color }};"></span> {{ destaque.button_color }}</dd>
+                    </div>
+                    <div class="flex gap-2">
+                        <dt class="text-gray-500 dark:text-gray-400">Criado em:</dt>
+                        <dd>{{ destaque.created_at|date:"d/m/Y H:i" }}</dd>
+                    </div>
+                    <div class="flex gap-2">
+                        <dt class="text-gray-500 dark:text-gray-400">Atualizado em:</dt>
+                        <dd>{{ destaque.updated_at|date:"d/m/Y H:i" }}</dd>
+                    </div>
+                </dl>
+            </div>
+        </article>
+
+        <div class="mt-6 flex justify-end">
+            <button type="button" onclick="document.getElementById('deleteModal').classList.remove('hidden')"
+                class="text-red-600 dark:text-red-400 hover:underline font-medium flex items-center gap-2">
+                <i class="bi bi-trash"></i> Remover destaque
+            </button>
+        </div>
+    </div>
+</main>
+
+{# Modal de confirmação de exclusão #}
+<div id="deleteModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 transition-opacity" onclick="document.getElementById('deleteModal').classList.add('hidden')"></div>
+        <div class="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="px-6 py-6">
+                <div class="flex items-center gap-3 text-red-600 dark:text-red-400">
+                    <i class="bi bi-exclamation-triangle text-3xl"></i>
+                    <h3 class="text-lg font-semibold" id="modal-title">Remover destaque?</h3>
+                </div>
+                <p class="mt-4 text-gray-600 dark:text-gray-300">
+                    Esta ação não pode ser desfeita. O destaque <strong>{{ destaque.title }}</strong> será excluído permanentemente.
+                </p>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 flex flex-row-reverse gap-3">
+                <form method="post" action="{% url 'portal:destaque_delete' destaque.pk %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition">
+                        Sim, remover
+                    </button>
+                </form>
+                <button type="button" onclick="document.getElementById('deleteModal').classList.add('hidden')"
+                    class="bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg font-medium transition">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

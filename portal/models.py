@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
+from .utils import upload_image_path
 
 BLOCK_TYPES = (
     ('paragraph', 'Parágrafo'),
@@ -7,6 +9,13 @@ BLOCK_TYPES = (
     ('subtitle', 'Subtítulo'),
     ('hr', 'Separador horizontal'),
     ('image', 'Imagem'),
+    ('title', 'Título'),
+    ('carousel', 'Carrossel'),
+)
+
+PORTAIS = (
+    ('portal_inovai', 'Portal Inovaí'),
+    ('portal_mulheres_ciencia', 'Portal Meninas e Mulheres na Ciência'),
 )
 
 # Modelo de noticias
@@ -14,7 +23,7 @@ class NewsPost(models.Model):
     title = models.CharField("Titulo", max_length=127)
     description = models.CharField("Descrição", max_length=255)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='news_post', null=True, blank=True)
-    thumbnail = models.ImageField("Thumbnail", upload_to=None, null=True, blank=True)
+    thumbnail = models.ImageField("Thumbnail", upload_to='news/', null=True, blank=True)
     publish_date = models.DateField("Data de publicação", auto_now_add=True)
     tags = models.CharField("Tags", max_length=255, null=True, blank=True)
 
@@ -45,13 +54,13 @@ class NewsBlock(models.Model):
         ordering = ('-related_post',)
 
     def __str__(self):
-        titulo_noticia = self.related_post[:20].strip()
+        titulo_noticia = str(self.related_post)[:20].strip()
         return f"Notícia {titulo_noticia} | ({self.order:02d}).{self.get_block_type_display()}"
         # Exemplo:  Notícia 31/12/26 - Abertura | (01).Parágrafo
         #           Notícia 31/12/26 - Abertura | (02).Imagem
 
 class BlockImage(models.Model):
-    image = models.ImageField("Imagem", upload_to=None)
+    image = models.ImageField("Imagem", upload_to='news/blocks/')
     block = models.ForeignKey("NewsBlock", on_delete=models.CASCADE, related_name="image")
     captions = models.CharField("Legenda", max_length=127, null=True, blank=True, default="")
     alt_text = models.CharField("Texto acessibilidade", max_length=255, null=True, blank=True, default="")
@@ -59,3 +68,24 @@ class BlockImage(models.Model):
 
     def __str__(self):
         return f"(Imagem) - {self.captions}"
+
+class Destaque(models.Model):
+    title = models.CharField("Título", max_length=127)
+    image = models.ImageField("Imagem", upload_to="destaques")
+    description = models.CharField("Descrição", max_length=255, null=True, blank=True)
+    portal = models.CharField("Portal", max_length=31, choices=PORTAIS, default="portal_inovai")
+    points_to_noticia = models.BooleanField("Aponta para notícia", default=False)
+    related_post = models.ForeignKey("NewsPost", on_delete=models.CASCADE, related_name='destaques', null=True, blank=True)
+    link_url = models.URLField("URL de destino", max_length=255, null=True, blank=True)
+    button_color = models.CharField("Cor do botão", max_length=15, validators=[RegexValidator(regex=r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$', message="Cor inválida. Use formato hexadecimal (ex: #FFFFFF ou #FFF).")], default="#FFFFFF")
+    button_text = models.CharField("Texto do botão", max_length=127, default="Saiba mais")
+    created_at = models.DateTimeField("Criado em:", auto_now_add=True)
+    updated_at = models.DateTimeField("Atualizado em:", auto_now=True)
+
+    class Meta:
+        verbose_name = "Destaque"
+        verbose_name_plural = "Destaques"
+        ordering = ('-created_at',)
+
+    def __str__(self):
+        return f"{self.get_portal_display()} --- {self.title} - {self.created_at.strftime('%d/%m/%Y %H:%M:%S')}"

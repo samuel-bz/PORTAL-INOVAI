@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} — Portal Inovaí{% endblock %}
+
+{% block content %}
+<article class="flex-grow">
+    <!-- Cabeçalho da notícia -->
+    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4 py-8 md:py-12 max-w-4xl">
+            <a href="{% url 'portal:index' %}" class="inline-flex items-center text-brand-blue dark:text-blue-400 hover:underline mb-6 text-sm font-medium">
+                <i class="bi bi-arrow-left mr-2"></i> Voltar ao portal
+            </a>
+            {% if post.tags %}
+            <p class="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">{{ post.tags }}</p>
+            {% endif %}
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{{ post.title }}</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300 mb-4">{{ post.description }}</p>
+            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                <span><i class="bi bi-calendar3 mr-1"></i> {{ post.formatted_publish_date }}</span>
+                {% if post.author %}
+                <span><i class="bi bi-person mr-1"></i> {{ post.author.get_full_name|default:post.author.username }}</span>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Thumbnail (se houver) -->
+    {% if post.thumbnail %}
+    <div class="w-full max-w-4xl mx-auto px-4 -mt-2 mb-8">
+        <img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" class="w-full rounded-xl shadow-lg object-cover max-h-[400px]">
+    </div>
+    {% endif %}
+
+    <!-- Conteúdo (blocos) -->
+    <div class="container mx-auto px-4 pb-16 max-w-3xl">
+        <div class="prose prose-lg dark:prose-invert max-w-none">
+            {% for block in blocks %}
+                {% if block.block_type == 'paragraph' %}
+                <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">{{ block.content|linebreaksbr }}</p>
+
+                {% elif block.block_type == 'subtitle' %}
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">{{ block.content }}</h2>
+
+                {% elif block.block_type == 'hr' %}
+                <hr class="my-8 border-gray-200 dark:border-gray-600">
+
+                {% elif block.block_type == 'image' %}
+                <div class="my-8">
+                    {% for img in block.image.all %}
+                    <figure class="my-4">
+                        <img src="{{ img.image.url }}" alt="{{ img.alt_text|default:img.captions }}" class="w-full rounded-lg shadow-md">
+                        {% if img.captions %}<figcaption class="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center">{{ img.captions }}</figcaption>{% endif %}
+                        {% if img.credits %}<p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ img.credits }}</p>{% endif %}
+                    </figure>
+                    {% endfor %}
+                </div>
+
+                {% elif block.block_type == 'paragraph_with_image' %}
+                {% if block.content %}
+                <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">{{ block.content|linebreaksbr }}</p>
+                {% endif %}
+                <div class="my-6">
+                    {% for img in block.image.all %}
+                    <figure class="my-4">
+                        <img src="{{ img.image.url }}" alt="{{ img.alt_text|default:img.captions }}" class="w-full rounded-lg shadow-md">
+                        {% if img.captions %}<figcaption class="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center">{{ img.captions }}</figcaption>{% endif %}
+                        {% if img.credits %}<p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{{ img.credits }}</p>{% endif %}
+                    </figure>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% empty %}
+            <p class="text-gray-500 dark:text-gray-400 italic">Nenhum conteúdo adicional publicado.</p>
+            {% endfor %}
+        </div>
+    </div>
+</article>
+{% endblock %}

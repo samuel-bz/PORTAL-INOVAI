@@ -1,11 +1,22 @@
-from django.shortcuts import render, redirect
+from pyexpat.errors import messages
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.contrib.auth import logout
+from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.views import LoginView
 from .models import NewsPost, NewsBlock, BlockImage
+import json
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from datetime import datetime
 
 def index(request):
-    return render(request, 'index.html')
+    noticias = NewsPost.objects.all()[:3]
+
+    context = {
+        'news_posts': noticias
+    }
+    return render(request, 'index.html', context)
 
 def mulheres(request):
     return render(request, 'mulheres.html')
@@ -19,16 +30,6 @@ def logout_view(request):
     """Log out and redirect; no template."""
     logout(request)
     return redirect(settings.LOGOUT_REDIRECT_URL)
-
-from django.shortcuts import render, redirect, get_object_or_404
-import json 
-
-# ... imports ...
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth.decorators import login_required
-from datetime import datetime
 
 @login_required
 def news_editor(request, news_id=None):

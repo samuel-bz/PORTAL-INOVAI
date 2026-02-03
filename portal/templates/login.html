@@ -7,6 +7,8 @@
 // Login page: navbar solid (no hero), same as index scrolled state
 const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
 const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
+const logoutBtn = navbar ? navbar.querySelector('#logoutBtn') : null;
+const newsAddBtn = navbar ? navbar.querySelector('#newsAddBtn') : null;
 if (navbar) {
     navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
     navbar.classList.add('bg-white', 'dark:bg-gray-800', 'shadow-md');
@@ -14,6 +16,16 @@ if (navbar) {
     if (typeof darkModeBtn !== 'undefined' && darkModeBtn) {
         darkModeBtn.classList.remove('text-white', 'border-white/20');
         darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+    }
+    // Ajustar botão de logout caso exista
+    if (typeof logoutBtn !== 'undefined' && logoutBtn) {
+        logoutBtn.classList.remove('text-white', 'border-white');
+        logoutBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300');
+    }
+    // Ajustar botão de adicionar notícia caso exista
+    if (typeof newsAddBtn !== 'undefined' && newsAddBtn) {
+        newsAddBtn.classList.remove('text-white', 'border-transparent');
+        newsAddBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300');
     }
     navLinks.forEach(link => {
         link.classList.remove('text-white');

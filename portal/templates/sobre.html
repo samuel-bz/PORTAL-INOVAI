@@ -42,9 +42,9 @@
             <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
                 <!-- Image/Slogan -->
                 <div class="w-full md:w-1/2">
-                    <div class="relative rounded-2xl overflow-hidden shadow-2xl skew-y-1 transform transition duration-500 hover:skew-y-0 group">
-                        <div class="absolute inset-0 bg-brand-blue/10 group-hover:bg-transparent transition duration-300 z-10"></div>
-                        <img src="{% static 'images/slogan.png' %}" alt="Inovaí Slogan" class="w-full h-auto object-cover transform scale-105 group-hover:scale-110 transition duration-700">
+                    <div id="sloganContainer" class="relative rounded-2xl overflow-hidden shadow-2xl skew-y-3 opacity-0 translate-y-20 transform transition-all duration-1000 ease-out">
+                        <div class="absolute inset-0 bg-brand-blue/20 transition duration-1000 z-10" id="sloganOverlay"></div>
+                        <img src="{% static 'images/slogan.png' %}" alt="Inovaí Slogan" class="w-full h-auto object-cover transform scale-105 transition duration-1000">
                     </div>
                 </div>
 
@@ -69,8 +69,37 @@
         </div>
     </section>
 
- 
-
-
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const slogan = document.getElementById('sloganContainer');
+        const overlay = document.getElementById('sloganOverlay');
+        
+        if (slogan && overlay) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Remove initial states
+                        slogan.classList.remove('skew-y-3', 'opacity-0', 'translate-y-20');
+                        // Add final visible states
+                        slogan.classList.add('skew-y-0', 'opacity-100', 'translate-y-0');
+                        
+                        // Fade out overlay
+                        overlay.classList.remove('bg-brand-blue/20');
+                        overlay.classList.add('bg-transparent');
+                        
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.3 // Trigger when 30% visible
+            });
+            
+            observer.observe(slogan);
+        }
+    });
+</script>
 {% endblock %}

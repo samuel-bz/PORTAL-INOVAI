@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block navbar_scroll_logic %}
+<script>
 const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
 const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
 const logoutBtn = navbar ? navbar.querySelector('#logoutBtn') : null;
@@ -90,6 +91,7 @@ link.classList.remove('text-gray-600', 'dark:text-gray-300');
 
 window.addEventListener('scroll', updateNavbar);
 updateNavbar(); // Verificação Inicial
+</script>
 {% endblock %}
 
 {% block content %}

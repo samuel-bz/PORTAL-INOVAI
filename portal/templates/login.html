@@ -3,6 +3,7 @@
 {% block title %}Entrar | Portal Inovaí{% endblock %}
 
 {% block navbar_scroll_logic %}
+<script>
 // Login page: navbar solid (no hero), same as index scrolled state
 const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
 const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
@@ -31,6 +32,7 @@ if (navbar) {
         link.classList.add('text-gray-600', 'dark:text-gray-300');
     });
 }
+</script>
 {% endblock %}
 
 {% block content %}

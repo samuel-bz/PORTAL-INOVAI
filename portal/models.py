@@ -8,6 +8,8 @@ BLOCK_TYPES = (
     ('subtitle', 'Subtítulo'),
     ('hr', 'Separador horizontal'),
     ('image', 'Imagem'),
+    ('title', 'Título'),
+    ('carousel', 'Carrossel'),
 )
 
 # Modelo de noticias

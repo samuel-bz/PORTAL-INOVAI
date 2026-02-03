@@ -23,7 +23,7 @@ class NewsPost(models.Model):
     title = models.CharField("Titulo", max_length=127)
     description = models.CharField("Descrição", max_length=255)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='news_post', null=True, blank=True)
-    thumbnail = models.ImageField("Thumbnail", upload_to=upload_image_path, null=True, blank=True)
+    thumbnail = models.ImageField("Thumbnail", upload_to='news/', null=True, blank=True)
     publish_date = models.DateField("Data de publicação", auto_now_add=True)
     tags = models.CharField("Tags", max_length=255, null=True, blank=True)
 
@@ -54,13 +54,13 @@ class NewsBlock(models.Model):
         ordering = ('-related_post',)
 
     def __str__(self):
-        titulo_noticia = self.related_post.title
+        titulo_noticia = str(self.related_post)[:20].strip()
         return f"Notícia {titulo_noticia} | ({self.order:02d}).{self.get_block_type_display()}"
         # Exemplo:  Notícia 31/12/26 - Abertura | (01).Parágrafo
         #           Notícia 31/12/26 - Abertura | (02).Imagem
 
 class BlockImage(models.Model):
-    image = models.ImageField("Imagem", upload_to=None)
+    image = models.ImageField("Imagem", upload_to='news/blocks/')
     block = models.ForeignKey("NewsBlock", on_delete=models.CASCADE, related_name="image")
     captions = models.CharField("Legenda", max_length=127, null=True, blank=True, default="")
     alt_text = models.CharField("Texto acessibilidade", max_length=255, null=True, blank=True, default="")

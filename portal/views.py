@@ -13,6 +13,9 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .forms import DestaqueForm
 from .models import NewsPost, NewsBlock, BlockImage, Destaque
 
+from .models import NewsPost
+
+
 def index(request):
     noticias = NewsPost.objects.all()[:3]
     destaques = Destaque.objects.filter(portal="portal_inovai")
@@ -212,3 +215,7 @@ def news_list(request):
         'news_list': news_query,
     }
     return render(request, 'news_list.html', context)
+def news_detail(request, pk):
+    post = get_object_or_404(NewsPost, pk=pk)
+    blocks = post.blocks.all().order_by('order')
+    return render(request, 'news_detail.html', {'post': post, 'blocks': blocks})

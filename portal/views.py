@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
-from .models import *
+from .models import NewsPost
 
 def index(request):
     noticias = NewsPost.objects.all()[:3]

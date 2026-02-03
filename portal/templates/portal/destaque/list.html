@@ -3,6 +3,14 @@
 
 {% block title %}Destaques – Portal Inovaí{% endblock %}
 
+{% block navbar %}
+    {% include 'components/navbar_editor.html' %}
+{% endblock %}
+
+{% block navbar_scroll_logic %}
+    <!-- Navbar logic handled by navbar_editor.html component -->
+{% endblock %}
+
 {% block content %}
 <main class="flex-grow container mx-auto px-4 pt-24 pb-10">
     <div class="flex items-center justify-between mb-8">

@@ -3,12 +3,15 @@
 
 {% block title %}Editor de Notícias - Portal Inovaí{% endblock %}
 
+{% block navbar %}
+    {% include 'components/navbar_editor.html' %}
+{% endblock %}
+
 {% block extra_styles %}
 <style>
     /* Estilos Específicos do Editor */
     #sidebar {
         height: calc(100vh - 80px);
-        /* Ajuste baseado na altura da navbar */
         position: sticky;
         top: 80px;
     }
@@ -84,49 +87,16 @@
     #canvas:hover #floatingAddBtn {
         opacity: 1;
     }
-</style>
-<style>
-    /* Navbar Overrides for Editor */
-    #navbar {
-        position: relative !important;
-        background-color: white !important;
-        border-bottom: 1px solid #e5e7eb;
-        box-shadow: none !important;
-    }
 
-    .dark #navbar {
-        background-color: #111827 !important;
-        border-color: #374151;
-    }
-
-    #navbar a,
-    #navbar button,
-    #navbar i {
-        color: #374151 !important;
-        /* gray-700 */
-    }
-
-    .dark #navbar a,
-    .dark #navbar button,
-    .dark #navbar i {
-        color: #d1d5db !important;
-        /* gray-300 */
-    }
-
-    /* Logo Filter Reset */
-    #navbar img {
-        filter: none !important;
-    }
-
-    /* Adjust main container since navbar is relative */
-    .editor-container {
-        padding-top: 0 !important;
+    /* Preserva newlines e tabulações em blocos de texto editáveis */
+    .editor-text-block {
+        white-space: pre-wrap;
     }
 </style>
 {% endblock %}
 
 {% block navbar_scroll_logic %}
-// Scroll logic disabled for Editor
+    <!-- Navbar logic handled by navbar_editor.html component -->
 {% endblock %}
 
 {% block content %}
@@ -393,13 +363,13 @@
 
             switch (type) {
                 case 'title':
-                    contentHTML = `<h1 class="text-4xl font-bold text-gray-900 outline-none" contenteditable="true">${content || 'Título da Notícia'}</h1>`;
+                    contentHTML = `<h1 class="text-4xl font-bold text-gray-900 outline-none editor-text-block" contenteditable="true"></h1>`;
                     break;
                 case 'subtitle':
-                    contentHTML = `<h2 class="text-2xl font-semibold text-gray-700 outline-none mt-2" contenteditable="true">${content || 'Subtítulo Explicativo'}</h2>`;
+                    contentHTML = `<h2 class="text-2xl font-semibold text-gray-700 outline-none mt-2 editor-text-block" contenteditable="true"></h2>`;
                     break;
                 case 'paragraph':
-                    contentHTML = `<p class="text-gray-600 leading-relaxed outline-none" contenteditable="true">${content || 'Comece a escrever o conteúdo do parágrafo aqui...'}</p>`;
+                    contentHTML = `<p class="text-gray-600 leading-relaxed outline-none editor-text-block" contenteditable="true"></p>`;
                     break;
                 case 'image':
                     // Se tivermos uma URL de imagem
@@ -476,8 +446,8 @@
                                 <input type="file" class="hidden" accept="image/*" onchange="previewImage(this)">
                             </div>
                             <div class="w-full md:w-1/2">
-                                <h3 class="text-xl font-bold mb-2 outline-none" contenteditable="true">Título da Seção</h3>
-                                <p class="text-gray-600 outline-none" contenteditable="true">${itContent}</p>
+                                <h3 class="text-xl font-bold mb-2 outline-none editor-text-block" contenteditable="true">Título da Seção</h3>
+                                <p class="text-gray-600 outline-none editor-text-block" contenteditable="true"></p>
                             </div>
                         </div>
                     `;
@@ -487,6 +457,17 @@
             const contentWrapper = document.createElement('div');
             contentWrapper.innerHTML = contentHTML;
             block.appendChild(contentWrapper);
+
+            /* Definir conteúdo via textContent para preservar newlines/tabs (title, subtitle, paragraph, image-text) */
+            if (type === 'title') {
+                contentWrapper.querySelector('h1').textContent = content || 'Título da Notícia';
+            } else if (type === 'subtitle') {
+                contentWrapper.querySelector('h2').textContent = content || 'Subtítulo Explicativo';
+            } else if (type === 'paragraph') {
+                contentWrapper.querySelector('p').textContent = content || 'Comece a escrever o conteúdo do parágrafo aqui...';
+            } else if (type === 'image-text') {
+                contentWrapper.querySelector('p').textContent = content || 'Texto descritivo ao lado da imagem...';
+            }
 
             // Inserir antes do botão flutuante e menu
             canvas.insertBefore(block, floatingBtn);
@@ -508,26 +489,26 @@
         }
 
         // --- Auxiliar: Pré-visualização de Imagem ---
+        // Importante: preservar o mesmo input (com o arquivo selecionado) ao atualizar o DOM,
+        // senão o arquivo é perdido e não é enviado no save.
         window.previewImage = function (input) {
             if (input.files && input.files[0]) {
+                const fileInput = input;
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                    const parent = input.parentElement;
-                    // Resetar classes para remover estilo de placeholder e permitir clique total
-                    // Resetar classes para remover estilo de placeholder e permitir clique total
-                    // VOLTANDO para altura fixa padrão (h-96) com object-cover
+                    const parent = fileInput.parentElement;
                     parent.className = 'w-full h-96 relative rounded-lg overflow-hidden group cursor-pointer';
                     parent.style.height = '';
 
+                    fileInput.remove();
                     parent.innerHTML = `
                         <img src="${e.target.result}" class="w-full h-full object-cover">
-                        <!-- Overlay de troca -->
                         <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                             <span class="text-white font-medium flex items-center gap-2"><i class="bi bi-pencil"></i> Trocar Imagem</span>
                         </div>
-                        <input type="file" class="hidden" accept="image/*" onchange="previewImage(this)">
                     `;
-                }
+                    parent.appendChild(fileInput);
+                };
                 reader.readAsDataURL(input.files[0]);
             }
         }
@@ -735,14 +716,14 @@
 
                 if (blockEl.querySelector('h1')) {
                     blockData.type = 'title';
-                    blockData.content = blockEl.querySelector('h1').innerText;
+                    blockData.content = blockEl.querySelector('h1').textContent;
                 } else if (blockEl.querySelector('h2')) {
                     blockData.type = 'subtitle';
-                    blockData.content = blockEl.querySelector('h2').innerText;
+                    blockData.content = blockEl.querySelector('h2').textContent;
                 } else if (blockEl.querySelector('p') && !blockEl.querySelector('img')) {
-                    // Parágrafo simples
+                    // Parágrafo simples (textContent preserva newlines/tabs)
                     blockData.type = 'paragraph';
-                    blockData.content = blockEl.querySelector('p').innerText;
+                    blockData.content = blockEl.querySelector('p').textContent;
                 } else if (blockEl.querySelector('.group-carousel')) {
                     blockData.type = 'carousel';
                     // Imagens do carrossel são manipuladas via propriedade storedImages no container
@@ -764,7 +745,7 @@
                     }
                 } else if (blockEl.querySelector('img') && blockEl.querySelector('p')) {
                     blockData.type = 'image-text';
-                    blockData.content = blockEl.querySelector('p').innerText;
+                    blockData.content = blockEl.querySelector('p').textContent;
                     // Imagem?
                     const imgInput = blockEl.querySelector('input[type="file"]');
                     if (imgInput && imgInput.files[0]) {

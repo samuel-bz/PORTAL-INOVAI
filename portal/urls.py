@@ -26,4 +26,3 @@ urlpatterns = [
     path('noticia/<int:pk>/', news_detail, name='news_detail'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

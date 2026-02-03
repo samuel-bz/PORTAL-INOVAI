@@ -3,6 +3,15 @@
 
 {% block title %}{{ post.title }} — Portal Inovaí{% endblock %}
 
+{% block navbar %}
+    {% include 'components/navbar_news.html' %}
+{% endblock %}
+
+{% block navbar_scroll_logic %}
+    <!-- Navbar logic handled by navbar_news.html component -->
+{% endblock %}
+
+
 {% block content %}
 <article class="flex-grow">
     <!-- Cabeçalho da notícia -->
@@ -24,13 +33,6 @@
             </div>
         </div>
     </header>
-
-    <!-- Thumbnail (se houver) -->
-    {% if post.thumbnail %}
-    <div class="w-full max-w-4xl mx-auto px-4 -mt-2 mb-8">
-        <img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" class="w-full rounded-xl shadow-lg object-cover max-h-[400px]">
-    </div>
-    {% endif %}
 
     <!-- Conteúdo (blocos) -->
     <div class="container mx-auto px-4 pb-16 max-w-3xl">

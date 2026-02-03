@@ -22,5 +22,7 @@ urlpatterns = [
     path('destaque/<int:pk>/edit/', DestaqueUpdateView.as_view(), name='destaque_update'),
     path('destaque/<int:pk>/delete/', DestaqueDeleteView.as_view(), name='destaque_delete'),
     path('news/', news_list, name='news_list'),
+    path('noticia/<int:pk>/', news_detail, name='news_detail'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

@@ -175,6 +175,7 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
         <div
             class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
             <div class="relative h-48 overflow-hidden">
+                <a href="{% url 'portal:news_detail' post.pk %}">
                 {% if post.thumbnail %}
                 <img src="{{ post.thumbnail.url }}"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -189,11 +190,12 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
                     class="absolute top-4 right-4 bg-brand-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                     {{ post.tags|truncatewords:2 }}</div>
                 {% endif %}
+                </a>
             </div>
             <div class="p-6">
                 <h5
                     class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
-                    {{ post.title }}</h5>
+                    <a href="{% url 'portal:news_detail' post.pk %}">{{ post.title }}</a></h5>
                 <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{{ post.description }}</p>
                 <a href="{% url 'portal:news_detail' post.pk %}"
                     class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
@@ -209,37 +211,4 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
         {% endfor %}
     </div>
 </main>
-
-    <!-- Rodapé -->
-    <footer class="bg-gray-800 dark:bg-gray-950 text-gray-300 py-12 mt-auto">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <h5 class="text-white text-lg font-bold mb-4">Portal Inovaí</h5>
-                    <p class="text-sm opacity-80 leading-relaxed">Conectando inovação, tecnologia e pessoas para
-                        transformar o futuro da nossa sociedade através do conhecimento.</p>
-                </div>
-                <div>
-                    <h5 class="text-white text-lg font-bold mb-4">Links Rápidos</h5>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-brand-blue transition">Sobre Nós</a></li>
-                        <li><a href="#" class="hover:text-brand-blue transition">Parceiros</a></li>
-                        <li><a href="#" class="hover:text-brand-blue transition">Contato</a></li>
-                        <li><a href="#" class="hover:text-brand-blue transition">Política de Privacidade</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 class="text-white text-lg font-bold mb-4">Contato</h5>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex items-center gap-2"><i class="bi bi-envelope"></i> contato@portalinovai.com.br
-                        </li>
-                        <li class="flex items-center gap-2"><i class="bi bi-geo-alt"></i> Itajubá, MG - Brasil</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-xs text-gray-500">
-                &copy; 2026 Portal Inovaí. Todos os direitos reservados.
-            </div>
-        </div>
-    </footer>
 {% endblock %}

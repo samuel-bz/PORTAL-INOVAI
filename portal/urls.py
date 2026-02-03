@@ -9,6 +9,7 @@ app_name = 'portal'
 
 urlpatterns = [
     path('', index, name='index'),
+    path('sobre/', sobre, name='sobre'),
     path('home/', index, name='home'),
     path('mulheres/', mulheres, name='mulheres'),
     path('editor/', news_editor, name='news_editor'),
@@ -25,4 +26,3 @@ urlpatterns = [
     path('noticia/<int:pk>/', news_detail, name='news_detail'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

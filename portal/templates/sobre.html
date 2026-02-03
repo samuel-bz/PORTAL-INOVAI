@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block navbar_scroll_logic %}
+<script>
+const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
+const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
+
+function updateNavbar() {
+if (!navbar) return;
+if (window.scrollY > 20) {
+// Estado Rolado (Sólido)
+navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
+navbar.classList.add('bg-blue-50', 'dark:bg-gray-800', 'shadow-md');
+
+// Filtro de Logo (Redefinir)
+logoImgs.forEach(img => img.style.filter = 'none');
+
+// Cor do Botão de Modo Escuro
+if (darkModeBtn) {
+darkModeBtn.classList.remove('text-white', 'border-white/20');
+darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+}
+
+// Cor dos links
+navLinks.forEach(link => {
+if (link.id === 'nav-active') {
+// Link Ativo Rolado (Texto Azul, Borda Transparente)
+link.classList.remove('text-white', 'border-white');
+link.classList.add('text-brand-blue', 'border-transparent');
+} else {
+// Links não ativos
+link.classList.remove('text-white');
+link.classList.add('text-gray-600', 'dark:text-gray-300');
+}
+});
+
+} else {
+// Estado Superior (Transparente)
+navbar.classList.add('bg-transparent', 'text-white', 'border-white/20');
+navbar.classList.remove('bg-blue-50', 'dark:bg-gray-800', 'shadow-md');
+
+// Filtro de Logo (Branco)
+logoImgs.forEach(img => img.style.filter = 'brightness(0) invert(1)');
+
+// Cor do Botão de Modo Escuro
+if (darkModeBtn) {
+darkModeBtn.classList.add('text-white', 'border-white/20');
+darkModeBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+}
+
+// Cor dos links
+navLinks.forEach(link => {
+if (link.id === 'nav-active') {
+// Link Ativo Transparente (Texto Branco, Borda Branca)
+link.classList.add('text-white', 'border-white');
+link.classList.remove('text-brand-blue', 'border-transparent');
+} else {
+// Não ativo
+link.classList.add('text-white');
+link.classList.remove('text-gray-600', 'dark:text-gray-300');
+}
+});
+}
+}
+
+window.addEventListener('scroll', updateNavbar);
+updateNavbar(); // Verificação Inicial
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Hero Section -->
+    <section class="container mx-auto px-4 pt-24 pb-8 bg-black">
+        <div class="w-full relative">
+            <img src="{% static 'images/slogan.png' %}" alt="Inovaí - Slogan"
+                class="w-full h-auto shadow-sm rounded-lg">
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-20 bg-[#fdfbf6] dark:bg-gray-800 font-serif">
+        <div class="container mx-auto px-4">
+            <div
+                class="max-w-5xl mx-auto bg-white dark:bg-gray-900 shadow-xl p-8 md:p-16 border-t-8 border-black dark:border-white">
+
+                <!-- Newspaper Header -->
+                <div class="text-center mb-12 border-b-4 border-double border-gray-900 dark:border-gray-100 pb-8">
+                    <h2
+                        class="text-5xl md:text-7xl font-black text-gray-900 dark:text-white mb-6 uppercase tracking-tighter">
+                        Nossa Missão
+                    </h2>
+                    <div
+                        class="flex items-center justify-center gap-6 text-sm md:text-base font-bold text-gray-600 dark:text-gray-400 uppercase tracking-[0.2em] border-t border-b border-gray-200 py-3">
+                        <span>Piraí - RJ</span>
+                        <span class="text-xl">•</span>
+                        <span>Inovação & Tecnologia</span>
+                        <span class="text-xl">•</span>
+                        <span>Edição Especial</span>
+                    </div>
+                </div>
+
+                <!-- Lead Text -->
+                <div
+                    class="text-xl md:text-2xl text-gray-800 dark:text-gray-200 font-medium italic text-center max-w-4xl mx-auto mb-16 leading-relaxed px-8 border-l-4 border-r-4 border-gray-100 dark:border-gray-700">
+                    "O Inovaí é um espaço da cidade de Piraí - RJ feito para você aprender tecnologia, experimentar
+                    novas ideias e construir soluções para o futuro. Aqui você encontra cursos,
+                    oficinas, robótica, soluções tecnológicas e muito mais, tudo gratuito e aberto à comunidade."
+                </div>
+
+                <!-- Main Content Columns -->
+                <div
+                    class="prose prose-lg prose-gray dark:prose-invert max-w-none md:columns-2 gap-12 text-justify leading-loose">
+
+                    <!-- First Paragraph with Drop Cap -->
+                    <p
+                        class="mb-8 first-letter:text-7xl first-letter:font-black first-letter:text-gray-900 dark:first-letter:text-white first-letter:mr-4 first-letter:float-left first-letter:leading-none first-letter:mt-2">
+                        O Inovaí é um programa público da Secretaria Municipal de Ciência e Tecnologia que abre as
+                        portas da inovação para toda a comunidade.
+                        Ele reúne cursos, oficinas e espaços colaborativos voltados para o aprendizado, a criatividade e
+                        o desenvolvimento de novas ideias.
+                        O principal objetivo do Inovaí é aproximar a população das ferramentas do futuro, promover
+                        educação digital de qualidade, oferecer oportunidades de profissionalização, incentivar a
+                        participação de mulheres na ciência e tecnologia e inclusão digital.
+                    </p>
+
+                    <!-- Subheadline -->
+                    <h2
+                        class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-6 uppercase border-b-2 border-black dark:border-white inline-block">
+                        O que o Inovaí oferece
+                    </h2>
+
+                    <h3 class="text-xl font-bold mb-6 italic text-gray-800 dark:text-gray-200">
+                        O Inovaí é um polo de inovação e tecnologia que aproxima,
+                        promove e incentiva o mundo tecnológico para a população de Piraí.
+                        É um espaço para aprender, criar e transformar.
+                    </h3>
+
+                    <!-- Divider only visible in column flow -->
+                    <div class="w-full h-px bg-gray-300 my-8"></div>
+
+                    <ul class="list-none space-y-4">
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Cursos básicos de tecnologia:</strong> para quem quer começar a aprender
+                            informática, programação ou ferramentas digitais.
+                        </li>
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Cultura maker e Fab-Lab:</strong> oficinas práticas para criar, experimentar e
+                            construir protótipos com impressoras 3D, eletrônica e outras tecnologias.
+                        </li>
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Robótica educacional:</strong> atividades para desenvolverem
+                            raciocínio lógico e criatividade.
+                        </li>
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Mulheres na Ciência:</strong> ambientes colaborativos para meninas e mulheres
+                        trabalharem juntas.
+                        </li>
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Centro de desenvolvimento de software:</strong> um núcleo especializado em
+                            desenvolvimento de sistema e soluções tecnológicas.
+                        </li>
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Oficinas educacionais e espaços de inovação:</strong> atividades abertas para
+                            estimular novas ideias e soluções para a cidade.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

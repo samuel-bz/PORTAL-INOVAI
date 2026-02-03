@@ -141,8 +141,8 @@ if (navbar) {
 
                     <div
                         class="mt-auto border-t border-gray-100 dark:border-gray-700 pt-4 flex justify-between items-center">
-                        <a href="#" class="text-blue-600 dark:text-blue-400 text-sm font-semibold hover:underline">
-                            <a href="{% url 'portal:news_detail' news.pk %}">Ler mais <i class="bi bi-arrow-right ml-1"></i></a>
+                        <a href="{% url 'portal:news_detail' news.pk %}" class="text-blue-600 dark:text-blue-400 text-sm font-semibold hover:underline">
+                            Ler mais <i class="bi bi-arrow-right ml-1"></i>
                         </a>
                         <!-- Edit Button (Context: View/Edit Page) -->
                         <a href="{% url 'portal:news_editor_edit' news.id|default:0 %}"

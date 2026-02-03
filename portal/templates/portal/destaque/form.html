@@ -74,14 +74,14 @@
                 </div>
                 {% endwith %}
 
-                <div id="related-post-wrap" class="space-y-1.5 destino-field" style="display: {% if form.points_to_noticia.value %}block{% else %}none{% endif %};">
+                <div id="related-post-wrap" class="space-y-1.5 destino-field {% if not form.points_to_noticia.value %}hidden{% endif %}">
                     <label for="{{ form.related_post.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ form.related_post.label }} <span class="text-red-500">*</span></label>
                     {{ form.related_post }}
                     {% if form.related_post.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ form.related_post.help_text }}</p>{% endif %}
                     {% if form.related_post.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ form.related_post.errors.0 }}</p>{% endif %}
                 </div>
 
-                <div id="link-url-wrap" class="space-y-1.5 destino-field" style="display: {% if form.points_to_noticia.value %}none{% else %}block{% endif %};">
+                <div id="link-url-wrap" class="space-y-1.5 destino-field {% if form.points_to_noticia.value %}hidden{% endif %}">
                     <label for="{{ form.link_url.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ form.link_url.label }}</label>
                     {{ form.link_url }}
                     {% if form.link_url.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ form.link_url.help_text }}</p>{% endif %}
@@ -89,9 +89,22 @@
                 </div>
 
                 {% with field=form.button_color %}
-                <div class="space-y-1.5">
+                <div class="space-y-3">
                     <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
-                    {{ field }}
+                    
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #FFFFFF;" onclick="setColor('#FFFFFF')" title="Branco"></button>
+                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #0d6efd;" onclick="setColor('#0d6efd')" title="Azul Claro"></button>
+                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #0a58ca;" onclick="setColor('#0a58ca')" title="Azul Escuro"></button>
+                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #fd0e6f;" onclick="setColor('#fd0e6f')" title="Rosa"></button>
+                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #6a0080;" onclick="setColor('#6a0080')" title="Roxo"></button>
+                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #8803A3;" onclick="setColor('#8803A3')" title="Roxo Escuro"></button>
+                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #F2B9FE;" onclick="setColor('#F2B9FE')" title="Rosa Claro"></button>
+                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #2e0836;" onclick="setColor('#2e0836')" title="Roxo MUITO Escuro"></button>
+                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #6efd0d;" onclick="setColor('#6efd0d')" title="Verde"></button>
+                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #000000;" onclick="setColor('#000000')" title="Preto"></button>
+                    </div>
+
                     {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
                     {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
                 </div>
@@ -124,6 +137,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     var form = document.getElementById('destaqueForm');
     if (!form) return;
+    
+    // Logic for destination toggle
     var cb = form.querySelector('input[name="points_to_noticia"]');
     var relatedWrap = document.getElementById('related-post-wrap');
     var linkWrap = document.getElementById('link-url-wrap');
@@ -133,12 +148,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function toggleDestino() {
         var pointsToNoticia = cb.checked;
         if (pointsToNoticia) {
-            relatedWrap.style.display = 'block';
-            linkWrap.style.display = 'none';
+            relatedWrap.classList.remove('hidden');
+            linkWrap.classList.add('hidden');
             if (linkInput) linkInput.value = '';
         } else {
-            relatedWrap.style.display = 'none';
-            linkWrap.style.display = 'block';
+            relatedWrap.classList.add('hidden');
+            linkWrap.classList.remove('hidden');
             if (relatedSelect) {
                 relatedSelect.selectedIndex = 0;
                 var opt = relatedSelect.options[0];
@@ -150,6 +165,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (cb) {
         cb.addEventListener('change', toggleDestino);
         toggleDestino();
+    }
+
+    // Logic for Color Picker
+    var colorInput = form.querySelector('input[name="button_color"]');
+    var colorPicker = document.getElementById('colorPickerBtn');
+
+    window.setColor = function(color) {
+        if (colorInput) colorInput.value = color;
+        if (colorPicker) colorPicker.value = color;
+    };
+
+    if (colorPicker && colorInput) {
+        // Sync color picker -> text input
+        colorPicker.addEventListener('input', function() {
+            colorInput.value = colorPicker.value;
+        });
+
+        // Sync text input -> color picker
+        colorInput.addEventListener('input', function() {
+            if (/^#[0-9A-F]{6}$/i.test(colorInput.value)) {
+                colorPicker.value = colorInput.value;
+            }
+        });
+        
+        // Initial sync
+        if (/^#[0-9A-F]{6}$/i.test(colorInput.value)) {
+            colorPicker.value = colorInput.value;
+        }
     }
 });
 </script>

@@ -91,6 +91,14 @@ link.classList.remove('text-gray-600', 'dark:text-gray-300');
 
 window.addEventListener('scroll', updateNavbar);
 updateNavbar(); // Verificação Inicial
+
+// --- Lógica de Cores Dinâmicas ---
+document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
+    const color = btn.getAttribute('data-button-color');
+    if (color) {
+        btn.style.backgroundColor = color;
+    }
+});
 </script>
 {% endblock %}
 
@@ -110,8 +118,8 @@ updateNavbar(); // Verificação Inicial
                         </p>
                         <a
                         {% if destaque.points_to_noticia %} href="#" {# TODO: replace with news detail URL when page exists #} {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
-                        class="bg-brand-blue hover:bg-brand-dark text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg hover:shadow-brand-blue/50"
-                        style="background-color:{{destaque.button_color}}">
+                        class="dynamic-color-btn bg-brand-blue hover:bg-brand-dark text-white px-8 py-3 rounded-full font-bold text-lg transition shadow-lg hover:shadow-brand-blue/50"
+                        data-button-color="{{ destaque.button_color }}">
                         {{destaque.button_text }}
                         </a>
                     </div>

@@ -1,71 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block navbar %}
+    {% include 'components/navbar_solid.html' %}
+{% endblock %}
+
 {% block navbar_scroll_logic %}
-<script>
-const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
-const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
-
-function updateNavbar() {
-if (!navbar) return;
-if (window.scrollY > 20) {
-// Estado Rolado (Sólido)
-navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
-navbar.classList.add('bg-blue-50', 'dark:bg-gray-800', 'shadow-md');
-
-// Filtro de Logo (Redefinir)
-logoImgs.forEach(img => img.style.filter = 'none');
-
-// Cor do Botão de Modo Escuro
-if (darkModeBtn) {
-darkModeBtn.classList.remove('text-white', 'border-white/20');
-darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
-}
-
-// Cor dos links
-navLinks.forEach(link => {
-if (link.id === 'nav-active') {
-// Link Ativo Rolado (Texto Azul, Borda Transparente)
-link.classList.remove('text-white', 'border-white');
-link.classList.add('text-brand-blue', 'border-transparent');
-} else {
-// Links não ativos
-link.classList.remove('text-white');
-link.classList.add('text-gray-600', 'dark:text-gray-300');
-}
-});
-
-} else {
-// Estado Superior (Transparente)
-navbar.classList.add('bg-transparent', 'text-white', 'border-white/20');
-navbar.classList.remove('bg-blue-50', 'dark:bg-gray-800', 'shadow-md');
-
-// Filtro de Logo (Branco)
-logoImgs.forEach(img => img.style.filter = 'brightness(0) invert(1)');
-
-// Cor do Botão de Modo Escuro
-if (darkModeBtn) {
-darkModeBtn.classList.add('text-white', 'border-white/20');
-darkModeBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
-}
-
-// Cor dos links
-navLinks.forEach(link => {
-if (link.id === 'nav-active') {
-// Link Ativo Transparente (Texto Branco, Borda Branca)
-link.classList.add('text-white', 'border-white');
-link.classList.remove('text-brand-blue', 'border-transparent');
-} else {
-// Não ativo
-link.classList.add('text-white');
-link.classList.remove('text-gray-600', 'dark:text-gray-300');
-}
-});
-}
-}
-
-window.addEventListener('scroll', updateNavbar);
-updateNavbar(); // Verificação Inicial
-</script>
+    <!-- Navbar logic handled by navbar_solid.html component -->
 {% endblock %}
 
 {% block content %}

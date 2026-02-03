@@ -155,78 +155,45 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
         </div>
     </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for news in news_posts %}
-            <!-- Cartão 1 -->
-            <div
-                class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="{{ news.thumbnail.url }}"
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        alt="News">
-                    <div
-                        class="absolute top-4 right-4 bg-brand-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                        {{ news.tags }}</div>
-                </div>
-                <div class="p-6">
-                    <h5
-                        class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
-                        {{ news.title }}</h5>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{{ news.description }}</p>
-                    <a href="#"
-                        class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
-                        Ler mais <i class="bi bi-arrow-right ml-2"></i>
-                    </a>
-                </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for post in news_posts %}
+        <div
+            class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
+            <div class="relative h-48 overflow-hidden">
+                {% if post.thumbnail %}
+                <img src="{{ post.thumbnail.url }}"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    alt="{{ post.title }}">
+                {% else %}
+                <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    alt="{{ post.title }}">
+                {% endif %}
+                {% if post.tags %}
+                <div
+                    class="absolute top-4 right-4 bg-brand-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                    {{ post.tags|truncatewords:2 }}</div>
+                {% endif %}
             </div>
-            {% endfor %}
-
-            {% comment %} <!-- Cartão 2 -->
-            <div
-                class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1562774053-701939374585"
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        alt="News">
-                </div>
-                <div class="p-6">
-                    <h5
-                        class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
-                        Workshop de Robótica</h5>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">Evento reuniu estudantes e
-                        pesquisadores para discutir o futuro da automação industrial e robótica colaborativa.</p>
-                    <a href="#"
-                        class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
-                        Ler mais <i class="bi bi-arrow-right ml-2"></i>
-                    </a>
-                </div>
+            <div class="p-6">
+                <h5
+                    class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
+                    {{ post.title }}</h5>
+                <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{{ post.description }}</p>
+                <a href="{% url 'portal:news_detail' post.pk %}"
+                    class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
+                    Ler mais <i class="bi bi-arrow-right ml-2"></i>
+                </a>
             </div>
-
-            <!-- Cartão 3 -->
-            <div
-                class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc"
-                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        alt="News">
-                    <div
-                        class="absolute top-4 right-4 bg-mulheres-purple text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                        Destaque</div>
-                </div>
-                <div class="p-6">
-                    <h5
-                        class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
-                        Premiação "Mulheres que Inspiram"</h5>
-                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">Cerimônia de premiação para cientistas
-                        que se destacaram no último ano por suas contribuições acadêmicas e sociais.</p>
-                    <a href="#"
-                        class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
-                        Ler mais <i class="bi bi-arrow-right ml-2"></i>
-                    </a>
-                </div>
-            </div> {% endcomment %}
         </div>
-    </main>
+        {% empty %}
+        <div class="col-span-full text-center py-12 text-gray-500 dark:text-gray-400">
+            <p class="mb-4">Nenhuma notícia publicada. Crie notícias no <a href="/admin/" class="text-brand-blue dark:text-blue-400 hover:underline">admin</a> para exibir aqui.</p>
+            <p class="text-sm">Para testar a página de detalhe: <a href="{% url 'portal:news_detail' 1 %}" class="text-brand-blue dark:text-blue-400 hover:underline">Ver notícia #1</a> (crie uma notícia no admin para ver o conteúdo).</p>
+        </div>
+        {% endfor %}
+    </div>
+</main>
 
     <!-- Rodapé -->
     <footer class="bg-gray-800 dark:bg-gray-950 text-gray-300 py-12 mt-auto">

@@ -168,14 +168,12 @@ def news_editor(request, news_id=None):
                 'content': block.content,
                 'images': []
             }
-            
             for img in block.image.all():
-                 blocks_data[-1]['images'].append({
-                     'url': img.image.url if img.image else '',
-                     'caption': img.captions,
-                     'alt': img.alt_text
-                 })
-
+                block_data['images'].append({
+                    'url': img.image.url if img.image else '',
+                    'caption': img.captions,
+                    'alt': img.alt_text
+                })
             blocks_data.append(block_data)
 
         context['existing_blocks_json'] = json.dumps(blocks_data)

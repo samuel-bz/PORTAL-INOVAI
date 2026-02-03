@@ -3,6 +3,7 @@
 {% block title %}Portal Inovaí - Mulheres na Ciência{% endblock %}
 
 {% block extra_styles %}
+<style>
 /* Forçar estilos do Tema Mulheres */
 body {
 --tw-bg-opacity: 1;
@@ -21,6 +22,7 @@ border-radius: 5px;
 ::-webkit-scrollbar-thumb:hover {
 background: #6a0080;
 }
+</style>
 {% endblock %}
 
 {% block body_class %}bg-mulheres-light text-mulheres-dark dark:bg-[#2e0836] dark:text-mulheres-pink transition-colors
@@ -35,8 +37,11 @@ duration-300 font-sans flex flex-col min-h-screen{% endblock %}
 {% endblock %}
 
 {% block navbar_scroll_logic %}
+<script>
 const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
 const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
+const logoutBtn = navbar ? navbar.querySelector('#logoutBtn') : null;
+const newsAddBtn = navbar ? navbar.querySelector('#newsAddBtn') : null;
 
 function updateNavbar() {
 if (!navbar) return;
@@ -50,8 +55,20 @@ logoImgs.forEach(img => img.style.filter = 'none');
 
 // Cor do Botão de Modo Escuro
 if (darkModeBtn) {
-darkModeBtn.classList.remove('text-white', 'border-white/20');
-darkModeBtn.classList.add('text-mulheres-pink', 'border-mulheres-pink/30'); // Reverter para cores originais
+    darkModeBtn.classList.remove('text-white', 'border-white/20');
+    darkModeBtn.classList.add('text-mulheres-pink', 'border-mulheres-pink/30'); // Reverter para cores originais
+}
+
+// Cor do Botão de Logout
+if (logoutBtn) {
+    logoutBtn.classList.remove('text-white', 'border-white');
+    logoutBtn.classList.add('text-mulheres-pink/90', 'border-mulheres-pink/30');
+} 
+
+// Cor do Botão de Adicionar Notícia
+if (newsAddBtn) {
+    newsAddBtn.classList.remove('text-white', 'border-transparent');
+    newsAddBtn.classList.add('text-mulheres-pink/90', 'border-mulheres-pink/30');
 }
 
 // Cor dos links - Manter como está (branco/rosa) ou reverter para cores específicas do tema?
@@ -72,8 +89,14 @@ logoImgs.forEach(img => img.style.filter = 'brightness(0) invert(1)');
 
 // Cor do Botão de Modo Escuro
 if (darkModeBtn) {
-darkModeBtn.classList.add('text-white', 'border-white/20');
-darkModeBtn.classList.remove('text-mulheres-pink', 'border-mulheres-pink/30');
+    darkModeBtn.classList.add('text-white', 'border-white/20');
+    darkModeBtn.classList.remove('text-mulheres-pink', 'border-mulheres-pink/30');
+}
+
+// Cor do Botão de Logout
+if (logoutBtn) {
+    logoutBtn.classList.add('text-white', 'border-white');
+    logoutBtn.classList.remove('text-mulheres-pink/90', 'border-mulheres-pink/30');
 }
 
 // Cor dos links
@@ -88,6 +111,7 @@ link.classList.remove('text-mulheres-pink/90');
 
 window.addEventListener('scroll', updateNavbar);
 updateNavbar(); // Verificação Inicial
+</script>
 {% endblock %}
 
 {% block content %}

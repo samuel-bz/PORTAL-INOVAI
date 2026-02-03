@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from .utils import upload_image_path
 
 BLOCK_TYPES = (
     ('paragraph', 'Parágrafo'),
@@ -8,6 +9,8 @@ BLOCK_TYPES = (
     ('subtitle', 'Subtítulo'),
     ('hr', 'Separador horizontal'),
     ('image', 'Imagem'),
+    ('title', 'Título'),
+    ('carousel', 'Carrossel'),
 )
 
 PORTAIS = (
@@ -20,7 +23,7 @@ class NewsPost(models.Model):
     title = models.CharField("Titulo", max_length=127)
     description = models.CharField("Descrição", max_length=255)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='news_post', null=True, blank=True)
-    thumbnail = models.ImageField("Thumbnail", upload_to=None, null=True, blank=True)
+    thumbnail = models.ImageField("Thumbnail", upload_to=upload_image_path, null=True, blank=True)
     publish_date = models.DateField("Data de publicação", auto_now_add=True)
     tags = models.CharField("Tags", max_length=255, null=True, blank=True)
 
@@ -51,7 +54,7 @@ class NewsBlock(models.Model):
         ordering = ('-related_post',)
 
     def __str__(self):
-        titulo_noticia = self.related_post[:20].strip()
+        titulo_noticia = self.related_post.title
         return f"Notícia {titulo_noticia} | ({self.order:02d}).{self.get_block_type_display()}"
         # Exemplo:  Notícia 31/12/26 - Abertura | (01).Parágrafo
         #           Notícia 31/12/26 - Abertura | (02).Imagem

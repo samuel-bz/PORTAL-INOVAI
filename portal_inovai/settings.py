@@ -120,10 +120,11 @@ STATICFILES_DIRS = [
     BASE_DIR / 'portal' / 'static'
 ]
 
-MEDIA_URL = 'media/'
+# Media files
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Auth
 LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/editor'
 LOGOUT_REDIRECT_URL = '/'

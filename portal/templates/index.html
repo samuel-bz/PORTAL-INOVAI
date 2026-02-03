@@ -3,6 +3,8 @@
 {% block navbar_scroll_logic %}
 const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
 const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
+const logoutBtn = navbar ? navbar.querySelector('#logoutBtn') : null;
+const newsAddBtn = navbar ? navbar.querySelector('#newsAddBtn') : null;
 
 function updateNavbar() {
 if (!navbar) return;
@@ -16,8 +18,20 @@ logoImgs.forEach(img => img.style.filter = 'none');
 
 // Cor do Botão de Modo Escuro
 if (darkModeBtn) {
-darkModeBtn.classList.remove('text-white', 'border-white/20');
-darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+    darkModeBtn.classList.remove('text-white', 'border-white/20');
+    darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+}
+
+// Cor do Botão de Logout
+if (logoutBtn) {
+    logoutBtn.classList.remove('text-white', 'border-white');
+    logoutBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300');
+} 
+
+// Cor do Botão de Adicionar Notícia
+if (newsAddBtn) {
+    newsAddBtn.classList.remove('text-white');
+    newsAddBtn.classList.add('text-gray-600', 'dark:text-gray-300');
 }
 
 // Cor dos links
@@ -43,8 +57,20 @@ logoImgs.forEach(img => img.style.filter = 'brightness(0) invert(1)');
 
 // Cor do Botão de Modo Escuro
 if (darkModeBtn) {
-darkModeBtn.classList.add('text-white', 'border-white/20');
-darkModeBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+    darkModeBtn.classList.add('text-white', 'border-white/20');
+    darkModeBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+}
+
+// Cor do Botão de Logout
+if (logoutBtn) {
+    logoutBtn.classList.add('text-white', 'border-white');
+    logoutBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'border-gray-300');
+} 
+
+// Cor do Botão de Adicionar Notícia
+if (newsAddBtn) {
+    newsAddBtn.classList.add('text-white');
+    newsAddBtn.classList.remove('text-gray-600', 'dark:text-gray-300');
 }
 
 // Cor dos links

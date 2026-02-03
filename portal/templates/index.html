@@ -145,75 +145,287 @@ updateNavbar(); // Verificação Inicial
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Cartão 1 -->
-        <div
-            class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
-            <div class="relative h-48 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31"
-                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    alt="News">
-                <div
-                    class="absolute top-4 right-4 bg-brand-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                    Inovação</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for news in news_posts %}
+            <!-- Cartão 1 -->
+            <div
+                class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="{{ news.thumbnail.url }}"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        alt="News">
+                    <div
+                        class="absolute top-4 right-4 bg-brand-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        {{ news.tags }}</div>
+                </div>
+                <div class="p-6">
+                    <h5
+                        class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
+                        {{ news.title }}</h5>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{{ news.description }}</p>
+                    <a href="#"
+                        class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
+                        Ler mais <i class="bi bi-arrow-right ml-2"></i>
+                    </a>
+                </div>
             </div>
-            <div class="p-6">
-                <h5
-                    class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
-                    Edital de Inovação Aberto</h5>
-                <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">Novas oportunidades de fomento para
-                    startups da região. Confira os prazos, mentorias disponíveis e requisitos para participação.</p>
-                <a href="#"
-                    class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
-                    Ler mais <i class="bi bi-arrow-right ml-2"></i>
-                </a>
-            </div>
-        </div>
+            {% endfor %}
 
-        <!-- Cartão 2 -->
-        <div
-            class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
-            <div class="relative h-48 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1562774053-701939374585"
-                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    alt="News">
+            {% comment %} <!-- Cartão 2 -->
+            <div
+                class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1562774053-701939374585"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        alt="News">
+                </div>
+                <div class="p-6">
+                    <h5
+                        class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
+                        Workshop de Robótica</h5>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">Evento reuniu estudantes e
+                        pesquisadores para discutir o futuro da automação industrial e robótica colaborativa.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
+                        Ler mais <i class="bi bi-arrow-right ml-2"></i>
+                    </a>
+                </div>
             </div>
-            <div class="p-6">
-                <h5
-                    class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
-                    Workshop de Robótica</h5>
-                <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">Evento reuniu estudantes e
-                    pesquisadores para discutir o futuro da automação industrial e robótica colaborativa.</p>
-                <a href="#"
-                    class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
-                    Ler mais <i class="bi bi-arrow-right ml-2"></i>
-                </a>
-            </div>
-        </div>
 
-        <!-- Cartão 3 -->
-        <div
-            class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
-            <div class="relative h-48 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc"
-                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    alt="News">
-                <div
-                    class="absolute top-4 right-4 bg-mulheres-purple text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                    Destaque</div>
+            <!-- Cartão 3 -->
+            <div
+                class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        alt="News">
+                    <div
+                        class="absolute top-4 right-4 bg-mulheres-purple text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        Destaque</div>
+                </div>
+                <div class="p-6">
+                    <h5
+                        class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
+                        Premiação "Mulheres que Inspiram"</h5>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">Cerimônia de premiação para cientistas
+                        que se destacaram no último ano por suas contribuições acadêmicas e sociais.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
+                        Ler mais <i class="bi bi-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div> {% endcomment %}
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-gray-800 dark:bg-gray-950 text-gray-300 py-12 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h5 class="text-white text-lg font-bold mb-4">Portal Inovaí</h5>
+                    <p class="text-sm opacity-80 leading-relaxed">Conectando inovação, tecnologia e pessoas para
+                        transformar o futuro da nossa sociedade através do conhecimento.</p>
+                </div>
+                <div>
+                    <h5 class="text-white text-lg font-bold mb-4">Links Rápidos</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-brand-blue transition">Sobre Nós</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition">Parceiros</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition">Contato</a></li>
+                        <li><a href="#" class="hover:text-brand-blue transition">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white text-lg font-bold mb-4">Contato</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-2"><i class="bi bi-envelope"></i> contato@portalinovai.com.br
+                        </li>
+                        <li class="flex items-center gap-2"><i class="bi bi-geo-alt"></i> Itajubá, MG - Brasil</li>
+                    </ul>
+                </div>
             </div>
-            <div class="p-6">
-                <h5
-                    class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
-                    Premiação "Mulheres que Inspiram"</h5>
-                <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">Cerimônia de premiação para cientistas
-                    que se destacaram no último ano por suas contribuições acadêmicas e sociais.</p>
-                <a href="#"
-                    class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
-                    Ler mais <i class="bi bi-arrow-right ml-2"></i>
-                </a>
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-xs text-gray-500">
+                &copy; 2026 Portal Inovaí. Todos os direitos reservados.
             </div>
         </div>
-    </div>
-</main>
-{% endblock %}
+    </footer>
+
+    <!-- Scripts para Interatividade -->
+    <script>
+        // --- Lógica do Modo Escuro ---
+        const darkModeBtn = document.getElementById('darkModeBtn');
+        const darkModeMobileBtn = document.getElementById('darkModeMobileBtn');
+        const html = document.documentElement;
+
+        function toggleDarkMode() {
+            html.classList.toggle('dark');
+            updateIcons();
+        }
+
+        function updateIcons() {
+            const isDark = html.classList.contains('dark');
+            const iconClass = isDark ? 'bi-sun-fill' : 'bi-moon-fill';
+
+            // Atualizar Ícone Desktop
+            if (darkModeBtn) {
+                const icon = darkModeBtn.querySelector('i');
+                icon.className = `bi ${iconClass}`;
+                darkModeBtn.title = isDark ? "Modo Claro" : "Modo Escuro";
+            }
+
+            // Atualizar Ícone Móvel
+            if (darkModeMobileBtn) {
+                const icon = darkModeMobileBtn.querySelector('i');
+                icon.className = `bi ${iconClass}`;
+            }
+        }
+
+        if (darkModeBtn) darkModeBtn.addEventListener('click', toggleDarkMode);
+        if (darkModeMobileBtn) darkModeMobileBtn.addEventListener('click', toggleDarkMode);
+
+        // --- Lógica do Menu Móvel ---
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // --- Lógica do Carrossel (JS Puro) ---
+        const carouselWrapper = document.getElementById('carouselWrapper');
+        const slides = carouselWrapper.children;
+        const totalSlides = slides.length;
+        let currentSlide = 0;
+        let autoSlideInterval;
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicators = document.querySelectorAll('.indicator');
+
+        function updateCarousel() {
+            const offset = currentSlide * -100;
+            carouselWrapper.style.transform = `translateX(${offset}%)`;
+
+            // Atualizar indicadores
+            indicators.forEach((ind, index) => {
+                if (index === currentSlide) {
+                    ind.style.opacity = '1';
+                    ind.classList.add('w-6'); // Esticar indicador ativo
+                } else {
+                    ind.style.opacity = '0.5';
+                    ind.classList.remove('w-6');
+                }
+            });
+
+            // Reativar animação para texto se necessário (Opcional, mais simples deixar o CSS lidar com o fade-in)
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoSlide();
+        });
+
+        if (nextBtn) nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoSlide();
+        });
+
+        indicators.forEach((ind, index) => {
+            ind.addEventListener('click', () => {
+                currentSlide = index;
+                updateCarousel();
+                resetAutoSlide();
+            });
+        });
+
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = setInterval(nextSlide, 5000);
+        }
+
+        // Iniciar Slide Automático
+        resetAutoSlide();
+
+        // --- Lógica de Rolagem da Navbar ---
+        const navbar = document.getElementById('navbar');
+        const navLinks = navbar.querySelectorAll('div.hidden.md\\:flex > a');
+        const logoImgs = navbar.querySelectorAll('.flex-shrink-0 img');
+        // darkModeBtn is already defined globally
+
+        function updateNavbar() {
+            if (window.scrollY > 20) {
+                // Estado Rolado (Sólido)
+                navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
+                navbar.classList.add('bg-white', 'dark:bg-gray-800', 'shadow-md');
+
+                // Filtro de Logo (Redefinir)
+                logoImgs.forEach(img => img.style.filter = 'none');
+
+                // Cor do Botão de Modo Escuro
+                if (darkModeBtn) {
+                    darkModeBtn.classList.remove('text-white', 'border-white/20');
+                    darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+                }
+
+                // Cor dos links
+                navLinks.forEach(link => {
+                    if (link.id === 'nav-active') {
+                        // Link Ativo Rolado (Texto Azul, Borda Transparente)
+                        link.classList.remove('text-white', 'border-white');
+                        link.classList.add('text-brand-blue', 'border-transparent');
+                    } else {
+                        // Links não ativos
+                        link.classList.remove('text-white');
+                        link.classList.add('text-gray-600', 'dark:text-gray-300');
+                    }
+                });
+
+            } else {
+                // Estado Superior (Transparente)
+                navbar.classList.add('bg-transparent', 'text-white', 'border-white/20');
+                navbar.classList.remove('bg-white', 'dark:bg-gray-800', 'shadow-md');
+
+                // Filtro de Logo (Branco)
+                logoImgs.forEach(img => img.style.filter = 'brightness(0) invert(1)');
+
+                // Cor do Botão de Modo Escuro
+                if (darkModeBtn) {
+                    darkModeBtn.classList.add('text-white', 'border-white/20');
+                    darkModeBtn.classList.remove('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
+                }
+
+                // Cor dos links
+                navLinks.forEach(link => {
+                    if (link.id === 'nav-active') {
+                        // Link Ativo Transparente (Texto Branco, Borda Branca)
+                        link.classList.add('text-white', 'border-white');
+                        link.classList.remove('text-brand-blue', 'border-transparent');
+                    } else {
+                        // Não ativo
+                        link.classList.add('text-white');
+                        link.classList.remove('text-gray-600', 'dark:text-gray-300');
+                    }
+                });
+            }
+        }
+
+        window.addEventListener('scroll', updateNavbar);
+        updateNavbar(); // Verificação Inicial
+
+    </script>
+</body>
+
+</html>

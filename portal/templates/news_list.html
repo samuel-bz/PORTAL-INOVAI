@@ -3,29 +3,16 @@
 
 {% block title %}Notícias - Portal Inovaí{% endblock %}
 
+{% block navbar %}
+    {% include 'components/navbar_solid.html' %}
+{% endblock %}
+
 {% block navbar_scroll_logic %}
-<script>
-// News List page: navbar solid (no hero), same as index scrolled state
-const navLinks = navbar ? navbar.querySelectorAll('div.hidden.md\\:flex > a') : [];
-const logoImgs = navbar ? navbar.querySelectorAll('.flex-shrink-0 img') : [];
-if (navbar) {
-    navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
-    navbar.classList.add('bg-white', 'dark:bg-gray-800', 'shadow-md');
-    logoImgs.forEach(img => img.style.filter = 'none');
-    if (typeof darkModeBtn !== 'undefined' && darkModeBtn) {
-        darkModeBtn.classList.remove('text-white', 'border-white/20');
-        darkModeBtn.classList.add('text-gray-600', 'dark:text-gray-300', 'border-gray-300', 'dark:border-gray-600');
-    }
-    navLinks.forEach(link => {
-        link.classList.remove('text-white');
-        link.classList.add('text-gray-600', 'dark:text-gray-300');
-    });
-}
-</script>
+    <!-- Navbar logic handled by navbar_solid.html component -->
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 pt-28 pb-8">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 pb-8">
     <div class="container mx-auto px-4">
 
 
@@ -144,12 +131,14 @@ if (navbar) {
                         <a href="{% url 'portal:news_detail' news.pk %}" class="text-blue-600 dark:text-blue-400 text-sm font-semibold hover:underline">
                             Ler mais <i class="bi bi-arrow-right ml-1"></i>
                         </a>
+                        {% if user.is_authenticated %}
                         <!-- Edit Button (Context: View/Edit Page) -->
                         <a href="{% url 'portal:news_editor_edit' news.id|default:0 %}"
                             class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition"
                             title="Editar">
                             <i class="bi bi-pencil-square text-lg"></i>
                         </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

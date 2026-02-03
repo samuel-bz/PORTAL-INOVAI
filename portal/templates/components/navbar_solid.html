@@ -1,0 +1,33 @@
+{% load static %}
+<!-- Unified Solid Navbar -->
+<nav id="navbar"
+    class="sticky w-full top-0 z-50 transition-all duration-300 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20 items-center">
+            <!-- Logo -->
+            <div class="flex-shrink-0 flex items-center gap-3">
+                {% include 'components/navbar_parts/logo.html' %}
+            </div>
+
+            <!-- Menu Desktop -->
+            <div class="hidden md:flex items-center space-x-8">
+                {% include 'components/navbar_parts/links.html' %}
+                {% include 'components/navbar_parts/actions.html' %}
+            </div>
+            
+            <!-- Botão do Menu Móvel -->
+            <div class="md:hidden flex items-center gap-4">
+                <button id="mobileMenuBtn"
+                    class="text-gray-600 dark:text-gray-300 hover:text-gray-900 focus:outline-none">
+                    <i class="bi bi-list text-3xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painel do Menu Móvel -->
+    <div id="mobileMenu"
+        class="hidden md:hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 pb-4">
+        {% include 'components/navbar_parts/mobile_menu.html' %}
+    </div>
+</nav>

@@ -4,12 +4,25 @@
 {% block title %}Portal Inovaí - {{ post.title }}{% endblock %}
 
 {% block navbar %}
-    {% include 'components/navbar_solid.html' %}
+{% include 'components/navbar_solid.html' %}
 {% endblock %}
+
+{% block extra_styles %}
+<style>
+.post-tag {
+    background-color: #fd0e6f;
+    border-radius: 1rem;
+    display: inline-block;
+    padding: 3px 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+{% endblock extra_styles %}
 
 {% block navbar_scroll_logic %}
     <!-- Navbar logic handled by navbar_solid.html component -->
-{% endblock %}
+    {% endblock %}
 
 
 {% block content %}
@@ -21,18 +34,25 @@
                 <i class="bi bi-arrow-left mr-2"></i> Voltar ao portal
             </a>
             {% if post.tags %}
-            <p class="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">{{ post.tags }}</p>
+            <div id="tags" class="text-sm text-white dark:text-white uppercase tracking-wide mb-2 flex flex-wrap gap-2" data-tags="{{ post.tags|escapejs }}">
+            </div>
             {% endif %}
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{{ post.title }}</h1>
             <p class="text-lg text-gray-600 dark:text-gray-300 mb-4">{{ post.description }}</p>
+            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                <span><i class="bi bi-calendar3 mr-1"></i> {{ post.formatted_publish_date }}</span>
+                {% if post.author %}
+                <span><i class="bi bi-person mr-1"></i> {{ post.author.get_full_name|default:post.author.username }}</span>
+                {% endif %}
+            </div>
         </div>
     </header>
-
+    
     <!-- Conteúdo (blocos) -->
     <div class="container mx-auto px-4 pb-16 max-w-3xl">
         <div class="prose prose-lg dark:prose-invert max-w-none">
             {% for block in blocks %}
-                {% if block.block_type == 'title' %}
+            {% if block.block_type == 'title' %}
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4">{{ block.content }}</h2>
 
                 {% elif block.block_type == 'paragraph' %}
@@ -77,3 +97,10 @@
     </div>
 </article>
 {% endblock %}
+
+
+
+
+{% block body_scripts %}
+{% include 'components/tags_script.html' %}
+{% endblock body_scripts %}

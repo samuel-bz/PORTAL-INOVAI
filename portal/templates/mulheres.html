@@ -93,7 +93,6 @@ if (darkModeBtn) {
     darkModeBtn.classList.add('text-white', 'border-white/20');
     darkModeBtn.classList.remove('text-mulheres-pink', 'border-mulheres-pink/30');
 }
-
 // Cor do Botão de Logout
 if (logoutBtn) {
     logoutBtn.classList.add('text-white', 'border-white');
@@ -169,33 +168,33 @@ updateNavbar(); // Verificação Inicial
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-       {% for noticia in noticias %}
+        {% for post in news_posts %}
         <div
             class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
             <div class="relative h-48 overflow-hidden">
-                <a href="{% url 'portal:news_detail' noticia.pk %}">
-                {% if noticia.thumbnail %}
-                <img src="{{ noticia.thumbnail.url }}"
+                <a href="{% url 'portal:news_detail' post.pk %}">
+                {% if post.thumbnail %}
+                <img src="{{ post.thumbnail.url }}"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    alt="{{ noticia.title }}">
+                    alt="{{ post.title }}">
                 {% else %}
                 <img src="{% static 'images/logoinovai.jpeg' %}"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    alt="{{ noticia.title }}">
+                    alt="{{ post.title }}">
                 {% endif %}
-                {% if noticia.tags %}
+                {% if post.tags %}
                 <div
                     class="absolute top-4 right-4 bg-brand-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                    {{ noticia.tags|truncatewords:2 }}</div>
+                    {{ post.tags|truncatewords:2 }}</div>
                 {% endif %}
                 </a>
             </div>
             <div class="p-6">
                 <h5
                     class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
-                    <a href="{% url 'portal:news_detail' noticia.pk %}">{{ noticia.title }}</a></h5>
-                <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{{ noticia.description }}</p>
-                <a href="{% url 'portal:news_detail' noticia.pk %}"
+                    <a href="{% url 'portal:news_detail' post.pk %}">{{ post.title }}</a></h5>
+                <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{{ post.description }}</p>
+                <a href="{% url 'portal:news_detail' post.pk %}"
                     class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
                     Ler mais <i class="bi bi-arrow-right ml-2"></i>
                 </a>

@@ -28,6 +28,7 @@ class NewsPost(models.Model):
     tags = models.CharField("Tags", max_length=255, null=True, blank=True)
     active = models.BooleanField("Ativa", default=True)
     draft = models.BooleanField("Rascunho", default=False)
+    portal = models.CharField("Portal", max_length=31, choices=PORTAIS, default="portal_inovai")
 
     class Meta:
         verbose_name = "Notícia"

@@ -29,7 +29,7 @@ def mulheres(request):
     destaques = Destaque.objects.filter(portal="portal_mulheres_ciencia")
     
     context = {
-        'noticias': noticias,
+        'news_posts': noticias,
         'destaques': destaques,
     }
     return render(request, 'mulheres.html', context=context)

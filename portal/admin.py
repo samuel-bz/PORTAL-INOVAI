@@ -16,9 +16,7 @@ class BlockImageAdmin(admin.ModelAdmin):
 
 class DestaqueAdmin(admin.ModelAdmin):
     class Meta:
-        models = Destaque
-
-admin.site.register(NewsPost, NewsPostAdmin)
+        models = Destaqueadmin.site.register(NewsPost, NewsPostAdmin)
 admin.site.register(NewsBlock, NewsBlockAdmin)
 admin.site.register(BlockImage, BlockImageAdmin)
 admin.site.register(Destaque, DestaqueAdmin)

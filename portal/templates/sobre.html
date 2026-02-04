@@ -4,20 +4,20 @@
 {% block title %}Sobre Nós - Portal Inovaí{% endblock %}
 
 {% block navbar %}
-    {% include 'components/navbar_solid.html' %}
+{% include 'components/navbar_solid.html' %}
 {% endblock %}
 
 {% block navbar_scroll_logic %}
-    <!-- Navbar logic handled by navbar_solid.html component -->
+<!-- Navbar logic handled by navbar_solid.html component -->
 {% endblock %}
 
 {% block content %}
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <!-- Hero Section -->
-    <section class="container mx-auto px-4 pt-24 pb-8 bg-black">
-        <div class="w-full relative">
+    <section class="container mx-auto px-4 pt-24 pb-8 bg-none">
+        <div class="w-full max-w-2xl mx-auto relative">
             <img src="{% static 'images/slogan.png' %}" alt="Inovaí - Slogan"
-                class="w-full h-auto shadow-sm rounded-lg">
+                class="w-full h-auto shadow-lg rounded-xl hover:shadow-2xl transition-shadow duration-300 border border-gray-100 dark:border-gray-800">
         </div>
     </section>
 
@@ -97,7 +97,7 @@
                         </li>
                         <li class="pl-4 border-l-2 border-gray-300">
                             <strong>Mulheres na Ciência:</strong> ambientes colaborativos para meninas e mulheres
-                        trabalharem juntas.
+                            trabalharem juntas.
                         </li>
                         <li class="pl-4 border-l-2 border-gray-300">
                             <strong>Centro de desenvolvimento de software:</strong> um núcleo especializado em
@@ -112,4 +112,4 @@
             </div>
         </div>
     </section>
-{% endblock %}
+    {% endblock %}

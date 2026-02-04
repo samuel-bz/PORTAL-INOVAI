@@ -12,7 +12,7 @@ def youtube_nocookie(url):
 
 @register.filter
 def split_tags(tags_string):
-    """Splits a comma-separated string into a list of tags."""
+    """Separa as tags, separadas por vírgula, em uma lista."""
     if not tags_string or not isinstance(tags_string, str):
         return []
     return [tag.strip() for tag in tags_string.split(',') if tag.strip()]

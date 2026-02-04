@@ -24,8 +24,11 @@ class NewsPost(models.Model):
     description = models.CharField("Descrição", max_length=255)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='news_post', null=True, blank=True)
     thumbnail = models.ImageField("Thumbnail", upload_to='news/', null=True, blank=True)
-    publish_date = models.DateField("Data de publicação", auto_now_add=True)
+    publish_date = models.DateTimeField("Data de publicação", auto_now_add=True)
     tags = models.CharField("Tags", max_length=255, null=True, blank=True)
+    active = models.BooleanField("Ativa", default=True)
+    draft = models.BooleanField("Rascunho", default=False)
+    portal = models.CharField("Portal", max_length=31, choices=PORTAIS, default="portal_inovai")
 
     class Meta:
         verbose_name = "Notícia"
@@ -51,7 +54,7 @@ class NewsBlock(models.Model):
     class Meta:
         verbose_name = "Bloco de conteúdo"
         verbose_name_plural = "Blocos de conteúdo"
-        ordering = ('-related_post',)
+        ordering = ('related_post', 'order')
 
     def __str__(self):
         titulo_noticia = str(self.related_post)[:20].strip()

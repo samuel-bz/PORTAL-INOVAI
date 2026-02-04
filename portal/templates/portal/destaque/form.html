@@ -3,9 +3,17 @@
 
 {% block title %}{% if object %}Editar destaque{% else %}Novo destaque{% endif %} – Portal Inovaí{% endblock %}
 
+{% block navbar %}
+    {% include 'components/navbar_solid.html' %}
+{% endblock %}
+
+{% block navbar_scroll_logic %}
+    <!-- Navbar logic handled by navbar_solid.html component -->
+{% endblock %}
+
 {% block content %}
-<main class="flex-grow container mx-auto px-4 pt-24 pb-10">
-    <div class="max-w-2xl mx-auto">
+<main class="flex-grow container mx-auto px-4 pt-10 pb-10">
+    <div class="max-w-6xl mx-auto">
         <div class="mb-6">
             <a href="{% url 'portal:destaque_list' %}" class="inline-flex items-center gap-2 text-brand-blue dark:text-blue-400 hover:underline font-medium">
                 <i class="bi bi-arrow-left"></i> Voltar à lista
@@ -20,111 +28,168 @@
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Preencha os campos abaixo.</p>
             </div>
 
-            <form method="post" enctype="multipart/form-data" id="destaqueForm" class="p-6 md:p-8 space-y-6">
+            <form method="post" enctype="multipart/form-data" id="destaqueForm" class="p-6 md:p-8">
                 {% csrf_token %}
+                
                 {% if form.non_field_errors %}
-                <div class="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-sm flex items-start gap-3">
+                <div class="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-sm flex items-start gap-3">
                     <i class="bi bi-exclamation-circle text-lg flex-shrink-0 mt-0.5"></i>
                     <div>{{ form.non_field_errors }}</div>
                 </div>
                 {% endif %}
 
-                {% with field=form.title %}
-                <div class="space-y-1.5">
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }} <span class="text-red-500">*</span></label>
-                    {{ field }}
-                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
-                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
-                </div>
-                {% endwith %}
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Coluna Esquerda: Campos de Texto -->
+                    <div class="lg:col-span-2 space-y-6">
+                        
+                        {% with field=form.title %}
+                        <div class="space-y-1.5">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }} <span class="text-red-500">*</span></label>
+                            {{ field }}
+                            {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                            {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                        </div>
+                        {% endwith %}
 
-                {% with field=form.image %}
-                <div class="space-y-1.5">
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }} <span class="text-red-500">*</span></label>
-                    {{ field }}
-                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
-                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
-                </div>
-                {% endwith %}
+                        {% with field=form.description %}
+                        <div class="space-y-1.5">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                            {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                        </div>
+                        {% endwith %}
 
-                {% with field=form.description %}
-                <div class="space-y-1.5">
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
-                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
-                </div>
-                {% endwith %}
+                        {% with field=form.portal %}
+                        <div class="space-y-1.5">
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }} <span class="text-red-500">*</span></label>
+                            {{ field }}
+                            {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                            {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                        </div>
+                        {% endwith %}
 
-                {% with field=form.portal %}
-                <div class="space-y-1.5">
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }} <span class="text-red-500">*</span></label>
-                    {{ field }}
-                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
-                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
-                </div>
-                {% endwith %}
+                        <!-- Lógica de Destino -->
+                        <div class="p-5 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-100 dark:border-gray-700 space-y-4">
+                            <h3 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                <i class="bi bi-link-45deg"></i> Destino
+                            </h3>
+                            
+                            {% with field=form.points_to_noticia %}
+                            <div class="space-y-1.5 flex items-center gap-3">
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer select-none">{{ field.label }}</label>
+                                {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                            </div>
+                            {% endwith %}
 
-                {# Aponta para notícia: mostra related_post ou link_url #}
-                {% with field=form.points_to_noticia %}
-                <div class="space-y-1.5 flex items-center gap-3">
-                    {{ field }}
-                    <label for="{{ field.id_for_label }}" class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer select-none">{{ field.label }}</label>
-                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
-                </div>
-                {% endwith %}
+                            <div id="related-post-wrap" class="space-y-1.5 destino-field {% if not form.points_to_noticia.value %}hidden{% endif %}">
+                                <label for="{{ form.related_post.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ form.related_post.label }} <span class="text-red-500">*</span></label>
+                                {{ form.related_post }}
+                                {% if form.related_post.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ form.related_post.help_text }}</p>{% endif %}
+                                {% if form.related_post.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ form.related_post.errors.0 }}</p>{% endif %}
+                            </div>
 
-                <div id="related-post-wrap" class="space-y-1.5 destino-field {% if not form.points_to_noticia.value %}hidden{% endif %}">
-                    <label for="{{ form.related_post.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ form.related_post.label }} <span class="text-red-500">*</span></label>
-                    {{ form.related_post }}
-                    {% if form.related_post.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ form.related_post.help_text }}</p>{% endif %}
-                    {% if form.related_post.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ form.related_post.errors.0 }}</p>{% endif %}
-                </div>
+                            <div id="link-url-wrap" class="space-y-1.5 destino-field {% if form.points_to_noticia.value %}hidden{% endif %}">
+                                <label for="{{ form.link_url.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ form.link_url.label }}</label>
+                                {{ form.link_url }}
+                                {% if form.link_url.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ form.link_url.help_text }}</p>{% endif %}
+                                {% if form.link_url.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ form.link_url.errors.0 }}</p>{% endif %}
+                            </div>
+                        </div>
 
-                <div id="link-url-wrap" class="space-y-1.5 destino-field {% if form.points_to_noticia.value %}hidden{% endif %}">
-                    <label for="{{ form.link_url.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ form.link_url.label }}</label>
-                    {{ form.link_url }}
-                    {% if form.link_url.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ form.link_url.help_text }}</p>{% endif %}
-                    {% if form.link_url.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ form.link_url.errors.0 }}</p>{% endif %}
-                </div>
+                         <!-- Botão Customização -->
+                         <div class="p-5 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-100 dark:border-gray-700 space-y-4">
+                            <h3 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                <i class="bi bi-palette"></i> Botão
+                            </h3>
 
-                {% with field=form.button_color %}
-                <div class="space-y-3">
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
-                    
-                    <div class="flex flex-wrap gap-2">
-                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #FFFFFF;" onclick="setColor('#FFFFFF')" title="Branco"></button>
-                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #0d6efd;" onclick="setColor('#0d6efd')" title="Azul Claro"></button>
-                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #0a58ca;" onclick="setColor('#0a58ca')" title="Azul Escuro"></button>
-                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #fd0e6f;" onclick="setColor('#fd0e6f')" title="Rosa"></button>
-                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #6a0080;" onclick="setColor('#6a0080')" title="Roxo"></button>
-                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #8803A3;" onclick="setColor('#8803A3')" title="Roxo Escuro"></button>
-                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #F2B9FE;" onclick="setColor('#F2B9FE')" title="Rosa Claro"></button>
-                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #2e0836;" onclick="setColor('#2e0836')" title="Roxo MUITO Escuro"></button>
-                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #6efd0d;" onclick="setColor('#6efd0d')" title="Verde"></button>
-                        <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400" style="background-color: #000000;" onclick="setColor('#000000')" title="Preto"></button>
+                            {% with field=form.button_text %}
+                            <div class="space-y-1.5">
+                                <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                                {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                            </div>
+                            {% endwith %}
+
+                            {% with field=form.button_color %}
+                            <div class="space-y-3">
+                                <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
+                                
+                                <div class="flex flex-wrap gap-2">
+                                    <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400 transition-transform hover:scale-110" style="background-color: #FFFFFF;" onclick="setColor('#FFFFFF')" title="Branco"></button>
+                                    <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400 transition-transform hover:scale-110" style="background-color: #0d6efd;" onclick="setColor('#0d6efd')" title="Azul Claro"></button>
+                                    <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400 transition-transform hover:scale-110" style="background-color: #0a58ca;" onclick="setColor('#0a58ca')" title="Azul Escuro"></button>
+                                    <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400 transition-transform hover:scale-110" style="background-color: #fd0e6f;" onclick="setColor('#fd0e6f')" title="Rosa"></button>
+                                    <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400 transition-transform hover:scale-110" style="background-color: #6a0080;" onclick="setColor('#6a0080')" title="Roxo"></button>
+                                    <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400 transition-transform hover:scale-110" style="background-color: #8803A3;" onclick="setColor('#8803A3')" title="Roxo Escuro"></button>
+                                    <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400 transition-transform hover:scale-110" style="background-color: #F2B9FE;" onclick="setColor('#F2B9FE')" title="Rosa Claro"></button>
+                                    <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400 transition-transform hover:scale-110" style="background-color: #2e0836;" onclick="setColor('#2e0836')" title="Roxo MUITO Escuro"></button>
+                                    <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400 transition-transform hover:scale-110" style="background-color: #6efd0d;" onclick="setColor('#6efd0d')" title="Verde"></button>
+                                    <button type="button" class="w-8 h-8 rounded-full border border-gray-300 shadow-sm focus:ring-2 focus:ring-offset-2 ring-gray-400 transition-transform hover:scale-110" style="background-color: #000000;" onclick="setColor('#000000')" title="Preto"></button>
+                                </div>
+                                {{ field }}
+                                {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                                {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                            </div>
+                            {% endwith %}
+                        </div>
+
                     </div>
 
-                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
-                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
-                </div>
-                {% endwith %}
+                    <!-- Coluna Direita: Imagem -->
+                    <div class="space-y-6">
+                        <div class="sticky top-24">
+                            {% with field=form.image %}
+                            <div class="bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-100 dark:border-gray-700 p-5 space-y-4">
+                                <h3 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                                    <i class="bi bi-image"></i> Imagem
+                                </h3>
+                                
+                                <div class="relative w-full aspect-video bg-gray-200 dark:bg-gray-600 rounded-lg overflow-hidden flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-500 group hover:border-brand-blue transition-colors">
+                                    <img id="imagePreview" src="{% if form.instance.image %}{{ form.instance.image.url }}{% endif %}" 
+                                         class="absolute inset-0 w-full h-full object-cover {% if not form.instance.image %}hidden{% endif %}">
+                                    
+                                    <div id="imagePlaceholder" class="text-gray-400 dark:text-gray-500 text-center p-4 {% if form.instance.image %}hidden{% endif %}">
+                                        <i class="bi bi-cloud-upload text-4xl mb-2 block"></i>
+                                        <span class="text-xs">Clique abaixo para selecionar</span>
+                                    </div>
+                                </div>
 
-                {% with field=form.button_text %}
-                <div class="space-y-1.5">
-                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
-                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
-                </div>
-                {% endwith %}
+                                <div class="space-y-1.5">
+                                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">{{ field.label }}<span class="text-red-500">*</span></label>
+                                    <!-- Input de arquivo renderizado manualmente para melhor controle se necessário, ou usar o padrão -->
+                                    {{ field }} 
+                                    {% if field.help_text %}<p class="text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>{% endif %}
+                                    {% if field.errors %}<p class="text-sm text-red-600 dark:text-red-400 flex items-center gap-1"><i class="bi bi-exclamation-circle text-sm"></i>{{ field.errors.0 }}</p>{% endif %}
+                                </div>
+                            </div>
+                            {% endwith %}
 
-                <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
-                    <button type="submit" class="inline-flex items-center gap-2 bg-brand-blue hover:bg-brand-dark text-white px-6 py-2.5 rounded-xl font-semibold transition shadow-md hover:shadow-lg">
+                             <!-- Botões de Ação na Coluna Lateral (Desktop) -->
+                             <div class="pt-6 hidden lg:block">
+                                <div class="flex flex-col gap-3">
+                                    <button type="submit" class="w-full inline-flex justify-center items-center gap-2 bg-brand-blue hover:bg-brand-dark text-white px-6 py-3 rounded-xl font-semibold transition shadow-md hover:shadow-lg">
+                                        <i class="bi bi-check-lg"></i>
+                                        {% if object %}Salvar alterações{% else %}Criar destaque{% endif %}
+                                    </button>
+                                    <a href="{% url 'portal:destaque_list' %}" class="w-full inline-flex justify-center items-center gap-2 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 px-6 py-3 rounded-xl font-medium transition">
+                                        Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação (Mobile) -->
+                <div class="lg:hidden flex flex-wrap items-center gap-3 pt-6 border-t border-gray-100 dark:border-gray-700 mt-6">
+                    <button type="submit" class="flex-grow inline-flex justify-center items-center gap-2 bg-brand-blue hover:bg-brand-dark text-white px-6 py-3 rounded-xl font-semibold transition shadow-md hover:shadow-lg">
                         <i class="bi bi-check-lg"></i>
-                        {% if object %}Salvar alterações{% else %}Criar destaque{% endif %}
+                        {% if object %}Salvar{% else %}Criar{% endif %}
                     </button>
-                    <a href="{% url 'portal:destaque_list' %}" class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white py-2.5 font-medium transition">
+                    <a href="{% url 'portal:destaque_list' %}" class="flex-grow inline-flex justify-center items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white py-3 font-medium transition">
                         Cancelar
                     </a>
                 </div>
@@ -173,26 +238,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.setColor = function(color) {
         if (colorInput) colorInput.value = color;
-        if (colorPicker) colorPicker.value = color;
+        // Trigger generic change if needed
     };
 
-    if (colorPicker && colorInput) {
-        // Sync color picker -> text input
-        colorPicker.addEventListener('input', function() {
-            colorInput.value = colorPicker.value;
-        });
+    // Image Preview Logic
+    var imageInput = document.querySelector('input[type="file"][name="image"]');
+    var imagePreview = document.getElementById('imagePreview');
+    var imagePlaceholder = document.getElementById('imagePlaceholder');
 
-        // Sync text input -> color picker
-        colorInput.addEventListener('input', function() {
-            if (/^#[0-9A-F]{6}$/i.test(colorInput.value)) {
-                colorPicker.value = colorInput.value;
+    if (imageInput && imagePreview) {
+        imageInput.addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
+                    if (imagePlaceholder) imagePlaceholder.classList.add('hidden');
+                }
+                reader.readAsDataURL(file);
+            } else {
+                // Se não houver arquivo (cancelar), volta ao original ou placeholder
+                // É difícil saber se há uma imagem original salva apenas pelo input, 
+                // então assumimos o estado inicial renders no HTML.
+                // Resetting to original src is redundant if we assume simple preview logic.
             }
         });
-        
-        // Initial sync
-        if (/^#[0-9A-F]{6}$/i.test(colorInput.value)) {
-            colorPicker.value = colorInput.value;
-        }
     }
 });
 </script>

@@ -1,0 +1,28 @@
+<script>
+(function () {
+    function initTags() {
+        const tagsEl = document.querySelector("#tags");
+        if (!tagsEl) return;
+
+        const tagsString = tagsEl.dataset.tags || "";
+        const tagList = tagsString.split(",").map(function (s) {
+            return s.replace(/\s+/g, " ").trim();
+        }).filter(function (s) {
+            return s.length > 0;
+        });
+
+        tagList.forEach(function (tag) {
+            const p = document.createElement("p");
+            p.className = "post-tag";
+            p.textContent = "#" + tag;
+            tagsEl.appendChild(p);
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initTags);
+    } else {
+        initTags();
+    }
+})();
+</script>

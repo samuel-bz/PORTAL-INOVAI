@@ -1,18 +1,41 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ post.title }} — Portal Inovaí{% endblock %}
+{% block title %}Portal Inovaí - {{ post.title }}{% endblock %}
+
+{% block navbar %}
+{% include 'components/navbar_solid.html' %}
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+.post-tag {
+    background-color: #fd0e6f;
+    border-radius: 1rem;
+    display: inline-block;
+    padding: 3px 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+{% endblock extra_styles %}
+
+{% block navbar_scroll_logic %}
+    <!-- Navbar logic handled by navbar_solid.html component -->
+    {% endblock %}
+
 
 {% block content %}
 <article class="flex-grow">
     <!-- Cabeçalho da notícia -->
     <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div class="container mx-auto px-4 py-8 md:py-12 max-w-4xl">
+        <div class="container mx-auto px-4 py-10 md:py-16 max-w-4xl">
             <a href="{% url 'portal:index' %}" class="inline-flex items-center text-brand-blue dark:text-blue-400 hover:underline mb-6 text-sm font-medium">
                 <i class="bi bi-arrow-left mr-2"></i> Voltar ao portal
             </a>
             {% if post.tags %}
-            <p class="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">{{ post.tags }}</p>
+            <div id="tags" class="text-sm text-white dark:text-white uppercase tracking-wide mb-2 flex flex-wrap gap-2" data-tags="{{ post.tags|escapejs }}">
+            </div>
             {% endif %}
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{{ post.title }}</h1>
             <p class="text-lg text-gray-600 dark:text-gray-300 mb-4">{{ post.description }}</p>
@@ -24,19 +47,15 @@
             </div>
         </div>
     </header>
-
-    <!-- Thumbnail (se houver) -->
-    {% if post.thumbnail %}
-    <div class="w-full max-w-4xl mx-auto px-4 -mt-2 mb-8">
-        <img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" class="w-full rounded-xl shadow-lg object-cover max-h-[400px]">
-    </div>
-    {% endif %}
-
+    
     <!-- Conteúdo (blocos) -->
     <div class="container mx-auto px-4 pb-16 max-w-3xl">
         <div class="prose prose-lg dark:prose-invert max-w-none">
             {% for block in blocks %}
-                {% if block.block_type == 'paragraph' %}
+            {% if block.block_type == 'title' %}
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4">{{ block.content }}</h2>
+
+                {% elif block.block_type == 'paragraph' %}
                 <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">{{ block.content|linebreaksbr }}</p>
 
                 {% elif block.block_type == 'subtitle' %}
@@ -74,6 +93,14 @@
             <p class="text-gray-500 dark:text-gray-400 italic">Nenhum conteúdo adicional publicado.</p>
             {% endfor %}
         </div>
+        
     </div>
 </article>
 {% endblock %}
+
+
+
+
+{% block body_scripts %}
+{% include 'components/tags_script.html' %}
+{% endblock body_scripts %}

@@ -15,7 +15,7 @@ from .models import NewsPost, NewsBlock, BlockImage, Destaque
 
 
 def index(request):
-    noticias = NewsPost.objects.all()[:3]
+    noticias = NewsPost.objects.all().exclude(active=False).exclude(draft=True).order_by('-publish_date')[:3]
     destaques = Destaque.objects.filter(portal="portal_inovai")
 
     context = {
@@ -119,35 +119,44 @@ def news_editor(request, news_id=None):
                 news_item.thumbnail = request.FILES['thumbnail']
             
             news_item.save()
-            
-            # 2. Manipular Blocos
-            # Deletar blocos existentes se estiver atualizando (estratégia mais simples)
-            if news_id:
-                 news_item.blocks.all().delete()
-            
+
+            # 2. Manipular Blocos (em edição: atualizar no lugar para preservar imagens existentes)
             blocks_json = data.get('blocks', '[]')
             blocks = json.loads(blocks_json)
-            
+            existing_blocks = list(news_item.blocks.all().order_by('order')) if news_id else []
+
             for index, block_data in enumerate(blocks):
-                block = NewsBlock(
-                    related_post=news_item,
-                    block_type=block_data.get('type', 'paragraph'),
-                    content=block_data.get('content', ''),
-                    order=index
-                )
-                block.save()
-                
-                # 3. Manipular Imagens dos Blocos
-                # Esperamos arquivos nomeados 'block_{index}_image'
+                if index < len(existing_blocks):
+                    block = existing_blocks[index]
+                    block.block_type = block_data.get('type', 'paragraph')
+                    block.content = block_data.get('content', '')
+                    block.order = index
+                    block.save()
+                else:
+                    block = NewsBlock(
+                        related_post=news_item,
+                        block_type=block_data.get('type', 'paragraph'),
+                        content=block_data.get('content', ''),
+                        order=index
+                    )
+                    block.save()
+
+                # 3. Imagens: só substituir quando houver novo upload
                 image_key = f'block_{index}_image'
                 if image_key in request.FILES:
-                    img_file = request.FILES[image_key]
+                    block.image.all().delete()
                     BlockImage.objects.create(
                         block=block,
-                        image=img_file
+                        image=request.FILES[image_key]
                     )
-            
-            return JsonResponse({'success': True, 'redirect_url': '/news/'}) # ou detalhe da notícia
+                # Se não houver novo upload, imagens existentes do bloco são mantidas
+
+            # Remover blocos que foram apagados no editor (índice além do novo tamanho)
+            if news_id and len(existing_blocks) > len(blocks):
+                for block in existing_blocks[len(blocks):]:
+                    block.delete()
+
+            return JsonResponse({'success': True, 'redirect_url': '/news/'})  # ou detalhe da notícia
             
         except Exception as e:
             import traceback
@@ -168,14 +177,12 @@ def news_editor(request, news_id=None):
                 'content': block.content,
                 'images': []
             }
-            
             for img in block.image.all():
-                 blocks_data[-1]['images'].append({
-                     'url': img.image.url if img.image else '',
-                     'caption': img.captions,
-                     'alt': img.alt_text
-                 })
-
+                block_data['images'].append({
+                    'url': img.image.url if img.image else '',
+                    'caption': img.captions,
+                    'alt': img.alt_text
+                })
             blocks_data.append(block_data)
 
         context['existing_blocks_json'] = json.dumps(blocks_data)

@@ -17,12 +17,18 @@
             <!-- Menu Desktop -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="{% url 'portal:index' %}" id="nav-active"
-                    class="text-white font-semibold dark:text-blue-400 border-b-2 border-white">Início</a>
-                <a href="#"
-                    class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Notícias</a>
+                    class="text-white hover:text-brand-blue font-semibold border-b-2 border-transparent transition">Início</a>
+                <a href="{% url 'portal:news_list' %}"
+                    class="text-white hover:text-brand-blue transition border-b-2 border-transparent hover:border-white">Notícias</a>
                 <a href="#"
                     class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Projetos</a>
-                <a href="{% url 'portal:sobre' %}" class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Sobre Nós</a>
+                  <!-- Link da Página Mulheres -->
+                <a id="mulheresBtn" href="{% url 'portal:mulheres' %}"
+                        class="bg-mulheres-primary hover:bg-purple-800 text-white px-5 py-2 rounded-full font-medium transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+                        <i class="bi bi-stars"></i>
+                        Mulheres na Ciência
+                    </a>
+                <a href="{% url 'portal:sobre' %}" class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Sobre</a>
 
                 <div class="flex items-center gap-3 border-l pl-6 border-gray-300 dark:border-gray-600">
                     <!-- Botão de Alternância do Modo Escuro -->
@@ -32,16 +38,7 @@
                         <i class="bi bi-moon-fill"></i>
                     </button>
 
-                    <!-- Link da Página Mulheres -->
-                    <a href="{% url 'portal:mulheres' %}"
-                        class="bg-mulheres-primary hover:bg-purple-800 text-white px-5 py-2 rounded-full font-medium transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
-                        <i class="bi bi-stars"></i>
-                        Mulheres na Ciência
-                    </a>
                     {% if user.is_authenticated%}
-                    <!-- Botão para logout-->
-                    <a href="{% url 'portal:logout' %}" id="logoutBtn" class="text-white hover:text-[#fd0e6f] transition border-2 border-white rounded-full hover:border-[#fd0e6f] px-3 py-1">
-                        <i class="bi bi-box-arrow-right mr-2"></i> Sair </a>
                     <!-- Botão para editor de notícias -->
                     <a id="newsAddBtn" href="{% url 'portal:news_editor' %}" class="text-white hover:text-brand-blue transition rounded-full py-1 flex items-center gap-2">
                         <i class="bi bi-plus-lg"></i> Notícia
@@ -49,6 +46,9 @@
                     <a id="destaquesButton" href="{% url 'portal:destaque_list' %}" class="text-white hover:text-brand-blue transition rounded-full py-1 flex items-center gap-2">
                         Destaques
                     </a>
+                     <!-- Botão para logout-->
+                    <a href="{% url 'portal:logout' %}" id="logoutBtn" class="text-white hover:text-[#fd0e6f] transition border-2 border-white rounded-full hover:border-[#fd0e6f] px-3 py-1">
+                        <i class="bi bi-box-arrow-right mr-2"></i> Sair </a>
                     {% endif %}
                 </div>
             </div>
@@ -69,7 +69,7 @@
         <div class="px-4 pt-2 pb-3 space-y-1">
             <a href="{% url 'portal:index' %}"
                 class="block px-3 py-2 text-brand-blue font-semibold rounded-md bg-blue-50 dark:bg-gray-700 dark:text-blue-400">Início</a>
-            <a href="#"
+            <a href="{% url 'portal:news_list' %}"
                 class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Notícias</a>
             <a href="#"
                 class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Projetos</a>

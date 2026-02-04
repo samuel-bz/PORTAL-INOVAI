@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Portal Inovaí - Mulheres{% endblock %}
 
@@ -168,74 +169,44 @@ updateNavbar(); // Verificação Inicial
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        <!-- Cartão 1 -->
+       {% for noticia in noticias %}
         <div
-            class="group bg-white dark:bg-[#3e1247] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-mulheres-pink/40">
+            class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700">
             <div class="relative h-48 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc"
+                <a href="{% url 'portal:news_detail' noticia.pk %}">
+                {% if noticia.thumbnail %}
+                <img src="{{ noticia.thumbnail.url }}"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    alt="News">
+                    alt="{{ noticia.title }}">
+                {% else %}
+                <img src="{% static 'images/logoinovai.jpeg' %}"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    alt="{{ noticia.title }}">
+                {% endif %}
+                {% if noticia.tags %}
                 <div
-                    class="absolute top-4 right-4 bg-mulheres-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                    Prêmio</div>
+                    class="absolute top-4 right-4 bg-brand-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                    {{ noticia.tags|truncatewords:2 }}</div>
+                {% endif %}
+                </a>
             </div>
             <div class="p-6">
                 <h5
-                    class="text-xl font-bold mb-3 text-purple-900 dark:text-mulheres-pink group-hover:text-mulheres-primary transition-colors">
-                    Prêmio Ada Lovelace</h5>
-                <p class="text-mulheres-dark/80 dark:text-mulheres-pink/80 mb-4 line-clamp-3">Inscrições abertas
-                    para o prêmio que reconhece programadoras de destaque na região.</p>
-                <a href="#"
-                    class="inline-flex items-center text-mulheres-purple dark:text-mulheres-pink font-semibold hover:underline">
-                    Ler edital <i class="bi bi-arrow-right ml-2"></i>
+                    class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
+                    <a href="{% url 'portal:news_detail' noticia.pk %}">{{ noticia.title }}</a></h5>
+                <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{{ noticia.description }}</p>
+                <a href="{% url 'portal:news_detail' noticia.pk %}"
+                    class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
+                    Ler mais <i class="bi bi-arrow-right ml-2"></i>
                 </a>
             </div>
         </div>
-
-        <!-- Cartão 2 -->
-        <div
-            class="group bg-white dark:bg-[#3e1247] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-mulheres-pink/40">
-            <div class="relative h-48 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=800"
-                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    alt="News">
-            </div>
-            <div class="p-6">
-                <h5
-                    class="text-xl font-bold mb-3 text-purple-900 dark:text-mulheres-pink group-hover:text-mulheres-primary transition-colors">
-                    Entrevista: Dra. Julia Silva</h5>
-                <p class="text-mulheres-dark/80 dark:text-mulheres-pink/80 mb-4 line-clamp-3">Confira a trajetória
-                    inspiradora da pesquisadora chefe do laboratório de IA.</p>
-                <a href="#"
-                    class="inline-flex items-center text-mulheres-primary dark:text-mulheres-pink font-semibold hover:underline">
-                    Ler entrevista <i class="bi bi-arrow-right ml-2"></i>
-                </a>
-            </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12 text-gray-500 dark:text-gray-400">
+            <p class="mb-4">Nenhuma notícia publicada. Crie notícias no <a href="/admin/" class="text-brand-blue dark:text-blue-400 hover:underline">admin</a> para exibir aqui.</p>
+            <p class="text-sm">Para testar a página de detalhe: <a href="{% url 'portal:news_detail' 1 %}" class="text-brand-blue dark:text-blue-400 hover:underline">Ver notícia #1</a> (crie uma notícia no admin para ver o conteúdo).</p>
         </div>
-
-        <!-- Cartão 3 -->
-        <div
-            class="group bg-white dark:bg-[#3e1247] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-mulheres-pink/40">
-            <div class="relative h-48 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800"
-                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    alt="News">
-                <div
-                    class="absolute top-4 right-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                    Oportunidade</div>
-            </div>
-            <div class="p-6">
-                <h5
-                    class="text-xl font-bold mb-3 text-purple-900 dark:text-mulheres-pink group-hover:text-mulheres-primary transition-colors">
-                    Mentoria para Meninas</h5>
-                <p class="text-mulheres-dark/80 dark:text-mulheres-pink/80 mb-4 line-clamp-3">Novo programa conecta
-                    estudantes do ensino médio a cientistas da universidade.</p>
-                <a href="#"
-                    class="inline-flex items-center text-mulheres-primary dark:text-mulheres-pink font-semibold hover:underline">
-                    Saiba como participar <i class="bi bi-arrow-right ml-2"></i>
-                </a>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </main>
 {% endblock %}

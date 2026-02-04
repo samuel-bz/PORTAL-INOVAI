@@ -26,8 +26,11 @@ def index(request):
 
 def mulheres(request):
     destaques = Destaque.objects.filter(portal="portal_mulheres_ciencia")
+    noticias = NewsPost.objects.all().filter(portal="portal_mulheres_ciencia").exclude(active=False).exclude(draft=True).order_by('-publish_date')[:3]
+    
     context = {
-        'destaques': destaques
+        'destaques': destaques,
+        'noticias': noticias,
     }
     return render(request, 'mulheres.html', context=context)
 
@@ -104,6 +107,7 @@ def news_editor(request, news_id=None):
             title = data.get('title')
             description = data.get('description')
             tags = data.get('tags')
+            portal = data.get('portal')
             
             if news_id:
                 news_item = get_object_or_404(NewsPost, pk=news_id)
@@ -114,6 +118,7 @@ def news_editor(request, news_id=None):
             news_item.description = description
             news_item.tags = tags
             news_item.author = request.user
+            news_item.portal = portal
             
             if 'thumbnail' in request.FILES:
                 news_item.thumbnail = request.FILES['thumbnail']

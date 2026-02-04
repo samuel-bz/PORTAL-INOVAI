@@ -107,7 +107,7 @@
                     <!-- Author & Tag -->
                     <div class="flex justify-between items-center mb-3 text-xs text-gray-500 dark:text-gray-400">
                         <span class="flex items-center gap-1">
-                            <i class="bi bi-person-circle"></i> {{ news.author.get_full_name|default:news.author.username|default:"Desconhecido" }}
+                            <i class="bi bi-person-circle"></i> {% if news.author %}{{ news.author.get_full_name|default:news.author.username }}{% else %}Desconhecido{% endif %}
                         </span>
                         {% if news.tags %}
                         <span

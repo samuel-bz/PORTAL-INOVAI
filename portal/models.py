@@ -11,6 +11,7 @@ BLOCK_TYPES = (
     ('image', 'Imagem'),
     ('title', 'Título'),
     ('carousel', 'Carrossel'),
+    ('youtube', 'Vídeo YouTube'),
 )
 
 PORTAIS = (
@@ -61,6 +62,12 @@ class NewsBlock(models.Model):
         return f"Notícia {titulo_noticia} | ({self.order:02d}).{self.get_block_type_display()}"
         # Exemplo:  Notícia 31/12/26 - Abertura | (01).Parágrafo
         #           Notícia 31/12/26 - Abertura | (02).Imagem
+
+    def youtube_embed_src(self):
+        """Para blocos YouTube, retorna a URL de embed no domínio youtube-nocookie.com (evita Erro 153)."""
+        if self.block_type != 'youtube' or not self.content:
+            return ''
+        return self.content.replace('youtube.com/embed', 'youtube-nocookie.com/embed').replace('www.youtube.com/embed', 'www.youtube-nocookie.com/embed')
 
 class BlockImage(models.Model):
     image = models.ImageField("Imagem", upload_to='news/blocks/')

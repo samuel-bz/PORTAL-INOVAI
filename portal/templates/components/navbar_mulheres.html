@@ -32,6 +32,19 @@
                         <i class="bi bi-moon-fill"></i>
                     </button>
 
+                    {% if user.is_authenticated%}
+                    <!-- Botão para editor de notícias -->
+                    <a id="newsAddBtn" href="{% url 'portal:news_editor' %}" class="text-white hover:text-brand-blue transition rounded-full py-1 flex items-center gap-2">
+                        <i class="bi bi-plus-lg"></i> Notícia
+                    </a>
+                    <a id="destaquesButton" href="{% url 'portal:destaque_list' %}" class="text-white hover:text-brand-blue transition rounded-full py-1 flex items-center gap-2">
+                        Destaques
+                    </a>
+                     <!-- Botão para logout-->
+                    <a href="{% url 'portal:logout' %}" id="logoutBtn" class="text-white hover:text-[#fd0e6f] transition border-2 border-white rounded-full hover:border-[#fd0e6f] px-3 py-1">
+                        <i class="bi bi-box-arrow-right mr-2"></i> Sair </a>
+                    {% endif %}
+
                     <!-- Link de Voltar -->
                     <a href="{% url 'portal:index' %}"
                         class="bg-brand-blue hover:bg-blue-700 text-white px-5 py-2 rounded-full font-bold transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">

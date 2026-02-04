@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load news_back_link_filter %}
 
 {% block title %}Portal Inovaí - {{ post.title }}{% endblock %}
 
@@ -30,7 +31,7 @@
     <!-- Cabeçalho da notícia -->
     <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div class="container mx-auto px-4 py-10 md:py-16 max-w-4xl">
-            <a href="{% url 'portal:index' %}" class="inline-flex items-center text-brand-blue dark:text-blue-400 hover:underline mb-6 text-sm font-medium">
+            <a href="{{ post.portal|news_back_link_filter }}" class="inline-flex items-center text-brand-blue dark:text-blue-400 hover:underline mb-6 text-sm font-medium">
                 <i class="bi bi-arrow-left mr-2"></i> Voltar ao portal
             </a>
             {% if post.tags %}

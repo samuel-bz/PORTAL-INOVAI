@@ -161,6 +161,15 @@
                 </div>
                 <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Imagem + Texto</span>
             </div>
+
+            <!-- Vídeo YouTube -->
+            <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
+                draggable="true" data-type="youtube">
+                <div class="w-8 h-8 rounded bg-red-100 text-red-600 flex items-center justify-center">
+                    <i class="bi bi-youtube"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Vídeo YouTube</span>
+            </div>
         </div>
     </aside>
 
@@ -205,6 +214,14 @@
                     <p class="text-xs text-gray-400 mt-1">Atual: <a href="{{ news_item.thumbnail.url }}" target="_blank"
                             class="underline">{{ news_item.thumbnail.name }}</a></p>
                     {% endif %}
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Portal</label>
+                    <select id="portal" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="" disabled {% if not news_item.portal %}selected{% endif %}>Selecione um portal</option>
+                        <option value="portal_inovai" {% if news_item.portal == 'portal_inovai' %}selected{% endif %}>Portal Inovaí</option>
+                        <option value="portal_mulheres_ciencia" {% if news_item.portal == 'portal_mulheres_ciencia' %}selected{% endif %}>Portal Meninas e Mulheres na Ciência</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -341,6 +358,34 @@
             addMenu.classList.add('hidden');
         }
 
+        // Extrai URL de incorporação YouTube a partir de iframe ou link (watch / youtu.be)
+        function parseYoutubeEmbedToUrl(text) {
+            if (!text || !text.trim()) return '';
+            const raw = text.trim();
+            let url = '';
+            const iframeMatch = raw.match(/src=["']([^"']+)["']/i);
+            if (iframeMatch) url = iframeMatch[1].trim();
+            else url = raw;
+            if (!url) return '';
+            try {
+                if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+                const u = new URL(url);
+                if (u.hostname === 'www.youtube.com' && u.pathname.startsWith('/embed/')) return url;
+                if ((u.hostname === 'www.youtube.com' || u.hostname === 'youtube.com') && u.pathname === '/watch' && u.searchParams.get('v')) {
+                    const vid = u.searchParams.get('v');
+                    const rest = new URLSearchParams(u.searchParams);
+                    rest.delete('v');
+                    const qs = rest.toString();
+                    return 'https://www.youtube.com/embed/' + vid + (qs ? '?' + qs : '');
+                }
+                if (u.hostname === 'youtu.be' && u.pathname.length > 1) {
+                    const vid = u.pathname.slice(1).split('/')[0];
+                    return 'https://www.youtube.com/embed/' + vid + (u.search ? u.search : '');
+                }
+            } catch (e) { return ''; }
+            return '';
+        }
+
         // --- Lógica de Criação de Blocos ---
         function createBlock(type, content = null, images = []) {
             if (emptyState) emptyState.remove();
@@ -452,6 +497,18 @@
                         </div>
                     `;
                     break;
+                case 'youtube':
+                    const embedUrl = content && content.trim() ? content.trim() : '';
+                    contentHTML = `
+                        <div class="youtube-embed-wrapper space-y-3">
+                            <textarea class="youtube-embed-input w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-mono" rows="3" placeholder="Cole o código de incorporação (iframe) ou o link do vídeo (youtube.com/watch?v=... ou youtu.be/...)">${embedUrl}</textarea>
+                            <input type="hidden" class="youtube-embed-url" value="${embedUrl.replace(/"/g, '&quot;')}">
+                            <div class="youtube-embed-preview w-full max-w-2xl rounded-lg overflow-hidden bg-gray-900" style="width: 100%; max-width: 560px; height: 315px;">
+                                ${embedUrl ? `<iframe width="560" height="315" src="${embedUrl.replace(/"/g, '&quot;')}" title="YouTube" frameborder="0" class="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>` : '<div class="w-full h-full flex items-center justify-center text-gray-500 text-sm" style="height: 315px;">Pré-visualização aparecerá aqui após colar o link ou iframe.</div>'}
+                            </div>
+                        </div>
+                    `;
+                    break;
             }
 
             const contentWrapper = document.createElement('div');
@@ -471,6 +528,25 @@
 
             // Inserir antes do botão flutuante e menu
             canvas.insertBefore(block, floatingBtn);
+
+            // Trata pós-inicialização do bloco YouTube: parser e preview
+            if (type === 'youtube') {
+                const wrapper = contentWrapper.querySelector('.youtube-embed-wrapper');
+                const textarea = contentWrapper.querySelector('.youtube-embed-input');
+                const hiddenInput = contentWrapper.querySelector('.youtube-embed-url');
+                const previewDiv = contentWrapper.querySelector('.youtube-embed-preview');
+                function updateYoutubePreview() {
+                    const raw = (textarea.value || '').trim();
+                    const embedUrl = parseYoutubeEmbedToUrl(raw);
+                    hiddenInput.value = embedUrl || '';
+                    if (embedUrl) {
+                        previewDiv.innerHTML = `<iframe width="560" height="315" src="${embedUrl.replace(/"/g, '&quot;')}" title="YouTube" frameborder="0" class="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+                    } else {
+                        previewDiv.innerHTML = '<div class="w-full h-full flex items-center justify-center text-gray-500 text-sm" style="height: 315px;">Pré-visualização aparecerá aqui após colar o link ou iframe.</div>';
+                    }
+                }
+                ['input', 'paste', 'blur'].forEach(ev => textarea.addEventListener(ev, updateYoutubePreview));
+            }
 
             // Trata pós-inicialização do carrossel se necessário
             if (type === 'carousel' && images && images.length > 0) {
@@ -698,6 +774,7 @@
             formData.append('title', document.getElementById('meta-title').value);
             formData.append('description', document.getElementById('meta-description').value);
             formData.append('tags', document.getElementById('meta-tags').value);
+            formData.append('portal', document.getElementById('portal').value);
 
             const thumbInput = document.getElementById('meta-thumbnail');
             if (thumbInput.files[0]) {
@@ -757,6 +834,10 @@
                     if (imgInput && imgInput.files[0]) {
                         formData.append(`block_${index}_image`, imgInput.files[0]);
                     }
+                } else if (type === 'youtube' || blockEl.querySelector('.youtube-embed-wrapper')) {
+                    blockData.type = 'youtube';
+                    const urlInput = blockEl.querySelector('input.youtube-embed-url');
+                    blockData.content = urlInput ? (urlInput.value || '').trim() : '';
                 }
 
                 blocks.push(blockData);

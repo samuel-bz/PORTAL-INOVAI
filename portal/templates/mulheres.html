@@ -111,6 +111,28 @@ link.classList.remove('text-mulheres-pink/90');
 
 window.addEventListener('scroll', updateNavbar);
 updateNavbar(); // Verificação Inicial
+
+// --- Lógica de Cores Dinâmicas (Igual Index) ---
+document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
+    const color = btn.getAttribute('data-button-color');
+    if (color) {
+        btn.style.backgroundColor = color;
+        
+        btn.addEventListener('mouseenter', () => {
+            btn.style.filter = 'brightness(0.85)'; 
+            if (color.length === 7) { 
+                 btn.style.boxShadow = `0 10px 25px -5px ${color}80`; 
+            } else {
+                 btn.style.boxShadow = `0 10px 25px -5px ${color}`;
+            }
+        });
+
+        btn.addEventListener('mouseleave', () => {
+             btn.style.filter = 'none';
+             btn.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'; 
+        });
+    }
+});
 </script>
 {% endblock %}
 
@@ -130,8 +152,8 @@ updateNavbar(); // Verificação Inicial
                         </p>
                         <a
                         {% if destaque.points_to_noticia %} href="#" {# TODO: replace with news detail URL when page exists #} {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
-                        class="bg-brand-blue hover:bg-brand-dark text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition shadow-lg hover:shadow-brand-blue/50 inline-block max-w-full truncate"
-                        style="background-color:{{ destaque.button_color}}">
+                        class="dynamic-color-btn text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition-all duration-300 shadow-lg inline-block max-w-full truncate"
+                        data-button-color="{{ destaque.button_color }}">
                         {{destaque.button_text }}
                         </a>
                     </div>

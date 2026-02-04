@@ -112,7 +112,38 @@ updateNavbar(); // Verificação Inicial
 document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
     const color = btn.getAttribute('data-button-color');
     if (color) {
+        // Set initial background
         btn.style.backgroundColor = color;
+        
+        // Helper to adjust brightness
+        // Negative percent lightens, positive darkens (CSS filter brightness > 1 is lighter, < 1 is darker)
+        // Actually, let's use standard filter: brightness()
+        // 0.9 = 10% darker, 1.1 = 10% lighter.
+        
+        btn.addEventListener('mouseenter', () => {
+            btn.style.filter = 'brightness(0.85)'; // Darken slightly on hover
+            // Create a colored shadow
+            // Hex to RGB for rgba conversion if needed, but we can just use the color directly in box-shadow
+            // box-shadow: 0 10px 15px -3px rgba(color, 0.5)
+            // Since we have hex, we can't easily add alpha without parsing. 
+            // Simple approach: Use the solid color for shadow, maybe lighter?
+            // Or just use the hex color. Browsers handle it.
+            // Using a large spread spread shadow
+            btn.style.boxShadow = `0 10px 25px -5px ${color}80`; // Adding 80 for ~50% opacity if hex is 6 chars
+            // If color is 3 chars, simple concatenation won't work perfectly for alpha, but it's a fallback.
+            // Let's try to just set the color.
+            if (color.length === 7) { 
+                 btn.style.boxShadow = `0 10px 25px -5px ${color}80`; 
+            } else {
+                 btn.style.boxShadow = `0 10px 25px -5px ${color}`;
+            }
+        });
+
+        btn.addEventListener('mouseleave', () => {
+             btn.style.filter = 'none';
+             btn.style.backgroundColor = color; // Restore original color (filter touches render)
+             btn.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'; // Default Tailwind shadow-lg
+        });
     }
 });
 </script>
@@ -134,7 +165,7 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
                         </p>
                         <a
                         {% if destaque.points_to_noticia %} href="#" {# TODO: replace with news detail URL when page exists #} {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
-                        class="dynamic-color-btn bg-brand-blue hover:bg-brand-dark text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition shadow-lg hover:shadow-brand-blue/50  inline-block max-w-full truncate"
+                        class="dynamic-color-btn text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition-all duration-300 shadow-lg inline-block max-w-full truncate"
                         data-button-color="{{ destaque.button_color }}">
                         {{destaque.button_text }}
                         </a>

@@ -9,3 +9,10 @@ def youtube_nocookie(url):
     if not url or not isinstance(url, str):
         return url
     return url.replace("youtube.com/embed", "youtube-nocookie.com/embed")
+
+@register.filter
+def split_tags(tags_string):
+    """Splits a comma-separated string into a list of tags."""
+    if not tags_string or not isinstance(tags_string, str):
+        return []
+    return [tag.strip() for tag in tags_string.split(',') if tag.strip()]

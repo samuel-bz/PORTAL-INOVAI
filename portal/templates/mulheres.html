@@ -205,9 +205,14 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
                     alt="{{ post.title }}">
                 {% endif %}
                 {% if post.tags %}
-                <div
-                    class="absolute top-4 right-4 bg-brand-blue text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                    {{ post.tags|truncatewords:2 }}</div>
+                <div class="absolute top-4 right-4 flex flex-wrap gap-1 justify-end">
+                    {% load portal_filters %}
+                    {% for tag in post.tags|split_tags|slice:":3" %}
+                    <span class="bg-brand-blue text-white text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide shadow-sm">
+                        {{ tag }}
+                    </span>
+                    {% endfor %}
+                </div>
                 {% endif %}
                 </a>
             </div>

@@ -222,7 +222,7 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
                 {% if post.tags %}
                 <div class="absolute top-4 right-4 flex flex-wrap gap-1 justify-end">
                     {% load portal_filters %}
-                    {% for tag in post.tags|split_tags|slice:":2" %}
+                    {% for tag in post.tags|split|slice:":2" %}
                     <span class="bg-brand-blue text-white text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide shadow-sm">
                         {{ tag }}
                     </span>

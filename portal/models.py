@@ -92,3 +92,16 @@ class Destaque(models.Model):
 
     def __str__(self):
         return f"{self.get_portal_display()} --- {self.title} - {self.created_at.strftime('%d/%m/%Y %H:%M:%S')}"
+    
+    
+class Attachment(models.Model):
+    attachments = models.FileField("Arquivo", upload_to= 'attachments/')
+    block = models.ForeignKey("NewsBlock", on_delete=models.CASCADE, related_name="attachments")
+    captions = models.CharField("Legenda", max_length=127, null=True, blank=True, default="")
+    alt_text = models.CharField("Texto acessibilidade", max_length=255, null=True, blank=True, default="")
+    created_at = models.DateTimeField("Criado em:", auto_now_add=True)
+
+    def __str__(self):
+        return f"(arquivo) - {self.attachments}- {self.captions}"
+
+

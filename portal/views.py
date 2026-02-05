@@ -11,7 +11,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .forms import DestaqueForm
-from .models import NewsPost, NewsBlock, BlockImage, Destaque
+from .models import Attachment, NewsPost, NewsBlock, BlockImage, Destaque
 
 
 def index(request):
@@ -158,6 +158,13 @@ def news_editor(request, news_id=None):
                 for block in existing_blocks[len(blocks):]:
                     block.delete()
 
+            if 'attachments' in request.FILES:
+                for file in request.FILES.getlist('attachments'):
+                    Attachment.objects.create(
+                        block = news_item.blocks.attachments,
+                        attachments = file
+                    ).save()
+
             return JsonResponse({'success': True, 'redirect_url': '/news/'})  # ou detalhe da notícia
             
         except Exception as e:
@@ -225,6 +232,7 @@ def news_list(request):
         'news_list': news_query,
     }
     return render(request, 'news_list.html', context)
+
 def news_detail(request, pk):
     post = get_object_or_404(NewsPost, pk=pk)
     blocks = post.blocks.all().order_by('order')

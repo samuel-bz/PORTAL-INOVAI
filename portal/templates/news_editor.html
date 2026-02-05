@@ -414,7 +414,7 @@
                     contentHTML = `<h2 class="text-2xl font-semibold text-gray-700 outline-none mt-2 editor-text-block" contenteditable="true"></h2>`;
                     break;
                 case 'paragraph':
-                    contentHTML = `<p class="text-gray-600 leading-relaxed outline-none editor-text-block" contenteditable="true"></p>`;
+                    contentHTML = `<textarea class="w-full bg-transparent outline-none resize-none text-gray-600 leading-relaxed editor-text-block" rows="3" placeholder="Comece a escrever o conteúdo do parágrafo aqui..."></textarea>`;
                     break;
                 case 'image':
                     // Se tivermos uma URL de imagem
@@ -521,7 +521,17 @@
             } else if (type === 'subtitle') {
                 contentWrapper.querySelector('h2').textContent = content || 'Subtítulo Explicativo';
             } else if (type === 'paragraph') {
-                contentWrapper.querySelector('p').textContent = content || 'Comece a escrever o conteúdo do parágrafo aqui...';
+                const ta = contentWrapper.querySelector('textarea');
+                ta.value = content || '';
+                
+                // Auto-resize logic
+                const resize = () => {
+                    ta.style.height = 'auto';
+                    ta.style.height = ta.scrollHeight + 'px';
+                };
+                ta.addEventListener('input', resize);
+                // Delay initial resize to ensure DOM insertion
+                setTimeout(resize, 0);
             } else if (type === 'image-text') {
                 contentWrapper.querySelector('p').textContent = content || 'Texto descritivo ao lado da imagem...';
             }
@@ -797,10 +807,16 @@
                 } else if (blockEl.querySelector('h2')) {
                     blockData.type = 'subtitle';
                     blockData.content = blockEl.querySelector('h2').textContent;
-                } else if (blockEl.querySelector('p') && !blockEl.querySelector('img')) {
-                    // Parágrafo simples (textContent preserva newlines/tabs)
+                } else if (type === 'paragraph') {
+                    // Parágrafo agora usa textarea
                     blockData.type = 'paragraph';
-                    blockData.content = blockEl.querySelector('p').textContent;
+                    const p = blockEl.querySelector('p');
+                    const ta = blockEl.querySelector('textarea');
+                    if (ta) {
+                        blockData.content = ta.value;
+                    } else if (p) {
+                         blockData.content = p.textContent;
+                    }
                 } else if (blockEl.querySelector('.group-carousel')) {
                     blockData.type = 'carousel';
                     // Imagens do carrossel são manipuladas via propriedade storedImages no container

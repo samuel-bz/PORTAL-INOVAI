@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load portal_filters %}
 {% load news_back_link_filter %}
 
 {% block title %}Portal Inovaí - {{ post.title }}{% endblock %}
@@ -61,6 +62,20 @@
 
                 {% elif block.block_type == 'subtitle' %}
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">{{ block.content }}</h2>
+
+                {% elif block.block_type == 'unordered_list' %}
+                <ul class="list-disc pl-5 my-4 space-y-1 text-gray-700 dark:text-gray-300 marker:text-brand-blue">
+                    {% for item in block.content|split_lines %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+
+                {% elif block.block_type == 'ordered_list' %}
+                <ol class="list-decimal pl-5 my-4 space-y-1 text-gray-700 dark:text-gray-300 marker:font-bold">
+                    {% for item in block.content|split_lines %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ol>
 
                 {% elif block.block_type == 'hr' %}
                 <hr class="my-8 border-gray-200 dark:border-gray-600">

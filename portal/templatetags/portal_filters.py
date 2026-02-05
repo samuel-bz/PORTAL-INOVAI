@@ -16,3 +16,10 @@ def split_tags(tags_string):
     if not tags_string or not isinstance(tags_string, str):
         return []
     return [tag.strip() for tag in tags_string.split(',') if tag.strip()]
+
+@register.filter
+def split_lines(text):
+    """Separa o texto em linhas."""
+    if not text or not isinstance(text, str):
+        return []
+    return [line.strip() for line in text.splitlines() if line.strip()]

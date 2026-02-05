@@ -135,6 +135,33 @@
                 <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Parágrafo</span>
             </div>
 
+            <!-- Lista Não Ordenada -->
+            <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
+                draggable="true" data-type="unordered_list">
+                <div class="w-8 h-8 rounded bg-teal-100 text-teal-600 flex items-center justify-center">
+                    <i class="bi bi-list-ul"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Lista Bullets</span>
+            </div>
+
+            <!-- Lista Ordenada -->
+            <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
+                draggable="true" data-type="ordered_list">
+                <div class="w-8 h-8 rounded bg-teal-100 text-teal-600 flex items-center justify-center">
+                    <i class="bi bi-list-ol"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Lista Numérica</span>
+            </div>
+
+            <!-- Separador -->
+            <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
+                draggable="true" data-type="hr">
+                <div class="w-8 h-8 rounded bg-gray-200 text-gray-600 flex items-center justify-center">
+                    <i class="bi bi-dash-lg"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Separador</span>
+            </div>
+
             <!-- Imagem -->
             <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
                 draggable="true" data-type="image">
@@ -254,6 +281,16 @@
                     class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
                     onclick="addBlock('paragraph')"><i class="bi bi-text-paragraph text-gray-500"></i>
                     Parágrafo</button>
+                    
+                <button
+                    class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
+                    onclick="addBlock('unordered_list')"><i class="bi bi-list-ul text-teal-500"></i> Lista Bullets</button>
+                <button
+                    class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
+                    onclick="addBlock('ordered_list')"><i class="bi bi-list-ol text-teal-500"></i> Lista Numérica</button>
+                <button
+                    class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
+                    onclick="addBlock('hr')"><i class="bi bi-dash-lg text-gray-500"></i> Separador</button>
                 <button
                     class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
                     onclick="addBlock('image')"><i class="bi bi-image text-purple-500"></i> Imagem</button>
@@ -416,6 +453,26 @@
                 case 'paragraph':
                     contentHTML = `<textarea class="w-full bg-transparent outline-none resize-none text-gray-600 leading-relaxed editor-text-block" rows="3" placeholder="Comece a escrever o conteúdo do parágrafo aqui..."></textarea>`;
                     break;
+                case 'unordered_list':
+                     // Separar conteúdo em itens se existir
+                     const ulItems = content ? content.split('\n').map(c => `<li>${c}</li>`).join('') : '<li></li>';
+                     contentHTML = `
+                        <ul class="list-disc list-inside pl-0 text-gray-700 dark:text-gray-300 outline-none editor-text-block w-full" contenteditable="true">
+                            ${ulItems}
+                        </ul>
+                     `;
+                    break;
+                case 'ordered_list':
+                     const olItems = content ? content.split('\n').map(c => `<li>${c}</li>`).join('') : '<li></li>';
+                     contentHTML = `
+                        <ol class="list-decimal list-inside pl-0 text-gray-700 dark:text-gray-300 outline-none editor-text-block w-full" contenteditable="true">
+                            ${olItems}
+                        </ol>
+                     `;
+                    break;
+                case 'hr':
+                    contentHTML = `<hr class="my-4 border-2 border-gray-200">`;
+                    break;
                 case 'image':
                     // Se tivermos uma URL de imagem
                     const imgUrl = (images && images.length > 0) ? images[0].url : '';
@@ -532,6 +589,14 @@
                 ta.addEventListener('input', resize);
                 // Delay initial resize to ensure DOM insertion
                 setTimeout(resize, 0);
+                setTimeout(resize, 0);
+            } else if (type === 'unordered_list' || type === 'ordered_list') {
+                // Foca no último li se for novo bloco? Ou apenas deixa quieto.
+                // Se content for vazio, garantimos um li vazio
+                // Nenhuma lógica de resize necessária para contenteditable
+                if (!content) {
+                    // Opcional: focar automaticamente
+                }
             } else if (type === 'image-text') {
                 contentWrapper.querySelector('p').textContent = content || 'Texto descritivo ao lado da imagem...';
             }
@@ -817,6 +882,23 @@
                     } else if (p) {
                          blockData.content = p.textContent;
                     }
+                } else if (type === 'unordered_list' || type === 'ordered_list') {
+                     blockData.type = type;
+                     // Extrair conteúdo dos LIs
+                     const list = blockEl.querySelector('ul, ol');
+                     if (list) {
+                         // Pega o texto de cada LI, ignorando vazios se preferir, ou mantendo
+                         // .innerText costuma funcionar bem para pegar o texto visível
+                         const items = Array.from(list.querySelectorAll('li'))
+                            .map(li => li.innerText.replace(/\n/g, ' ').trim()) // Remove newlines dentro do item se houver
+                            .filter(t => t.length > 0); // Remove itens vazios
+                         blockData.content = items.join('\n');
+                     } else {
+                         blockData.content = '';
+                     }
+                } else if (type === 'hr') {
+                    blockData.type = 'hr';
+                    blockData.content = '';
                 } else if (blockEl.querySelector('.group-carousel')) {
                     blockData.type = 'carousel';
                     // Imagens do carrossel são manipuladas via propriedade storedImages no container

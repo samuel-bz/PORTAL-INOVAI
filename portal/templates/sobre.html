@@ -4,102 +4,112 @@
 {% block title %}Sobre Nós - Portal Inovaí{% endblock %}
 
 {% block navbar %}
-    {% include 'components/navbar_solid.html' %}
+{% include 'components/navbar_solid.html' %}
 {% endblock %}
 
 {% block navbar_scroll_logic %}
-    <!-- Navbar logic handled by navbar_solid.html component -->
+<!-- Navbar logic handled by navbar_solid.html component -->
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-white dark:bg-gray-900 font-sans">
-    
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <!-- Hero Section -->
-    <section class="relative bg-gray-900 border-b border-gray-800">
-        <div class="absolute inset-0 overflow-hidden">
-             <!-- Background Image / Pattern -->
-            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent"></div>
-        </div>
-
-        <div class="relative container mx-auto px-4 py-24 md:py-32 flex flex-col items-center text-center">
-            <span class="inline-block py-1 px-3 rounded-full bg-brand-blue/20 text-brand-blue text-sm font-bold tracking-wider mb-6 border border-brand-blue/30 backdrop-blur-sm animate-fade-in">
-                INOVAÇÃO & TECNOLOGIA
-            </span>
-            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in-up">
-                Transformando o Futuro <br class="hidden md:block" /> de <span class="text-brand-blue">Piraí</span>
-            </h1>
-            <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-100">
-                O Inovaí é um espaço feito para você aprender, experimentar e construir. 
-                Conectamos pessoas, tecnologia e conhecimento para desenvolver nossa cidade.
-            </p>
+    <section class="container mx-auto px-4 pt-24 pb-8 bg-none">
+        <div class="w-full max-w-2xl mx-auto relative">
+            <img src="{% static 'images/slogan.png' %}" alt="Inovaí - Slogan"
+                class="w-full h-auto shadow-lg rounded-xl hover:shadow-2xl transition-shadow duration-300 border border-gray-100 dark:border-gray-800">
         </div>
     </section>
 
-    <!-- Mission & Slogan Section -->
-    <section class="py-16 md:py-24 bg-white dark:bg-gray-900">
+    <!-- About Section -->
+    <section class="py-20 bg-[#fdfbf6] dark:bg-gray-800 font-serif">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
-                <!-- Image/Slogan -->
-                <div class="w-full md:w-1/2">
-                    <div id="sloganContainer" class="relative rounded-2xl overflow-hidden shadow-2xl skew-y-3 opacity-0 translate-y-20 transform transition-all duration-1000 ease-out">
-                        <div class="absolute inset-0 bg-brand-blue/20 transition duration-1000 z-10" id="sloganOverlay"></div>
-                        <img src="{% static 'images/slogan.png' %}" alt="Inovaí Slogan" class="w-full h-auto object-cover transform scale-105 transition duration-1000">
+            <div
+                class="max-w-5xl mx-auto bg-white dark:bg-gray-900 shadow-xl p-8 md:p-16 border-t-8 border-black dark:border-white">
+
+                <!-- Newspaper Header -->
+                <div class="text-center mb-12 border-b-4 border-double border-gray-900 dark:border-gray-100 pb-8">
+                    <h2
+                        class="text-5xl md:text-7xl font-black text-gray-900 dark:text-white mb-6 uppercase tracking-tighter">
+                        Nossa Missão
+                    </h2>
+                    <div
+                        class="flex items-center justify-center gap-6 text-sm md:text-base font-bold text-gray-600 dark:text-gray-400 uppercase tracking-[0.2em] border-t border-b border-gray-200 py-3">
+                        <span>Piraí - RJ</span>
+                        <span class="text-xl">•</span>
+                        <span>Inovação & Tecnologia</span>
+                        <span class="text-xl">•</span>
+                        <span>Edição Especial</span>
                     </div>
                 </div>
 
-                <!-- Text Content -->
-                <div class="w-full md:w-1/2">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                        Nossa Missão
+                <!-- Lead Text -->
+                <div
+                    class="text-xl md:text-2xl text-gray-800 dark:text-gray-200 font-medium italic text-center max-w-4xl mx-auto mb-16 leading-relaxed px-8 border-l-4 border-r-4 border-gray-100 dark:border-gray-700">
+                    "O Inovaí é um espaço da cidade de Piraí - RJ feito para você aprender tecnologia, experimentar
+                    novas ideias e construir soluções para o futuro. Aqui você encontra cursos,
+                    oficinas, robótica, soluções tecnológicas e muito mais, tudo gratuito e aberto à comunidade."
+                </div>
+
+                <!-- Main Content Columns -->
+                <div
+                    class="prose prose-lg prose-gray dark:prose-invert max-w-none md:columns-2 gap-12 text-justify leading-loose">
+
+                    <!-- First Paragraph with Drop Cap -->
+                    <p
+                        class="mb-8 first-letter:text-7xl first-letter:font-black first-letter:text-gray-900 dark:first-letter:text-white first-letter:mr-4 first-letter:float-left first-letter:leading-none first-letter:mt-2">
+                        O Inovaí é um programa público da Secretaria Municipal de Ciência e Tecnologia que abre as
+                        portas da inovação para toda a comunidade.
+                        Ele reúne cursos, oficinas e espaços colaborativos voltados para o aprendizado, a criatividade e
+                        o desenvolvimento de novas ideias.
+                        O principal objetivo do Inovaí é aproximar a população das ferramentas do futuro, promover
+                        educação digital de qualidade, oferecer oportunidades de profissionalização, incentivar a
+                        participação de mulheres na ciência e tecnologia e inclusão digital.
+                    </p>
+
+                    <!-- Subheadline -->
+                    <h2
+                        class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-6 uppercase border-b-2 border-black dark:border-white inline-block">
+                        O que o Inovaí oferece
                     </h2>
-                    <div class="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                        <p>
-                            O Inovaí é um programa público da Secretaria Municipal de Ciência e Tecnologia que abre as portas da inovação para toda a comunidade.
-                        </p>
-                        <p>
-                            Reunimos cursos, oficinas e espaços colaborativos voltados para o aprendizado, a criatividade e o desenvolvimento de novas ideias.
-                        </p>
-                        <p class="font-medium text-brand-blue dark:text-blue-400 border-l-4 border-brand-blue pl-4">
-                            Nosso objetivo é aproximar a população das ferramentas do futuro, promover educação digital de qualidade e oferecer oportunidades reais de profissionalização.
-                        </p>
-                    </div>
+
+                    <h3 class="text-xl font-bold mb-6 italic text-gray-800 dark:text-gray-200">
+                        O Inovaí é um polo de inovação e tecnologia que aproxima,
+                        promove e incentiva o mundo tecnológico para a população de Piraí.
+                        É um espaço para aprender, criar e transformar.
+                    </h3>
+
+                    <!-- Divider only visible in column flow -->
+                    <div class="w-full h-px bg-gray-300 my-8"></div>
+
+                    <ul class="list-none space-y-4">
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Cursos básicos de tecnologia:</strong> para quem quer começar a aprender
+                            informática, programação ou ferramentas digitais.
+                        </li>
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Cultura maker e Fab-Lab:</strong> oficinas práticas para criar, experimentar e
+                            construir protótipos com impressoras 3D, eletrônica e outras tecnologias.
+                        </li>
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Robótica educacional:</strong> atividades para desenvolverem
+                            raciocínio lógico e criatividade.
+                        </li>
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Mulheres na Ciência:</strong> ambientes colaborativos para meninas e mulheres
+                            trabalharem juntas.
+                        </li>
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Centro de desenvolvimento de software:</strong> um núcleo especializado em
+                            desenvolvimento de sistema e soluções tecnológicas.
+                        </li>
+                        <li class="pl-4 border-l-2 border-gray-300">
+                            <strong>Oficinas educacionais e espaços de inovação:</strong> atividades abertas para
+                            estimular novas ideias e soluções para a cidade.
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
-
-</div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const slogan = document.getElementById('sloganContainer');
-        const overlay = document.getElementById('sloganOverlay');
-        
-        if (slogan && overlay) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Remove initial states
-                        slogan.classList.remove('skew-y-3', 'opacity-0', 'translate-y-20');
-                        // Add final visible states
-                        slogan.classList.add('skew-y-0', 'opacity-100', 'translate-y-0');
-                        
-                        // Fade out overlay
-                        overlay.classList.remove('bg-brand-blue/20');
-                        overlay.classList.add('bg-transparent');
-                        
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.3 // Trigger when 30% visible
-            });
-            
-            observer.observe(slogan);
-        }
-    });
-</script>
-{% endblock %}
+    {% endblock %}

@@ -15,7 +15,7 @@ from .models import NewsPost, NewsBlock, BlockImage, Destaque
 
 
 def index(request):
-    noticias = NewsPost.objects.all().exclude(active=False).exclude(draft=True).order_by('-publish_date')[:3]
+    noticias = NewsPost.objects.filter(portal='portal_inovai').exclude(active=False).exclude(draft=True).order_by('-publish_date')[:3]
     destaques = Destaque.objects.filter(portal="portal_inovai")
 
     context = {
@@ -25,12 +25,12 @@ def index(request):
     return render(request, 'index.html', context)
 
 def mulheres(request):
+    noticias = NewsPost.objects.filter(portal='portal_mulheres_ciencia').exclude(active=False).exclude(draft=True).order_by('-publish_date')[:3]
     destaques = Destaque.objects.filter(portal="portal_mulheres_ciencia")
-    noticias = NewsPost.objects.all().filter(portal="portal_mulheres_ciencia").exclude(active=False).exclude(draft=True).order_by('-publish_date')[:3]
     
     context = {
+        'news_posts': noticias,
         'destaques': destaques,
-        'noticias': noticias,
     }
     return render(request, 'mulheres.html', context=context)
 

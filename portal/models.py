@@ -11,6 +11,7 @@ BLOCK_TYPES = (
     ('image', 'Imagem'),
     ('title', 'Título'),
     ('carousel', 'Carrossel'),
+    ('youtube', 'Vídeo YouTube'),
 )
 
 PORTAIS = (
@@ -62,6 +63,12 @@ class NewsBlock(models.Model):
         # Exemplo:  Notícia 31/12/26 - Abertura | (01).Parágrafo
         #           Notícia 31/12/26 - Abertura | (02).Imagem
 
+    def youtube_embed_src(self):
+        """Para blocos YouTube, retorna a URL de embed no domínio youtube-nocookie.com (evita Erro 153)."""
+        if self.block_type != 'youtube' or not self.content:
+            return ''
+        return self.content.replace('youtube.com/embed', 'youtube-nocookie.com/embed').replace('www.youtube.com/embed', 'www.youtube-nocookie.com/embed')
+
 class BlockImage(models.Model):
     image = models.ImageField("Imagem", upload_to='news/blocks/')
     block = models.ForeignKey("NewsBlock", on_delete=models.CASCADE, related_name="image")
@@ -80,7 +87,7 @@ class Destaque(models.Model):
     points_to_noticia = models.BooleanField("Aponta para notícia", default=False)
     related_post = models.ForeignKey("NewsPost", on_delete=models.CASCADE, related_name='destaques', null=True, blank=True)
     link_url = models.URLField("URL de destino", max_length=255, null=True, blank=True)
-    button_color = models.CharField("Cor do botão", max_length=15, validators=[RegexValidator(regex=r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$', message="Cor inválida. Use formato hexadecimal (ex: #FFFFFF ou #FFF).")], default="#FFFFFF")
+    button_color = models.CharField("Cor do botão", max_length=15, validators=[RegexValidator(regex=r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$', message="Cor inválida. Use formato hexadecimal (ex: #FFFFFF ou #FFF).")], default="#0d6efd")
     button_text = models.CharField("Texto do botão", max_length=127, default="Saiba mais")
     created_at = models.DateTimeField("Criado em:", auto_now_add=True)
     updated_at = models.DateTimeField("Atualizado em:", auto_now=True)

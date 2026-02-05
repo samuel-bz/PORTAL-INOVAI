@@ -22,21 +22,21 @@
                     class="text-white hover:text-brand-blue transition border-b-2 border-transparent hover:border-white">Notícias</a>
                 <a href="#"
                     class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Projetos</a>
-                  <!-- Link da Página Mulheres -->
-                <a id="mulheresBtn" href="{% url 'portal:mulheres' %}"
-                        class="bg-mulheres-primary hover:bg-purple-800 text-white px-5 py-2 rounded-full font-medium transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
-                        <i class="bi bi-stars"></i>
-                        Mulheres na Ciência
-                    </a>
-                <a href="{% url 'portal:sobre' %}" class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Sobre</a>
-
-                <div class="flex items-center gap-3 border-l pl-6 border-gray-300 dark:border-gray-600">
-                    <!-- Botão de Alternância do Modo Escuro -->
-                    <button id="darkModeBtn"
+                    <a href="{% url 'portal:sobre' %}" class="text-white hover:text-brand-blue transition border-b-2 border-transparent">Sobre</a>
+                    
+                    <div class="flex items-center gap-3 border-l pl-6 border-gray-300 dark:border-gray-600">
+                        <!-- Botão de Alternância do Modo Escuro -->
+                        <button id="darkModeBtn"
                         class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                         title="Alternar Modo Escuro">
                         <i class="bi bi-moon-fill"></i>
                     </button>
+                    <!-- Link da Página Mulheres -->
+                  <a id="mulheresBtn" href="{% url 'portal:mulheres' %}"
+                          class="bg-mulheres-primary hover:bg-purple-800 text-white px-5 py-2 rounded-full font-medium transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+                          <i class="bi bi-stars"></i>
+                          Mulheres na Ciência
+                      </a>
 
                     {% if user.is_authenticated%}
                     <!-- Botão para editor de notícias -->

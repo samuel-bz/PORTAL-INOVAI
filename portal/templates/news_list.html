@@ -107,13 +107,17 @@
                     <!-- Author & Tag -->
                     <div class="flex justify-between items-center mb-3 text-xs text-gray-500 dark:text-gray-400">
                         <span class="flex items-center gap-1">
-                            <i class="bi bi-person-circle"></i> {{ news.author.get_full_name|default:news.author.username|default:"Desconhecido" }}
+                            <i class="bi bi-person-circle"></i> {% if news.author %}{{ news.author.get_full_name|default:news.author.username }}{% else %}Desconhecido{% endif %}
                         </span>
                         {% if news.tags %}
-                        <span
-                            class="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded">
-                            {{ news.tags }}
-                        </span>
+                        <div class="flex flex-wrap gap-1">
+                            {% load portal_filters %}
+                            {% for tag in news.tags|split_tags %}
+                            <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded text-[10px] uppercase font-bold">
+                                {{ tag }}
+                            </span>
+                            {% endfor %}
+                        </div>
                         {% endif %}
                     </div>
 

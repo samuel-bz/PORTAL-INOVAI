@@ -16,7 +16,7 @@ class BlockImageAdmin(admin.ModelAdmin):
 
 class DestaqueAdmin(admin.ModelAdmin):
     class Meta:
-        models = Destaque
+        model = Destaque
 
 class AttachmentsAdmin(admin.ModelAdmin):
     class Meta:

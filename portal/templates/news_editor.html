@@ -172,6 +172,15 @@
                 <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Imagem</span>
             </div>
 
+            <!-- Anexo -->
+            <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
+                draggable="true" data-type="attachment">
+                <div class="w-8 h-8 rounded bg-green-100 text-green-600 flex items-center justify-center">
+                    <i class="bi bi-paperclip"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Anexo</span>
+            </div>
+
             <!-- Carrossel -->
             <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
                 draggable="true" data-type="carousel">
@@ -302,6 +311,9 @@
                     class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
                     onclick="addBlock('image-text')"><i class="bi bi-layout-sidebar text-orange-500"></i> Imagem +
                     Texto</button>
+                <button
+                    class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
+                    onclick="addBlock('attachment')"><i class="bi bi-paperclip text-green-500"></i> Anexo</button>
             </div>
         </div>
     </main>
@@ -555,6 +567,43 @@
                         </div>
                     `;
                     break;
+                case 'attachment':
+                    const att = (images && images.length > 0) ? images[0] : null;
+                    if (att && att.url) {
+                        contentHTML = `
+                            <div class="w-full p-4 bg-gray-100 rounded-lg flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded bg-green-50 text-green-600 flex items-center justify-center">
+                                        <i class="bi bi-file-earmark-text text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <a href="${att.url}" target="_blank" class="font-medium text-gray-800 underline attachment-file">${att.name || 'Download'}</a>
+                                        <div class="text-xs text-gray-500">${att.type || ''}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="file" class="hidden attachment-input" onchange="previewAttachment(this)">
+                                    <button class="bg-blue-600 text-white px-3 py-1 rounded" onclick="this.closest('.editor-block').querySelector('.attachment-input').click()">Trocar</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        contentHTML = `
+                            <div class="w-full p-6 bg-gray-100 rounded-lg flex items-center justify-between gap-4 cursor-pointer" onclick="this.querySelector('input').click()">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded bg-green-50 text-green-600 flex items-center justify-center">
+                                        <i class="bi bi-paperclip text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Adicionar Anexo</div>
+                                        <div class="text-xs text-gray-500">PDF, DOCX, XLSX, etc.</div>
+                                    </div>
+                                </div>
+                                <input type="file" class="hidden attachment-input" onchange="previewAttachment(this)">
+                            </div>
+                        `;
+                    }
+                    break;
                 case 'youtube':
                     const embedUrl = content && content.trim() ? content.trim() : '';
                     contentHTML = `
@@ -662,6 +711,32 @@
                     parent.appendChild(fileInput);
                 };
                 reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- Auxiliar: Pré-visualização de Anexo ---
+        window.previewAttachment = function (input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const parent = input.parentElement;
+                parent.className = 'w-full p-4 bg-gray-100 rounded-lg flex items-center justify-between gap-4';
+                // Remover input e montar a visão resumida
+                input.remove();
+                parent.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded bg-green-50 text-green-600 flex items-center justify-center">
+                            <i class="bi bi-file-earmark-text text-2xl"></i>
+                        </div>
+                        <div>
+                            <a href="#" class="font-medium text-gray-800 attachment-file">${file.name}</a>
+                            <div class="text-xs text-gray-500">${file.type || ''} • ${(file.size/1024).toFixed(1)} KB</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="bg-blue-600 text-white px-3 py-1 rounded" onclick="this.closest('.editor-block').querySelector('input').click()">Trocar</button>
+                    </div>
+                `;
+                parent.appendChild(input);
             }
         }
 
@@ -932,6 +1007,16 @@
                     const imgInput = blockEl.querySelector('input[type="file"]');
                     if (imgInput && imgInput.files[0]) {
                         formData.append(`block_${index}_image`, imgInput.files[0]);
+                    }
+                } else if (blockEl.dataset.type === 'attachment' || blockEl.querySelector('.attachment-input') || blockEl.querySelector('.attachment-file')) {
+                    blockData.type = 'attachment';
+                    // Priorizar input file (novo anexo)
+                    const attInput = blockEl.querySelector('input[type="file"]');
+                    if (attInput && attInput.files[0]) {
+                        formData.append(`block_${index}_attachment`, attInput.files[0]);
+                        blockData.content = attInput.files[0].name;
+                    } else if (blockEl.querySelector('.attachment-file')) {
+                        blockData.content = blockEl.querySelector('.attachment-file').getAttribute('href') || blockEl.querySelector('.attachment-file').textContent;
                     }
                 } else if (type === 'youtube' || blockEl.querySelector('.youtube-embed-wrapper')) {
                     blockData.type = 'youtube';

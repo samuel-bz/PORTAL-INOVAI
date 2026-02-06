@@ -17,15 +17,16 @@
             <!-- Menu Desktop -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="{% url 'portal:index' %}"
-                    class="text-black hover:text-brand-blue font-medium transition border-b-2 border-transparent">Início</a>
-                <a href="{% url 'portal:news_list' %}" class="text-black font-extrabold border-b-2 border-brand-blue">Inovaí</a>
-                <a href="{% url 'portal:projects_list' %}"
-                    class="text-black hover:text-brand-blue font-medium transition border-b-2 border-transparent">Projetos</a>
+                    class="text-black hover:text-brand-blue dark:text-white font-medium transition border-b-2 border-transparent">Início</a>
+                <a href="#" 
+                class="text-black dark:text-white font-extrabold border-b-2 border-brand-blue">Inovaí</a>
+                <a href="#"
+                    class="text-black hover:text-brand-blue dark:text-white font-medium transition border-b-2 border-transparent">Projetos</a>
 
-                <div class="flex items-center gap-3 border-l pl-6 border-white/30">
+                <div class="flex items-center gap-3 border-l pl-6 border-black/30">
                     <!-- Botão de Alternância do Modo Escuro -->
                     <button id="darkModeBtn"
-                        class="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-black hover:bg-blue-50/10 transition"
+                        class="w-10 h-10 rounded-full border border-black/30 flex items-center dark:text-white dark:border-white justify-center text-black hover:bg-blue-50/10 transition"
                         title="Alternar Modo Escuro">
                         <i class="bi bi-moon-fill"></i>
                     </button>
@@ -58,8 +59,6 @@
                 class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Notícias</a>
             <a href="#"
                 class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Projetos</a>
-            <a href="#"
-                class="block px-3 py-2 text-gray-600 hover:text-brand-blue hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md">Sobre</a>
 
             <div class="mt-4 flex flex-col gap-3 px-3">
                 <button id="darkModeMobileBtn"

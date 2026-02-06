@@ -1013,6 +1013,7 @@
                     // Priorizar input file (novo anexo)
                     const attInput = blockEl.querySelector('input[type="file"]');
                     if (attInput && attInput.files[0]) {
+                        formData.append(`block_${index}_attachments`, attInput.files[0]);
                         formData.append(`block_${index}_attachment`, attInput.files[0]);
                         blockData.content = attInput.files[0].name;
                     } else if (blockEl.querySelector('.attachment-file')) {

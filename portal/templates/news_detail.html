@@ -104,32 +104,39 @@
                     </figure>
                     {% endfor %}
                 </div>
-                
+
+                {% elif block.block_type == 'youtube' %}
+                {% if block.content %}
+                <div class="my-8 w-full aspect-video max-w-3xl rounded-lg overflow-hidden bg-gray-900">
+                    <iframe src="{{ block.youtube_embed_src }}" title="Vídeo YouTube" width="560" height="315" frameborder="0" class="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
                 {% endif %}
-                
+
+                {% elif block.block_type == 'attachment' %}
                 <!-- Exibir Arquivos anexados ao bloco -->
                 {% if block.attachments.all %}
                 <div class="my-6 bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Arquivos</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Arquivos para Download</h3>
                     <div class="space-y-3">
                         {% for attachment in block.attachments.all %}
                         <div class="flex items-center justify-between bg-white dark:bg-gray-600 p-3 rounded-lg border border-gray-200 dark:border-gray-500">
-                            <div class="flex items-center flex-1">
-                                <i class="bi bi-file-earmark-pdf text-red-500 text-xl mr-3"></i>
-                                <div class="flex-1">
-                                    <p class="text-gray-900 dark:text-white font-medium">{{ attachment.attachments.name|slice:"11:" }}</p>
+                            <div class="flex items-center flex-1 min-w-0">
+                                <i class="bi bi-file-earmark-text text-green-600 text-2xl mr-4"></i>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-gray-900 dark:text-white font-medium truncate">{{ attachment.attachments.name|slice:"12:" }}</p>
                                     {% if attachment.captions %}
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ attachment.captions }}</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate">{{ attachment.captions }}</p>
                                     {% endif %}
                                 </div>
                             </div>
-                            <a href="{{ attachment.attachments.url }}" download class="inline-flex items-center px-4 py-2 bg-brand-blue hover:bg-blue-700 text-white font-medium rounded-lg transition">
+                            <a href="{{ attachment.attachments.url }}" download class="ml-4 flex-shrink-0 inline-flex items-center px-4 py-2 bg-brand-blue hover:bg-blue-700 text-white font-medium rounded-lg transition">
                                 <i class="bi bi-download mr-2"></i> Download
                             </a>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
+                {% endif %}
                 {% endif %}
             {% empty %}
             <p class="text-gray-500 dark:text-gray-400 italic">Nenhum conteúdo adicional publicado.</p>

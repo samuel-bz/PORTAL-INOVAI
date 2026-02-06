@@ -155,18 +155,22 @@ def news_editor(request, news_id=None):
                         image=request.FILES[image_key]
                     )
                 # Se não houver novo upload, imagens existentes do bloco são mantidas
+                
+                # 4. Anexos: substituir quando houver novo upload
+                attachment_key = f'block_{index}_attachment'
+                file_obj = request.FILES.get(attachment_key) or request.FILES.get(f'block_{index}_attachments')
+                if file_obj:
+                    block.attachments.all().delete()
+                    Attachment.objects.create(
+                        block=block,
+                        attachments=file_obj,
+                        captions=block_data.get('content', '')
+                    )
 
             # Remover blocos que foram apagados no editor (índice além do novo tamanho)
             if news_id and len(existing_blocks) > len(blocks):
                 for block in existing_blocks[len(blocks):]:
                     block.delete()
-
-            if 'attachments' in request.FILES:
-                for file in request.FILES.getlist('attachments'):
-                    Attachment.objects.create(
-                        block = news_item.blocks.attachments,
-                        attachments = file
-                    ).save()
 
             return JsonResponse({'success': True, 'redirect_url': '/news/'})  # ou detalhe da notícia
             
@@ -194,6 +198,13 @@ def news_editor(request, news_id=None):
                     'url': img.image.url if img.image else '',
                     'caption': img.captions,
                     'alt': img.alt_text
+                })
+            
+            for att in block.attachments.all():
+                block_data['images'].append({
+                    'url': att.attachments.url if att.attachments else '',
+                    'name': att.attachments.name.split('/')[-1] if att.attachments else 'Arquivo',
+                    'type': 'Anexo'
                 })
             blocks_data.append(block_data)
 

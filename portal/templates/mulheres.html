@@ -144,19 +144,23 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
         {% for destaque in destaques %}
             <div class="min-w-full h-full relative">
                 <img src="{{ destaque.image.url }}" class="w-full h-full object-cover opacity-60">
-                <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
-                    <div class="max-w-2xl text-white animate-fade-in-up">
-                        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pt-12 text-shadow">{{ destaque.title }}</h2>
-                        <p class="text-xl md:text-2xl mb-6 text-gray-200">
+                <div class="absolute inset-x-0 bottom-0 top-0 px-8 md:px-20 pt-20 flex flex-col justify-start pointer-events-none">
+                    <div class="max-w-2xl text-white animate-fade-in-up pointer-events-auto mb-20"> <!-- Margin bottom to clear button area -->
+                        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pt-4 text-shadow">{{ destaque.title }}</h2>
+                        <p class="text-xl md:text-2xl mb-6 pb-4 text-gray-200 line-clamp-3 md:line-clamp-none">
                             {{ destaque.description }}
                         </p>
-                        <a
-                        {% if destaque.points_to_noticia %} href="#" {# TODO: replace with news detail URL when page exists #} {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
-                        class="dynamic-color-btn text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition-all duration-300 shadow-lg inline-block max-w-full truncate"
-                        data-button-color="{{ destaque.button_color }}">
-                        {{destaque.button_text }}
-                        </a>
                     </div>
+                </div>
+
+                <!-- Fixed Button Position -->
+                <div class="absolute bottom-12 left-8 md:left-20 animate-fade-in-up z-10">
+                    <a
+                    {% if destaque.points_to_noticia %} href="#" {# TODO: replace with news detail URL when page exists #} {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
+                    class="dynamic-color-btn text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition-all duration-300 shadow-lg inline-block max-w-full truncate"
+                    data-button-color="{{ destaque.button_color }}">
+                    {{destaque.button_text }}
+                    </a>
                 </div>
             </div>
         {% endfor %}

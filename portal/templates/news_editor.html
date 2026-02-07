@@ -471,6 +471,32 @@
         }
 
         // --- Lógica de Criação de Blocos ---
+
+        // --- Funções de Rich Text Editor ---
+        window.formatText = function(button, command) {
+            document.execCommand(command, false, null);
+            // Manter foco no editor
+            const editor = button.closest('.rich-text-editor').querySelector('.editor-content');
+            editor.focus();
+            updateToolbarStates(editor);
+        };
+
+        window.updateToolbarStates = function(editor) {
+            const toolbar = editor.closest('.rich-text-editor').querySelector('.toolbar');
+            const buttons = toolbar.querySelectorAll('button');
+            
+            buttons.forEach(btn => {
+                const command = btn.dataset.command;
+                if (document.queryCommandState(command)) {
+                    btn.classList.add('bg-gray-200', 'text-blue-600');
+                    btn.classList.remove('text-gray-600');
+                } else {
+                    btn.classList.remove('bg-gray-200', 'text-blue-600');
+                    btn.classList.add('text-gray-600');
+                }
+            });
+        };
+
         function createBlock(type, content = null, images = [], id = null) {
             if (emptyState) emptyState.remove();
 
@@ -533,7 +559,26 @@
                     contentHTML = `<h2 class="text-2xl font-semibold text-gray-700 outline-none mt-2 editor-text-block" contenteditable="true"></h2>`;
                     break;
                 case 'paragraph':
-                    contentHTML = `<textarea class="w-full bg-transparent outline-none resize-none text-gray-600 leading-relaxed editor-text-block" rows="3" placeholder="Comece a escrever o conteúdo do parágrafo aqui..."></textarea>`;
+                    contentHTML = `
+                        <div class="rich-text-editor w-full">
+                            <div class="toolbar flex gap-2 mb-2 border-b border-gray-200 pb-2">
+                                <button type="button" class="p-1 rounded hover:bg-gray-100 text-gray-600 w-8 h-8 flex items-center justify-center transition-colors" data-command="bold" title="Negrito (Ctrl+B)" onclick="formatText(this, 'bold')">
+                                    <i class="bi bi-type-bold"></i>
+                                </button>
+                                <button type="button" class="p-1 rounded hover:bg-gray-100 text-gray-600 w-8 h-8 flex items-center justify-center transition-colors" data-command="italic" title="Itálico (Ctrl+I)" onclick="formatText(this, 'italic')">
+                                    <i class="bi bi-type-italic"></i>
+                                </button>
+                                <button type="button" class="p-1 rounded hover:bg-gray-100 text-gray-600 w-8 h-8 flex items-center justify-center transition-colors" data-command="underline" title="Sublinhado (Ctrl+U)" onclick="formatText(this, 'underline')">
+                                    <i class="bi bi-type-underline"></i>
+                                </button>
+                            </div>
+                            <div class="editor-content w-full bg-transparent outline-none text-gray-600 leading-relaxed editor-text-block min-h-[80px]" 
+                                 contenteditable="true" 
+                                 onmouseup="updateToolbarStates(this)" 
+                                 onkeyup="updateToolbarStates(this)"
+                                 placeholder="Comece a escrever o conteúdo do parágrafo aqui..."></div>
+                        </div>
+                    `;
                     break;
                 case 'unordered_list':
                     // Separar conteúdo em itens se existir
@@ -697,18 +742,8 @@
             } else if (type === 'subtitle') {
                 contentWrapper.querySelector('h2').textContent = content || 'Subtítulo Explicativo';
             } else if (type === 'paragraph') {
-                const ta = contentWrapper.querySelector('textarea');
-                ta.value = content || '';
-
-                // Auto-resize logic
-                const resize = () => {
-                    ta.style.height = 'auto';
-                    ta.style.height = ta.scrollHeight + 'px';
-                };
-                ta.addEventListener('input', resize);
-                // Delay initial resize to ensure DOM insertion
-                setTimeout(resize, 0);
-                setTimeout(resize, 0);
+                const editor = contentWrapper.querySelector('.editor-content');
+                editor.innerHTML = content || '';
             } else if (type === 'unordered_list' || type === 'ordered_list') {
                 // Foca no último li se for novo bloco? Ou apenas deixa quieto.
                 // Se content for vazio, garantimos um li vazio
@@ -1018,11 +1053,14 @@
                     blockData.type = 'subtitle';
                     blockData.content = blockEl.querySelector('h2').textContent;
                 } else if (type === 'paragraph') {
-                    // Parágrafo agora usa textarea
                     blockData.type = 'paragraph';
-                    const p = blockEl.querySelector('p');
+                    const editor = blockEl.querySelector('.editor-content');
                     const ta = blockEl.querySelector('textarea');
-                    if (ta) {
+                    const p = blockEl.querySelector('p');
+                    
+                    if (editor) {
+                        blockData.content = editor.innerHTML;
+                    } else if (ta) {
                         blockData.content = ta.value;
                     } else if (p) {
                         blockData.content = p.textContent;

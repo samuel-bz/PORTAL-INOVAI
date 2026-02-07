@@ -5,7 +5,7 @@
 {% block title %}Editor de Notícias - Portal Inovaí{% endblock %}
 
 {% block navbar %}
-    {% include 'components/navbar_solid.html' %}
+{% include 'components/navbar_solid.html' %}
 {% endblock %}
 
 {% block extra_styles %}
@@ -97,7 +97,7 @@
 {% endblock %}
 
 {% block navbar_scroll_logic %}
-    <!-- Navbar logic handled by navbar_editor.html component -->
+<!-- Navbar logic handled by navbar_editor.html component -->
 {% endblock %}
 
 {% block content %}
@@ -254,8 +254,10 @@
                 </div>
                 <div class="col-span-2">
                     <label class="block text-xs font-medium text-gray-500 mb-1">Portal</label>
-                    <select id="portal" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                        <option value="" disabled {% if not news_item.portal %}selected{% endif %}>Selecione um portal</option>
+                    <select id="portal"
+                        class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="" disabled {% if not news_item.portal %}selected{% endif %}>Selecione um portal
+                        </option>
                         <option value="portal_inovai" {% if news_item.portal == 'portal_inovai' %}selected{% endif %}>Portal Inovaí</option>
                         <option value="portal_mulheres_ciencia" {% if news_item.portal == 'portal_mulheres_ciencia' %}selected{% endif %}>Portal Meninas e Mulheres na Ciência</option>
                     </select>
@@ -291,13 +293,15 @@
                     class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
                     onclick="addBlock('paragraph')"><i class="bi bi-text-paragraph text-gray-500"></i>
                     Parágrafo</button>
-                    
+
                 <button
                     class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
-                    onclick="addBlock('unordered_list')"><i class="bi bi-list-ul text-teal-500"></i> Lista Bullets</button>
+                    onclick="addBlock('unordered_list')"><i class="bi bi-list-ul text-teal-500"></i> Lista
+                    Bullets</button>
                 <button
                     class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
-                    onclick="addBlock('ordered_list')"><i class="bi bi-list-ol text-teal-500"></i> Lista Numérica</button>
+                    onclick="addBlock('ordered_list')"><i class="bi bi-list-ol text-teal-500"></i> Lista
+                    Numérica</button>
                 <button
                     class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
                     onclick="addBlock('hr')"><i class="bi bi-dash-lg text-gray-500"></i> Separador</button>
@@ -338,7 +342,7 @@
         const existingBlocks = JSON.parse(document.getElementById('existing-blocks-data')?.textContent || '[]');
         // Inicializa os blocos existentes
         existingBlocks.forEach(block => {
-            createBlock(block.type, block.content, block.images);
+            createBlock(block.type, block.content, block.images, block.id);
         });
 
         // --- Início Drag & Drop ---
@@ -353,11 +357,24 @@
         // --- Drag Over Canvas ---
         canvas.addEventListener('dragover', (e) => {
             e.preventDefault(); // Necessário para permitir o drop
-            e.dataTransfer.dropEffect = 'copy';
 
-            // Lógica para mostrar onde será inserido (indicador visual simples aqui)
-            // Para simplicidade, apenas permitimos append no final por enquanto nesta versão inicial
-            canvas.style.borderColor = '#3b82f6';
+            const draggingBlock = document.querySelector('.dragging');
+
+            if (draggingBlock) {
+                // Lógica de Reordenação
+                e.dataTransfer.dropEffect = 'move';
+                const afterElement = getDragAfterElement(canvas, e.clientY);
+                if (afterElement == null) {
+                    // Inserir antes do botão flutuante (fim da lista de blocos)
+                    canvas.insertBefore(draggingBlock, floatingBtn);
+                } else {
+                    canvas.insertBefore(draggingBlock, afterElement);
+                }
+            } else {
+                // Lógica de Nova Ferramenta
+                e.dataTransfer.dropEffect = 'copy';
+                canvas.style.borderColor = '#3b82f6';
+            }
         });
 
         canvas.addEventListener('dragleave', (e) => {
@@ -370,10 +387,27 @@
             canvas.style.borderColor = '';
 
             const type = e.dataTransfer.getData('text/plain');
-            if (type) {
+            if (type && !document.querySelector('.dragging')) {
+                // Apenas criar novo se NÃO estivermos reordenando (sem classe .dragging)
                 createBlock(type);
+                draggedType = null; // Reset
             }
         });
+
+        // --- Helper: Encontrar posição de inserção ---
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.editor-block:not(.dragging)')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
 
         // --- Lógica do Botão Flutuante ---
         // O botão deve seguir o último elemento ou ser posicionado manualmente?
@@ -437,12 +471,13 @@
         }
 
         // --- Lógica de Criação de Blocos ---
-        function createBlock(type, content = null, images = []) {
+        function createBlock(type, content = null, images = [], id = null) {
             if (emptyState) emptyState.remove();
 
             const block = document.createElement('div');
             block.className = 'editor-block mb-4 group relative py-2 px-4 hover:bg-gray-50 rounded-lg';
             block.dataset.type = type;
+            if (id) block.dataset.id = id;
 
             // Botões de Ação do Bloco (Excluir/Mover)
             const actions = document.createElement('div');
@@ -450,9 +485,43 @@
             actions.innerHTML = `
                 <button class="p-1 text-red-500 hover:bg-red-50 rounded-full" onclick="this.closest('.editor-block').remove()"><i class="bi bi-trash"></i></button>
                 <div class="h-full w-px bg-gray-200 mx-1"></div>
-                <button class="p-1 text-gray-500 hover:bg-gray-100 rounded-full cursor-move"><i class="bi bi-grip-vertical"></i></button>
+                <button class="p-1 text-gray-500 hover:bg-gray-100 rounded-full cursor-move drag-handle"><i class="bi bi-grip-vertical"></i></button>
             `;
             block.appendChild(actions);
+
+            // --- Configuração de Drag & Drop (Reordenação) ---
+            const handle = actions.querySelector('.drag-handle');
+
+            // Só permitir drag ao segurar o handle (Melhoria: usar mouseenter para garantir atributo antes do click)
+            handle.addEventListener('mouseenter', () => {
+                block.setAttribute('draggable', 'true');
+            });
+            handle.addEventListener('mouseleave', () => {
+                 if (!block.classList.contains('dragging')) {
+                    block.setAttribute('draggable', 'false');
+                 }
+            });
+            
+            // Fallback para touch/click rápido
+            handle.addEventListener('mousedown', () => {
+                block.setAttribute('draggable', 'true');
+            });
+             handle.addEventListener('mouseup', () => {
+                if (!block.classList.contains('dragging')) {
+                    block.setAttribute('draggable', 'false');
+                }
+            });
+
+            block.addEventListener('dragstart', () => {
+                block.classList.add('dragging');
+                block.classList.add('opacity-50'); // Feedback visual
+            });
+
+            block.addEventListener('dragend', () => {
+                block.classList.remove('dragging');
+                block.classList.remove('opacity-50');
+                block.setAttribute('draggable', 'false'); // Resetar sempre ao final
+            });
 
             let contentHTML = '';
 
@@ -467,17 +536,17 @@
                     contentHTML = `<textarea class="w-full bg-transparent outline-none resize-none text-gray-600 leading-relaxed editor-text-block" rows="3" placeholder="Comece a escrever o conteúdo do parágrafo aqui..."></textarea>`;
                     break;
                 case 'unordered_list':
-                     // Separar conteúdo em itens se existir
-                     const ulItems = content ? content.split('\n').map(c => `<li>${c}</li>`).join('') : '<li></li>';
-                     contentHTML = `
+                    // Separar conteúdo em itens se existir
+                    const ulItems = content ? content.split('\n').map(c => `<li>${c}</li>`).join('') : '<li></li>';
+                    contentHTML = `
                         <ul class="list-disc list-inside pl-0 text-gray-700 dark:text-gray-300 outline-none editor-text-block w-full" contenteditable="true">
                             ${ulItems}
                         </ul>
                      `;
                     break;
                 case 'ordered_list':
-                     const olItems = content ? content.split('\n').map(c => `<li>${c}</li>`).join('') : '<li></li>';
-                     contentHTML = `
+                    const olItems = content ? content.split('\n').map(c => `<li>${c}</li>`).join('') : '<li></li>';
+                    contentHTML = `
                         <ol class="list-decimal list-inside pl-0 text-gray-700 dark:text-gray-300 outline-none editor-text-block w-full" contenteditable="true">
                             ${olItems}
                         </ol>
@@ -630,7 +699,7 @@
             } else if (type === 'paragraph') {
                 const ta = contentWrapper.querySelector('textarea');
                 ta.value = content || '';
-                
+
                 // Auto-resize logic
                 const resize = () => {
                     ta.style.height = 'auto';
@@ -729,7 +798,7 @@
                         </div>
                         <div>
                             <a href="#" class="font-medium text-gray-800 attachment-file">${file.name}</a>
-                            <div class="text-xs text-gray-500">${file.type || ''} • ${(file.size/1024).toFixed(1)} KB</div>
+                            <div class="text-xs text-gray-500">${file.type || ''} • ${(file.size / 1024).toFixed(1)} KB</div>
                         </div>
                     </div>
                     <div>
@@ -940,7 +1009,7 @@
                     || 'unknown';
 
                 // Auxiliar para obter tipo da estrutura de conteúdo
-                let blockData = { order: index, type: 'unknown', content: '', images: [] };
+                let blockData = { order: index, type: 'unknown', content: '', images: [], id: blockEl.dataset.id || null };
 
                 if (blockEl.querySelector('h1')) {
                     blockData.type = 'title';
@@ -956,22 +1025,22 @@
                     if (ta) {
                         blockData.content = ta.value;
                     } else if (p) {
-                         blockData.content = p.textContent;
+                        blockData.content = p.textContent;
                     }
                 } else if (type === 'unordered_list' || type === 'ordered_list') {
-                     blockData.type = type;
-                     // Extrair conteúdo dos LIs
-                     const list = blockEl.querySelector('ul, ol');
-                     if (list) {
-                         // Pega o texto de cada LI, ignorando vazios se preferir, ou mantendo
-                         // .innerText costuma funcionar bem para pegar o texto visível
-                         const items = Array.from(list.querySelectorAll('li'))
+                    blockData.type = type;
+                    // Extrair conteúdo dos LIs
+                    const list = blockEl.querySelector('ul, ol');
+                    if (list) {
+                        // Pega o texto de cada LI, ignorando vazios se preferir, ou mantendo
+                        // .innerText costuma funcionar bem para pegar o texto visível
+                        const items = Array.from(list.querySelectorAll('li'))
                             .map(li => li.innerText.replace(/\n/g, ' ').trim()) // Remove newlines dentro do item se houver
                             .filter(t => t.length > 0); // Remove itens vazios
-                         blockData.content = items.join('\n');
-                     } else {
-                         blockData.content = '';
-                     }
+                        blockData.content = items.join('\n');
+                    } else {
+                        blockData.content = '';
+                    }
                 } else if (type === 'hr') {
                     blockData.type = 'hr';
                     blockData.content = '';

@@ -126,25 +126,38 @@ def news_editor(request, news_id=None):
             news_item.save()
 
             # 2. Manipular Blocos (em edição: atualizar no lugar para preservar imagens existentes)
+            # 2. Manipular Blocos (em edição: atualizar no lugar para preservar imagens existentes)
             blocks_json = data.get('blocks', '[]')
-            blocks = json.loads(blocks_json)
-            existing_blocks = list(news_item.blocks.all().order_by('order')) if news_id else []
+            blocks_data_list = json.loads(blocks_json)
+            
+            # Recuperar blocos existentes e mapear por ID para atualização
+            existing_blocks_map = {b.id: b for b in news_item.blocks.all()} if news_id else {}
+            processed_block_ids = []
 
-            for index, block_data in enumerate(blocks):
-                if index < len(existing_blocks):
-                    block = existing_blocks[index]
+            for index, block_data in enumerate(blocks_data_list):
+                block_id = block_data.get('id')
+                if block_id:
+                    try:
+                        block_id = int(block_id)
+                    except (ValueError, TypeError):
+                        block_id = None
+                
+                if block_id and block_id in existing_blocks_map:
+                    # Atualizar bloco existente
+                    block = existing_blocks_map[block_id]
                     block.block_type = block_data.get('type', 'paragraph')
                     block.content = block_data.get('content', '')
                     block.order = index
                     block.save()
+                    processed_block_ids.append(block_id)
                 else:
-                    block = NewsBlock(
+                    # Criar novo bloco
+                    block = NewsBlock.objects.create(
                         related_post=news_item,
                         block_type=block_data.get('type', 'paragraph'),
                         content=block_data.get('content', ''),
                         order=index
                     )
-                    block.save()
 
                 # 3. Imagens: só substituir quando houver novo upload
                 image_key = f'block_{index}_image'
@@ -154,7 +167,6 @@ def news_editor(request, news_id=None):
                         block=block,
                         image=request.FILES[image_key]
                     )
-                # Se não houver novo upload, imagens existentes do bloco são mantidas
                 
                 # 4. Anexos: substituir quando houver novo upload
                 attachment_key = f'block_{index}_attachment'
@@ -167,10 +179,10 @@ def news_editor(request, news_id=None):
                         captions=block_data.get('content', '')
                     )
 
-            # Remover blocos que foram apagados no editor (índice além do novo tamanho)
-            if news_id and len(existing_blocks) > len(blocks):
-                for block in existing_blocks[len(blocks):]:
-                    block.delete()
+            # Remover blocos que não estão mais na lista (foram excluídos)
+            for b_id, b_obj in existing_blocks_map.items():
+                if b_id not in processed_block_ids:
+                    b_obj.delete()
 
             return JsonResponse({'success': True, 'redirect_url': '/news/'})  # ou detalhe da notícia
             
@@ -189,6 +201,7 @@ def news_editor(request, news_id=None):
         blocks_data = []
         for block in news_item.blocks.all().order_by('order'):
             block_data = {
+                'id': block.id,
                 'type': block.block_type,
                 'content': block.content,
                 'images': []

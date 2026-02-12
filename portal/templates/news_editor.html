@@ -262,6 +262,10 @@
                         <option value="portal_mulheres_ciencia" {% if news_item.portal == 'portal_mulheres_ciencia' %}selected{% endif %}>Portal Meninas e Mulheres na Ciência</option>
                     </select>
                 </div>
+                <div class="col-span-2 flex items-center mt-2">
+                    <input type="checkbox" id="meta-active" class="mr-2" {% if news_item.active %}checked{% endif %}>
+                    <label for="meta-active" class="text-xs text-gray-500">Notícia ativa (visível)</label>
+                </div>
             </div>
         </div>
 
@@ -1030,6 +1034,8 @@
             formData.append('description', document.getElementById('meta-description').value);
             formData.append('tags', document.getElementById('meta-tags').value);
             formData.append('portal', document.getElementById('portal').value);
+            // Add active checkbox value
+            formData.append('active', document.getElementById('meta-active').checked ? 'on' : '');
 
             const thumbInput = document.getElementById('meta-thumbnail');
             if (thumbInput.files[0]) {

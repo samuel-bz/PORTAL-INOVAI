@@ -241,10 +241,11 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
             </div>
         </div>
         {% empty %}
+        {% if user.is_authenticated %}
         <div class="col-span-full text-center py-12 text-gray-500 dark:text-gray-400">
-            <p class="mb-4">Nenhuma notícia publicada. Crie notícias no <a href="/admin/" class="text-brand-blue dark:text-blue-400 hover:underline">admin</a> para exibir aqui.</p>
-            <p class="text-sm">Para testar a página de detalhe: <a href="{% url 'portal:news_detail' 1 %}" class="text-brand-blue dark:text-blue-400 hover:underline">Ver notícia #1</a> (crie uma notícia no admin para ver o conteúdo).</p>
+            <p class="mb-4">Nenhuma notícia publicada. Crie notícias no <a href="{% url 'portal:news_editor' %}" class="text-brand-blue dark:text-blue-400 hover:underline">editor de notícias</a> para exibir aqui.</p>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 </main>

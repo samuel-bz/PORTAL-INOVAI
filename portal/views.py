@@ -108,6 +108,7 @@ def news_editor(request, news_id=None):
             description = data.get('description')
             tags = data.get('tags')
             portal = data.get('portal')
+            active = data.get('active') == 'on'
             
             if news_id:
                 news_item = get_object_or_404(NewsPost, pk=news_id)
@@ -119,6 +120,7 @@ def news_editor(request, news_id=None):
             news_item.tags = tags
             news_item.author = request.user
             news_item.portal = portal
+            news_item.active = active
             
             if 'thumbnail' in request.FILES:
                 news_item.thumbnail = request.FILES['thumbnail']

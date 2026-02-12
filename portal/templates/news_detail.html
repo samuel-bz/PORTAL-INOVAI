@@ -28,6 +28,7 @@
 
 
 {% block content %}
+{% if post.active %}
 <article class="flex-grow">
     <!-- Cabeçalho da notícia -->
     <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -46,6 +47,10 @@
                 {% if post.author %}
                 <span><i class="bi bi-person mr-1"></i> {{ post.author.get_full_name|default:post.author.username }}</span>
                 {% endif %}
+                <span class="flex items-center gap-1 ml-2">
+                    <input type="checkbox" disabled {% if post.active %}checked{% endif %} id="active-detail-{{ post.pk }}">
+                    <label for="active-detail-{{ post.pk }}" class="text-xs text-gray-500">Ativa</label>
+                </span>
             </div>
         </div>
     </header>
@@ -141,6 +146,7 @@
             {% empty %}
             <p class="text-gray-500 dark:text-gray-400 italic">Nenhum conteúdo adicional publicado.</p>
             {% endfor %}
+            {% endif %}
         </div>
         
     </div>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import NewsPost, NewsBlock, BlockImage, Destaque
+from .models import NewsPost, NewsBlock, BlockImage, Destaque, Attachment
 
 # Register your models here.
 class NewsPostAdmin(admin.ModelAdmin):
@@ -18,7 +18,12 @@ class DestaqueAdmin(admin.ModelAdmin):
     class Meta:
         model = Destaque
 
+class AttachmentsAdmin(admin.ModelAdmin):
+    class Meta:
+        model = Attachment
+
 admin.site.register(NewsPost, NewsPostAdmin)
 admin.site.register(NewsBlock, NewsBlockAdmin)
 admin.site.register(BlockImage, BlockImageAdmin)
 admin.site.register(Destaque, DestaqueAdmin)
+admin.site.register(Attachment, AttachmentsAdmin)

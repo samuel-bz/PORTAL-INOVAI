@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% block footer %}{% endblock %}
 {% load static %}
 
 {% block title %}Editor de Notícias - Portal Inovaí{% endblock %}
 
 {% block navbar %}
-    {% include 'components/navbar_solid.html' %}
+{% include 'components/navbar_solid.html' %}
 {% endblock %}
 
 {% block extra_styles %}
@@ -96,7 +97,7 @@
 {% endblock %}
 
 {% block navbar_scroll_logic %}
-    <!-- Navbar logic handled by navbar_editor.html component -->
+<!-- Navbar logic handled by navbar_editor.html component -->
 {% endblock %}
 
 {% block content %}
@@ -135,6 +136,33 @@
                 <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Parágrafo</span>
             </div>
 
+            <!-- Lista Não Ordenada -->
+            <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
+                draggable="true" data-type="unordered_list">
+                <div class="w-8 h-8 rounded bg-teal-100 text-teal-600 flex items-center justify-center">
+                    <i class="bi bi-list-ul"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Lista Bullets</span>
+            </div>
+
+            <!-- Lista Ordenada -->
+            <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
+                draggable="true" data-type="ordered_list">
+                <div class="w-8 h-8 rounded bg-teal-100 text-teal-600 flex items-center justify-center">
+                    <i class="bi bi-list-ol"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Lista Numérica</span>
+            </div>
+
+            <!-- Separador -->
+            <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
+                draggable="true" data-type="hr">
+                <div class="w-8 h-8 rounded bg-gray-200 text-gray-600 flex items-center justify-center">
+                    <i class="bi bi-dash-lg"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Separador</span>
+            </div>
+
             <!-- Imagem -->
             <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
                 draggable="true" data-type="image">
@@ -142,6 +170,15 @@
                     <i class="bi bi-image"></i>
                 </div>
                 <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Imagem</span>
+            </div>
+
+            <!-- Anexo -->
+            <div class="tool-item bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 shadow-sm"
+                draggable="true" data-type="attachment">
+                <div class="w-8 h-8 rounded bg-green-100 text-green-600 flex items-center justify-center">
+                    <i class="bi bi-paperclip"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">Anexo</span>
             </div>
 
             <!-- Carrossel -->
@@ -217,11 +254,17 @@
                 </div>
                 <div class="col-span-2">
                     <label class="block text-xs font-medium text-gray-500 mb-1">Portal</label>
-                    <select id="portal" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                        <option value="" disabled {% if not news_item.portal %}selected{% endif %}>Selecione um portal</option>
+                    <select id="portal"
+                        class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="" disabled {% if not news_item.portal %}selected{% endif %}>Selecione um portal
+                        </option>
                         <option value="portal_inovai" {% if news_item.portal == 'portal_inovai' %}selected{% endif %}>Portal Inovaí</option>
                         <option value="portal_mulheres_ciencia" {% if news_item.portal == 'portal_mulheres_ciencia' %}selected{% endif %}>Portal Meninas e Mulheres na Ciência</option>
                     </select>
+                </div>
+                <div class="col-span-2 flex items-center mt-2">
+                    <input type="checkbox" id="meta-active" class="mr-2" {% if news_item.active %}checked{% endif %}>
+                    <label for="meta-active" class="text-xs text-gray-500">Notícia ativa (visível)</label>
                 </div>
             </div>
         </div>
@@ -254,6 +297,18 @@
                     class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
                     onclick="addBlock('paragraph')"><i class="bi bi-text-paragraph text-gray-500"></i>
                     Parágrafo</button>
+
+                <button
+                    class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
+                    onclick="addBlock('unordered_list')"><i class="bi bi-list-ul text-teal-500"></i> Lista
+                    Bullets</button>
+                <button
+                    class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
+                    onclick="addBlock('ordered_list')"><i class="bi bi-list-ol text-teal-500"></i> Lista
+                    Numérica</button>
+                <button
+                    class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
+                    onclick="addBlock('hr')"><i class="bi bi-dash-lg text-gray-500"></i> Separador</button>
                 <button
                     class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
                     onclick="addBlock('image')"><i class="bi bi-image text-purple-500"></i> Imagem</button>
@@ -264,6 +319,9 @@
                     class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
                     onclick="addBlock('image-text')"><i class="bi bi-layout-sidebar text-orange-500"></i> Imagem +
                     Texto</button>
+                <button
+                    class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm flex items-center gap-2"
+                    onclick="addBlock('attachment')"><i class="bi bi-paperclip text-green-500"></i> Anexo</button>
             </div>
         </div>
     </main>
@@ -288,7 +346,7 @@
         const existingBlocks = JSON.parse(document.getElementById('existing-blocks-data')?.textContent || '[]');
         // Inicializa os blocos existentes
         existingBlocks.forEach(block => {
-            createBlock(block.type, block.content, block.images);
+            createBlock(block.type, block.content, block.images, block.id);
         });
 
         // --- Início Drag & Drop ---
@@ -303,11 +361,24 @@
         // --- Drag Over Canvas ---
         canvas.addEventListener('dragover', (e) => {
             e.preventDefault(); // Necessário para permitir o drop
-            e.dataTransfer.dropEffect = 'copy';
 
-            // Lógica para mostrar onde será inserido (indicador visual simples aqui)
-            // Para simplicidade, apenas permitimos append no final por enquanto nesta versão inicial
-            canvas.style.borderColor = '#3b82f6';
+            const draggingBlock = document.querySelector('.dragging');
+
+            if (draggingBlock) {
+                // Lógica de Reordenação
+                e.dataTransfer.dropEffect = 'move';
+                const afterElement = getDragAfterElement(canvas, e.clientY);
+                if (afterElement == null) {
+                    // Inserir antes do botão flutuante (fim da lista de blocos)
+                    canvas.insertBefore(draggingBlock, floatingBtn);
+                } else {
+                    canvas.insertBefore(draggingBlock, afterElement);
+                }
+            } else {
+                // Lógica de Nova Ferramenta
+                e.dataTransfer.dropEffect = 'copy';
+                canvas.style.borderColor = '#3b82f6';
+            }
         });
 
         canvas.addEventListener('dragleave', (e) => {
@@ -320,10 +391,27 @@
             canvas.style.borderColor = '';
 
             const type = e.dataTransfer.getData('text/plain');
-            if (type) {
+            if (type && !document.querySelector('.dragging')) {
+                // Apenas criar novo se NÃO estivermos reordenando (sem classe .dragging)
                 createBlock(type);
+                draggedType = null; // Reset
             }
         });
+
+        // --- Helper: Encontrar posição de inserção ---
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.editor-block:not(.dragging)')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
 
         // --- Lógica do Botão Flutuante ---
         // O botão deve seguir o último elemento ou ser posicionado manualmente?
@@ -387,12 +475,39 @@
         }
 
         // --- Lógica de Criação de Blocos ---
-        function createBlock(type, content = null, images = []) {
+
+        // --- Funções de Rich Text Editor ---
+        window.formatText = function(button, command) {
+            document.execCommand(command, false, null);
+            // Manter foco no editor
+            const editor = button.closest('.rich-text-editor').querySelector('.editor-content');
+            editor.focus();
+            updateToolbarStates(editor);
+        };
+
+        window.updateToolbarStates = function(editor) {
+            const toolbar = editor.closest('.rich-text-editor').querySelector('.toolbar');
+            const buttons = toolbar.querySelectorAll('button');
+            
+            buttons.forEach(btn => {
+                const command = btn.dataset.command;
+                if (document.queryCommandState(command)) {
+                    btn.classList.add('bg-gray-200', 'text-blue-600');
+                    btn.classList.remove('text-gray-600');
+                } else {
+                    btn.classList.remove('bg-gray-200', 'text-blue-600');
+                    btn.classList.add('text-gray-600');
+                }
+            });
+        };
+
+        function createBlock(type, content = null, images = [], id = null) {
             if (emptyState) emptyState.remove();
 
             const block = document.createElement('div');
             block.className = 'editor-block mb-4 group relative py-2 px-4 hover:bg-gray-50 rounded-lg';
             block.dataset.type = type;
+            if (id) block.dataset.id = id;
 
             // Botões de Ação do Bloco (Excluir/Mover)
             const actions = document.createElement('div');
@@ -400,9 +515,43 @@
             actions.innerHTML = `
                 <button class="p-1 text-red-500 hover:bg-red-50 rounded-full" onclick="this.closest('.editor-block').remove()"><i class="bi bi-trash"></i></button>
                 <div class="h-full w-px bg-gray-200 mx-1"></div>
-                <button class="p-1 text-gray-500 hover:bg-gray-100 rounded-full cursor-move"><i class="bi bi-grip-vertical"></i></button>
+                <button class="p-1 text-gray-500 hover:bg-gray-100 rounded-full cursor-move drag-handle"><i class="bi bi-grip-vertical"></i></button>
             `;
             block.appendChild(actions);
+
+            // --- Configuração de Drag & Drop (Reordenação) ---
+            const handle = actions.querySelector('.drag-handle');
+
+            // Só permitir drag ao segurar o handle (Melhoria: usar mouseenter para garantir atributo antes do click)
+            handle.addEventListener('mouseenter', () => {
+                block.setAttribute('draggable', 'true');
+            });
+            handle.addEventListener('mouseleave', () => {
+                 if (!block.classList.contains('dragging')) {
+                    block.setAttribute('draggable', 'false');
+                 }
+            });
+            
+            // Fallback para touch/click rápido
+            handle.addEventListener('mousedown', () => {
+                block.setAttribute('draggable', 'true');
+            });
+             handle.addEventListener('mouseup', () => {
+                if (!block.classList.contains('dragging')) {
+                    block.setAttribute('draggable', 'false');
+                }
+            });
+
+            block.addEventListener('dragstart', () => {
+                block.classList.add('dragging');
+                block.classList.add('opacity-50'); // Feedback visual
+            });
+
+            block.addEventListener('dragend', () => {
+                block.classList.remove('dragging');
+                block.classList.remove('opacity-50');
+                block.setAttribute('draggable', 'false'); // Resetar sempre ao final
+            });
 
             let contentHTML = '';
 
@@ -414,7 +563,46 @@
                     contentHTML = `<h2 class="text-2xl font-semibold text-gray-700 outline-none mt-2 editor-text-block" contenteditable="true"></h2>`;
                     break;
                 case 'paragraph':
-                    contentHTML = `<p class="text-gray-600 leading-relaxed outline-none editor-text-block" contenteditable="true"></p>`;
+                    contentHTML = `
+                        <div class="rich-text-editor w-full">
+                            <div class="toolbar flex gap-2 mb-2 border-b border-gray-200 pb-2">
+                                <button type="button" class="p-1 rounded hover:bg-gray-100 text-gray-600 w-8 h-8 flex items-center justify-center transition-colors" data-command="bold" title="Negrito (Ctrl+B)" onclick="formatText(this, 'bold')">
+                                    <i class="bi bi-type-bold"></i>
+                                </button>
+                                <button type="button" class="p-1 rounded hover:bg-gray-100 text-gray-600 w-8 h-8 flex items-center justify-center transition-colors" data-command="italic" title="Itálico (Ctrl+I)" onclick="formatText(this, 'italic')">
+                                    <i class="bi bi-type-italic"></i>
+                                </button>
+                                <button type="button" class="p-1 rounded hover:bg-gray-100 text-gray-600 w-8 h-8 flex items-center justify-center transition-colors" data-command="underline" title="Sublinhado (Ctrl+U)" onclick="formatText(this, 'underline')">
+                                    <i class="bi bi-type-underline"></i>
+                                </button>
+                            </div>
+                            <div class="editor-content w-full bg-transparent outline-none text-gray-600 leading-relaxed editor-text-block min-h-[80px]" 
+                                 contenteditable="true" 
+                                 onmouseup="updateToolbarStates(this)" 
+                                 onkeyup="updateToolbarStates(this)"
+                                 placeholder="Comece a escrever o conteúdo do parágrafo aqui..."></div>
+                        </div>
+                    `;
+                    break;
+                case 'unordered_list':
+                    // Separar conteúdo em itens se existir
+                    const ulItems = content ? content.split('\n').map(c => `<li>${c}</li>`).join('') : '<li></li>';
+                    contentHTML = `
+                        <ul class="list-disc list-inside pl-0 text-gray-700 dark:text-gray-300 outline-none editor-text-block w-full" contenteditable="true">
+                            ${ulItems}
+                        </ul>
+                     `;
+                    break;
+                case 'ordered_list':
+                    const olItems = content ? content.split('\n').map(c => `<li>${c}</li>`).join('') : '<li></li>';
+                    contentHTML = `
+                        <ol class="list-decimal list-inside pl-0 text-gray-700 dark:text-gray-300 outline-none editor-text-block w-full" contenteditable="true">
+                            ${olItems}
+                        </ol>
+                     `;
+                    break;
+                case 'hr':
+                    contentHTML = `<hr class="my-4 border-2 border-gray-200">`;
                     break;
                 case 'image':
                     // Se tivermos uma URL de imagem
@@ -497,6 +685,43 @@
                         </div>
                     `;
                     break;
+                case 'attachment':
+                    const att = (images && images.length > 0) ? images[0] : null;
+                    if (att && att.url) {
+                        contentHTML = `
+                            <div class="w-full p-4 bg-gray-100 rounded-lg flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded bg-green-50 text-green-600 flex items-center justify-center">
+                                        <i class="bi bi-file-earmark-text text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <a href="${att.url}" target="_blank" class="font-medium text-gray-800 underline attachment-file">${att.name || 'Download'}</a>
+                                        <div class="text-xs text-gray-500">${att.type || ''}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="file" class="hidden attachment-input" onchange="previewAttachment(this)">
+                                    <button class="bg-blue-600 text-white px-3 py-1 rounded" onclick="this.closest('.editor-block').querySelector('.attachment-input').click()">Trocar</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        contentHTML = `
+                            <div class="w-full p-6 bg-gray-100 rounded-lg flex items-center justify-between gap-4 cursor-pointer" onclick="this.querySelector('input').click()">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded bg-green-50 text-green-600 flex items-center justify-center">
+                                        <i class="bi bi-paperclip text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">Adicionar Anexo</div>
+                                        <div class="text-xs text-gray-500">PDF, DOCX, XLSX, etc.</div>
+                                    </div>
+                                </div>
+                                <input type="file" class="hidden attachment-input" onchange="previewAttachment(this)">
+                            </div>
+                        `;
+                    }
+                    break;
                 case 'youtube':
                     const embedUrl = content && content.trim() ? content.trim() : '';
                     contentHTML = `
@@ -521,7 +746,15 @@
             } else if (type === 'subtitle') {
                 contentWrapper.querySelector('h2').textContent = content || 'Subtítulo Explicativo';
             } else if (type === 'paragraph') {
-                contentWrapper.querySelector('p').textContent = content || 'Comece a escrever o conteúdo do parágrafo aqui...';
+                const editor = contentWrapper.querySelector('.editor-content');
+                editor.innerHTML = content || '';
+            } else if (type === 'unordered_list' || type === 'ordered_list') {
+                // Foca no último li se for novo bloco? Ou apenas deixa quieto.
+                // Se content for vazio, garantimos um li vazio
+                // Nenhuma lógica de resize necessária para contenteditable
+                if (!content) {
+                    // Opcional: focar automaticamente
+                }
             } else if (type === 'image-text') {
                 contentWrapper.querySelector('p').textContent = content || 'Texto descritivo ao lado da imagem...';
             }
@@ -586,6 +819,32 @@
                     parent.appendChild(fileInput);
                 };
                 reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- Auxiliar: Pré-visualização de Anexo ---
+        window.previewAttachment = function (input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const parent = input.parentElement;
+                parent.className = 'w-full p-4 bg-gray-100 rounded-lg flex items-center justify-between gap-4';
+                // Remover input e montar a visão resumida
+                input.remove();
+                parent.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded bg-green-50 text-green-600 flex items-center justify-center">
+                            <i class="bi bi-file-earmark-text text-2xl"></i>
+                        </div>
+                        <div>
+                            <a href="#" class="font-medium text-gray-800 attachment-file">${file.name}</a>
+                            <div class="text-xs text-gray-500">${file.type || ''} • ${(file.size / 1024).toFixed(1)} KB</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="bg-blue-600 text-white px-3 py-1 rounded" onclick="this.closest('.editor-block').querySelector('input').click()">Trocar</button>
+                    </div>
+                `;
+                parent.appendChild(input);
             }
         }
 
@@ -775,6 +1034,8 @@
             formData.append('description', document.getElementById('meta-description').value);
             formData.append('tags', document.getElementById('meta-tags').value);
             formData.append('portal', document.getElementById('portal').value);
+            // Add active checkbox value
+            formData.append('active', document.getElementById('meta-active').checked ? 'on' : '');
 
             const thumbInput = document.getElementById('meta-thumbnail');
             if (thumbInput.files[0]) {
@@ -789,7 +1050,7 @@
                     || 'unknown';
 
                 // Auxiliar para obter tipo da estrutura de conteúdo
-                let blockData = { order: index, type: 'unknown', content: '', images: [] };
+                let blockData = { order: index, type: 'unknown', content: '', images: [], id: blockEl.dataset.id || null };
 
                 if (blockEl.querySelector('h1')) {
                     blockData.type = 'title';
@@ -797,10 +1058,36 @@
                 } else if (blockEl.querySelector('h2')) {
                     blockData.type = 'subtitle';
                     blockData.content = blockEl.querySelector('h2').textContent;
-                } else if (blockEl.querySelector('p') && !blockEl.querySelector('img')) {
-                    // Parágrafo simples (textContent preserva newlines/tabs)
+                } else if (type === 'paragraph') {
                     blockData.type = 'paragraph';
-                    blockData.content = blockEl.querySelector('p').textContent;
+                    const editor = blockEl.querySelector('.editor-content');
+                    const ta = blockEl.querySelector('textarea');
+                    const p = blockEl.querySelector('p');
+                    
+                    if (editor) {
+                        blockData.content = editor.innerHTML;
+                    } else if (ta) {
+                        blockData.content = ta.value;
+                    } else if (p) {
+                        blockData.content = p.textContent;
+                    }
+                } else if (type === 'unordered_list' || type === 'ordered_list') {
+                    blockData.type = type;
+                    // Extrair conteúdo dos LIs
+                    const list = blockEl.querySelector('ul, ol');
+                    if (list) {
+                        // Pega o texto de cada LI, ignorando vazios se preferir, ou mantendo
+                        // .innerText costuma funcionar bem para pegar o texto visível
+                        const items = Array.from(list.querySelectorAll('li'))
+                            .map(li => li.innerText.replace(/\n/g, ' ').trim()) // Remove newlines dentro do item se houver
+                            .filter(t => t.length > 0); // Remove itens vazios
+                        blockData.content = items.join('\n');
+                    } else {
+                        blockData.content = '';
+                    }
+                } else if (type === 'hr') {
+                    blockData.type = 'hr';
+                    blockData.content = '';
                 } else if (blockEl.querySelector('.group-carousel')) {
                     blockData.type = 'carousel';
                     // Imagens do carrossel são manipuladas via propriedade storedImages no container
@@ -833,6 +1120,17 @@
                     const imgInput = blockEl.querySelector('input[type="file"]');
                     if (imgInput && imgInput.files[0]) {
                         formData.append(`block_${index}_image`, imgInput.files[0]);
+                    }
+                } else if (blockEl.dataset.type === 'attachment' || blockEl.querySelector('.attachment-input') || blockEl.querySelector('.attachment-file')) {
+                    blockData.type = 'attachment';
+                    // Priorizar input file (novo anexo)
+                    const attInput = blockEl.querySelector('input[type="file"]');
+                    if (attInput && attInput.files[0]) {
+                        formData.append(`block_${index}_attachments`, attInput.files[0]);
+                        formData.append(`block_${index}_attachment`, attInput.files[0]);
+                        blockData.content = attInput.files[0].name;
+                    } else if (blockEl.querySelector('.attachment-file')) {
+                        blockData.content = blockEl.querySelector('.attachment-file').getAttribute('href') || blockEl.querySelector('.attachment-file').textContent;
                     }
                 } else if (type === 'youtube' || blockEl.querySelector('.youtube-embed-wrapper')) {
                     blockData.type = 'youtube';

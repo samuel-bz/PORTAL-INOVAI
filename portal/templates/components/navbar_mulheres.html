@@ -31,7 +31,14 @@
                         title="Alternar Modo Escuro">
                         <i class="bi bi-moon-fill"></i>
                     </button>
-
+                    
+                    <!-- Link de Voltar -->
+                    <a href="{% url 'portal:index' %}"
+                        class="bg-brand-blue hover:bg-blue-700 text-white px-5 py-2 rounded-full font-bold transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        Voltar ao Portal
+                    </a>
+                    
                     {% if user.is_authenticated%}
                     <!-- Botão para editor de notícias -->
                     <a id="newsAddBtn" href="{% url 'portal:news_editor' %}" class="text-white hover:text-brand-blue transition rounded-full py-1 flex items-center gap-2">
@@ -45,12 +52,6 @@
                         <i class="bi bi-box-arrow-right mr-2"></i> Sair </a>
                     {% endif %}
 
-                    <!-- Link de Voltar -->
-                    <a href="{% url 'portal:index' %}"
-                        class="bg-brand-blue hover:bg-blue-700 text-white px-5 py-2 rounded-full font-bold transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
-                        <i class="bi bi-arrow-counterclockwise"></i>
-                        Voltar ao Portal
-                    </a>
                 </div>
             </div>
 

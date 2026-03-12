@@ -44,13 +44,15 @@
             <p class="text-lg text-gray-600 dark:text-gray-300 mb-4">{{ post.description }}</p>
             <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                 <span><i class="bi bi-calendar3 mr-1"></i> {{ post.formatted_publish_date }}</span>
-                {% if post.author %}
-                <span><i class="bi bi-person mr-1"></i> {{ post.author.get_full_name|default:post.author.username }}</span>
+                {% if user.is_authenticated %}
+                    {% if post.author %}
+                    <span><i class="bi bi-person mr-1"></i> {{ post.author.get_full_name|default:post.author.username }}</span>
+                    {% endif %}
+                    <span class="flex items-center gap-1 ml-2">
+                        <input type="checkbox" disabled {% if post.active %}checked{% endif %} id="active-detail-{{ post.pk }}">
+                        <label for="active-detail-{{ post.pk }}" class="text-xs text-gray-500">Ativa</label>
+                    </span>
                 {% endif %}
-                <span class="flex items-center gap-1 ml-2">
-                    <input type="checkbox" disabled {% if post.active %}checked{% endif %} id="active-detail-{{ post.pk }}">
-                    <label for="active-detail-{{ post.pk }}" class="text-xs text-gray-500">Ativa</label>
-                </span>
             </div>
         </div>
     </header>

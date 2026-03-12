@@ -15,7 +15,10 @@ from .models import Attachment, NewsPost, NewsBlock, BlockImage, Destaque
 
 
 def index(request):
-    noticias = NewsPost.objects.filter(portal='portal_inovai').exclude(active=False).exclude(draft=True).order_by('-publish_date')[:3]
+    noticias = NewsPost.objects.filter(portal='portal_inovai').exclude(draft=True)
+    if not request.user.is_authenticated:
+        noticias = noticias.filter(active=True)
+    noticias = noticias.order_by('-publish_date')[:3]
     destaques = Destaque.objects.filter(portal="portal_inovai")
 
     context = {
@@ -25,7 +28,10 @@ def index(request):
     return render(request, 'index.html', context)
 
 def mulheres(request):
-    noticias = NewsPost.objects.filter(portal='portal_mulheres_ciencia').exclude(active=False).exclude(draft=True).order_by('-publish_date')[:3]
+    noticias = NewsPost.objects.filter(portal='portal_mulheres_ciencia').exclude(draft=True)
+    if not request.user.is_authenticated:
+        noticias = noticias.filter(active=True)
+    noticias = noticias.order_by('-publish_date')[:3]
     destaques = Destaque.objects.filter(portal="portal_mulheres_ciencia")
     
     context = {
@@ -232,6 +238,8 @@ def news_list(request):
     View to list, filter and sort news posts.
     """
     news_query = NewsPost.objects.all()
+    if not request.user.is_authenticated:
+        news_query = news_query.filter(active=True)
 
     # Filtros
     title_query = request.GET.get('title')
@@ -264,5 +272,8 @@ def news_list(request):
 
 def news_detail(request, pk):
     post = get_object_or_404(NewsPost, pk=pk)
+    if not post.active and not request.user.is_authenticated:
+        from django.http import Http404
+        raise Http404("Notícia inativa")
     blocks = post.blocks.all().order_by('order')
     return render(request, 'news_detail.html', {'post': post, 'blocks': blocks})

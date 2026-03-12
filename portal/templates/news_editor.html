@@ -440,6 +440,19 @@
             }
         });
 
+        // --- Limpar formatação ao colar ---
+        canvas.addEventListener('paste', (e) => {
+            const target = e.target;
+            // Intercepta se o alvo for um elemento editável
+            if (target.isContentEditable) {
+                e.preventDefault();
+                // Pega apenas o texto puro do clipboard
+                const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+                // Insere o texto puro na posição do cursor, respeitando a quebra de linha do container
+                document.execCommand('insertText', false, text);
+            }
+        });
+
         // Expor função addBlock globalmente para o onclick do menu html
         window.addBlock = function (type) {
             createBlock(type);

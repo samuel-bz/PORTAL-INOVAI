@@ -30,12 +30,14 @@
                 </div>
 
                 <!-- Filter by Author -->
+                {% if user.is_authenticated %}
                 <div class="flex flex-col gap-1">
                     <label for="author" class="text-sm font-medium text-gray-700 dark:text-gray-300">Autor</label>
                     <input type="text" name="author" id="author" value="{{ request.GET.author|default:'' }}"
                         class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
                         placeholder="Nome do autor...">
                 </div>
+                {% endif %}
 
                 <!-- Filter by Tag -->
                 <div class="flex flex-col gap-1">
@@ -108,9 +110,11 @@
                 <div class="p-6 flex flex-col flex-grow">
                     <!-- Author & Tag -->
                     <div class="flex justify-between items-center mb-3 text-xs text-gray-500 dark:text-gray-400">
+                        {% if user.is_authenticated %}
                         <span class="flex items-center gap-1">
                             <i class="bi bi-person-circle"></i> {% if news.author %}{{ news.author.get_full_name|default:news.author.username }}{% else %}Desconhecido{% endif %}
                         </span>
+                        {% endif %}
                         {% if news.tags %}
                         <div class="flex flex-wrap gap-1">
                             {% load portal_filters %}
@@ -142,10 +146,12 @@
                         {% else %}
                         <span class="text-xs text-red-500 flex items-center gap-1"><i class="bi bi-eye-slash"></i> Inativa</span>
                         {% endif %}
+                        {% if user.is_authenticated %}
                         <span class="flex items-center gap-1 ml-2">
                             <input type="checkbox" disabled {% if news.active %}checked{% endif %} id="active-list-{{ news.pk }}">
                             <label for="active-list-{{ news.pk }}" class="text-xs text-gray-500">Ativa</label>
                         </span>
+                        {% endif %}
                         {% if user.is_authenticated %}
                         <!-- Edit Button (Context: View/Edit Page) -->
                         <a href="{% url 'portal:news_editor_edit' news.id|default:0 %}"

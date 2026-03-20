@@ -169,7 +169,7 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
                 <!-- Fixed Button Position -->
                 <div class="absolute bottom-12 left-8 md:left-20 animate-fade-in-up z-10">
                     <a
-                    {% if destaque.points_to_noticia %} href="#" {# TODO: replace with news detail URL when page exists #} {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
+                    {% if destaque.points_to_noticia and destaque.related_post %} href="{% url 'portal:news_detail' destaque.related_post.pk %}" {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
                     class="dynamic-color-btn text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition-all duration-300 shadow-lg inline-block max-w-full truncate"
                     data-button-color="{{ destaque.button_color }}">
                     {{destaque.button_text }}

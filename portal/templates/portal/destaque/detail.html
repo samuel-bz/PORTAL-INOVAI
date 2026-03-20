@@ -34,7 +34,12 @@
                         <dt class="text-gray-500 dark:text-gray-400">Aponta para notícia:</dt>
                         <dd>{{ destaque.points_to_noticia|yesno:"Sim,Não" }}</dd>
                     </div>
-                    {% if destaque.link_url %}
+                    {% if destaque.points_to_noticia and destaque.related_post %}
+                    <div class="flex gap-2">
+                        <dt class="text-gray-500 dark:text-gray-400">Notícia vinculada:</dt>
+                        <dd><a href="{% url 'portal:news_detail' destaque.related_post.pk %}" class="text-brand-blue dark:text-blue-400 hover:underline">{{ destaque.related_post.title }}</a></dd>
+                    </div>
+                    {% elif destaque.link_url %}
                     <div class="flex gap-2">
                         <dt class="text-gray-500 dark:text-gray-400">URL:</dt>
                         <dd><a href="{{ destaque.link_url }}" target="_blank" rel="noopener" class="text-brand-blue dark:text-blue-400 hover:underline truncate max-w-xs inline-block">{{ destaque.link_url }}</a></dd>
@@ -46,7 +51,7 @@
                     </div>
                     <div class="flex gap-2 items-center">
                         <dt class="text-gray-500 dark:text-gray-400">Cor do botão:</dt>
-                        <dd><span class="inline-block w-6 h-6 rounded border border-gray-300 dark:border-gray-600" style="background-color: {{ destaque.button_color }};"></span> {{ destaque.button_color }}</dd>
+                        <dd><span class="inline-block w-6 h-6 rounded border border-gray-300 dark:border-gray-600" style="background-color: var(--preview-color); --preview-color: {{ destaque.button_color }};"></span> {{ destaque.button_color }}</dd>
                     </div>
                     <div class="flex gap-2">
                         <dt class="text-gray-500 dark:text-gray-400">Criado em:</dt>

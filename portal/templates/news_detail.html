@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load portal_filters %}
 {% load news_back_link_filter %}
 
 {% block title %}Portal Inovaí - {{ post.title }}{% endblock %}
@@ -27,6 +28,7 @@
 
 
 {% block content %}
+{% if post.active %}
 <article class="flex-grow">
     <!-- Cabeçalho da notícia -->
     <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -42,8 +44,14 @@
             <p class="text-lg text-gray-600 dark:text-gray-300 mb-4">{{ post.description }}</p>
             <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                 <span><i class="bi bi-calendar3 mr-1"></i> {{ post.formatted_publish_date }}</span>
-                {% if post.author %}
-                <span><i class="bi bi-person mr-1"></i> {{ post.author.get_full_name|default:post.author.username }}</span>
+                {% if user.is_authenticated %}
+                    {% if post.author %}
+                    <span><i class="bi bi-person mr-1"></i> {{ post.author.get_full_name|default:post.author.username }}</span>
+                    {% endif %}
+                    <span class="flex items-center gap-1 ml-2">
+                        <input type="checkbox" disabled {% if post.active %}checked{% endif %} id="active-detail-{{ post.pk }}">
+                        <label for="active-detail-{{ post.pk }}" class="text-xs text-gray-500">Ativa</label>
+                    </span>
                 {% endif %}
             </div>
         </div>
@@ -57,10 +65,24 @@
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4">{{ block.content }}</h2>
 
                 {% elif block.block_type == 'paragraph' %}
-                <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">{{ block.content|linebreaksbr }}</p>
+                <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">{{ block.content|safe }}</p>
 
                 {% elif block.block_type == 'subtitle' %}
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">{{ block.content }}</h2>
+
+                {% elif block.block_type == 'unordered_list' %}
+                <ul class="list-disc pl-5 my-4 space-y-1 text-gray-700 dark:text-gray-300 marker:text-brand-blue">
+                    {% for item in block.content|split_lines %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+
+                {% elif block.block_type == 'ordered_list' %}
+                <ol class="list-decimal pl-5 my-4 space-y-1 text-gray-700 dark:text-gray-300 marker:font-bold">
+                    {% for item in block.content|split_lines %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ol>
 
                 {% elif block.block_type == 'hr' %}
                 <hr class="my-8 border-gray-200 dark:border-gray-600">
@@ -78,7 +100,7 @@
 
                 {% elif block.block_type == 'paragraph_with_image' %}
                 {% if block.content %}
-                <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">{{ block.content|linebreaksbr }}</p>
+                <p class="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">{{ block.content|safe }}</p>
                 {% endif %}
                 <div class="my-6">
                     {% for img in block.image.all %}
@@ -93,13 +115,40 @@
                 {% elif block.block_type == 'youtube' %}
                 {% if block.content %}
                 <div class="my-8 w-full aspect-video max-w-3xl rounded-lg overflow-hidden bg-gray-900">
-                    <iframe src="{{ block.content }}" title="Vídeo YouTube" width="560" height="315" frameborder="0" class="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    <iframe src="{{ block.youtube_embed_src }}" title="Vídeo YouTube" width="560" height="315" frameborder="0" class="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+                {% endif %}
+
+                {% elif block.block_type == 'attachment' %}
+                <!-- Exibir Arquivos anexados ao bloco -->
+                {% if block.attachments.all %}
+                <div class="my-6 bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Arquivos para Download</h3>
+                    <div class="space-y-3">
+                        {% for attachment in block.attachments.all %}
+                        <div class="flex items-center justify-between bg-white dark:bg-gray-600 p-3 rounded-lg border border-gray-200 dark:border-gray-500">
+                            <div class="flex items-center flex-1 min-w-0">
+                                <i class="bi bi-file-earmark-text text-green-600 text-2xl mr-4"></i>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-gray-900 dark:text-white font-medium truncate">{{ attachment.attachments.name|slice:"12:" }}</p>
+                                    {% if attachment.captions %}
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 truncate">{{ attachment.captions }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <a href="{{ attachment.attachments.url }}" download class="ml-4 flex-shrink-0 inline-flex items-center px-4 py-2 bg-brand-blue hover:bg-blue-700 text-white font-medium rounded-lg transition">
+                                <i class="bi bi-download mr-2"></i> Download
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 {% endif %}
                 {% endif %}
             {% empty %}
             <p class="text-gray-500 dark:text-gray-400 italic">Nenhum conteúdo adicional publicado.</p>
             {% endfor %}
+            {% endif %}
         </div>
         
     </div>

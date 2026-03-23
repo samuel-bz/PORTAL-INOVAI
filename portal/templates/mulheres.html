@@ -145,19 +145,22 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
         {% for destaque in destaques %}
             <div class="min-w-full h-full relative">
                 <img src="{{ destaque.image.url }}" class="w-full h-full object-cover opacity-60">
-                <div class="absolute inset-0 flex items-center justify-start px-8 md:px-20">
-                    <div class="max-w-2xl text-white animate-fade-in-up">
-                        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 text-shadow">{{ destaque.title }}</h2>
-                        <p class="text-xl md:text-2xl mb-6 text-gray-200">
+                <div class="absolute inset-x-0 bottom-0 top-0 px-8 md:px-20 pt-20 flex flex-col justify-start pointer-events-none">
+                    <div class="max-w-2xl text-white animate-fade-in-up pointer-events-auto mb-20"> <!-- Margin bottom to clear button area -->
+                        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pt-4 text-shadow">{{ destaque.title }}</h2>
+                        <p class="text-xl md:text-2xl mb-6 pb-4 text-gray-200 line-clamp-3 md:line-clamp-none">
                             {{ destaque.description }}
                         </p>
-                        <a
-                        {% if destaque.points_to_noticia %} href="#" {# TODO: replace with news detail URL when page exists #} {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
-                        class="dynamic-color-btn text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition-all duration-300 shadow-lg inline-block max-w-full truncate"
-                        data-button-color="{{ destaque.button_color }}">
-                        {{destaque.button_text }}
-                        </a>
                     </div>
+                </div>
+
+                <div class="absolute bottom-12 left-8 md:left-20 animate-fade-in-up z-10">
+                    <a
+                    {% if destaque.points_to_noticia and destaque.related_post %} href="{% url 'portal:news_detail' destaque.related_post.pk %}" {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
+                    class="dynamic-color-btn text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition-all duration-300 shadow-lg inline-block max-w-full truncate"
+                    data-button-color="{{ destaque.button_color }}">
+                    {{destaque.button_text }}
+                    </a>
                 </div>
             </div>
         {% endfor %}
@@ -219,17 +222,27 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
                     class="text-xl font-bold mb-3 text-gray-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-blue-400 transition-colors">
                     <a href="{% url 'portal:news_detail' post.pk %}">{{ post.title }}</a></h5>
                 <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{{ post.description }}</p>
-                <a href="{% url 'portal:news_detail' post.pk %}"
-                    class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
-                    Ler mais <i class="bi bi-arrow-right ml-2"></i>
-                </a>
+                <div class="flex items-center justify-between">
+                    <a href="{% url 'portal:news_detail' post.pk %}"
+                        class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline">
+                        Ler mais <i class="bi bi-arrow-right ml-2"></i>
+                    </a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'portal:news_editor_edit' post.pk %}" 
+                       class="text-gray-400 hover:text-mulheres-pink transition-colors"
+                       title="Editar">
+                        <i class="bi bi-pencil-square text-lg"></i>
+                    </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
         {% empty %}
+        {% if user.is_authenticated %}
         <div class="col-span-full text-center py-12 text-gray-500 dark:text-gray-400">
-            <p class="mb-4">Nenhuma notícia publicada. Crie notícias no <a href="/admin/" class="text-brand-blue dark:text-blue-400 hover:underline">admin</a> para exibir aqui.</p>
-            <p class="text-sm">Para testar a página de detalhe: <a href="{% url 'portal:news_detail' 1 %}" class="text-brand-blue dark:text-blue-400 hover:underline">Ver notícia #1</a> (crie uma notícia no admin para ver o conteúdo).</p>
+            <p class="mb-4">Nenhuma notícia publicada. Crie notícias no <a href="{% url 'portal:news_editor' %}" class="text-brand-blue dark:text-blue-400 hover:underline">editor de notícias</a> para exibir aqui.</p>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 </main>

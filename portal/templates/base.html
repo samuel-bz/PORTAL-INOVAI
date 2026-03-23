@@ -210,6 +210,33 @@
                 autoSlideInterval = setInterval(nextSlide, 5000);
             }
 
+            // --- Suporte a Touch (Swipe) ---
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            carouselWrapper.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            carouselWrapper.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const threshold = 50; // Mínimo de pixels para considerar swipe
+                if (touchStartX - touchEndX > threshold) {
+                    // Swipe Left (Próximo)
+                    nextSlide();
+                    resetAutoSlide();
+                }
+                if (touchEndX - touchStartX > threshold) {
+                    // Swipe Right (Anterior)
+                    prevSlide();
+                    resetAutoSlide();
+                }
+            }
+
             // Iniciar Slide Automático
             resetAutoSlide();
         }

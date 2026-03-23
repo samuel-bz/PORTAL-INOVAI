@@ -10,6 +10,12 @@ def youtube_nocookie(url):
         return url
     return url.replace("youtube.com/embed", "youtube-nocookie.com/embed")
 
+@register.filter(name='split')
+def split(value):
+    """
+    Returns the value turned into a list.
+    """
+    return value.split(',')
 @register.filter
 def split_tags(tags_string):
     """Separa as tags, separadas por vírgula, em uma lista."""

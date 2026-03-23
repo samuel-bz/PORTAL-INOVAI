@@ -73,6 +73,7 @@
 {% endblock %}
 
 {% block scripts %}
+{{ block.super }}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const slogan = document.getElementById('sloganContainer');

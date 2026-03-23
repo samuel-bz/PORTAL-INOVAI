@@ -7,6 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Portal Inovaí{% endblock %}</title>
     <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+    <script>
+        // Aplica o tema antes da renderização para evitar flicker.
+        (function () {
+            try {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const shouldUseDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+                if (shouldUseDark) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {
+                // fallback silencioso: segue com tema padrão
+            }
+        })();
+    </script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -111,10 +128,27 @@
         const darkModeBtn = document.getElementById('darkModeBtn');
         const darkModeMobileBtn = document.getElementById('darkModeMobileBtn');
         const html = document.documentElement;
+        const THEME_KEY = 'theme';
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                html.classList.add('dark');
+            } else {
+                html.classList.remove('dark');
+            }
+            updateIcons();
+        }
+
+        function getPreferredTheme() {
+            const savedTheme = localStorage.getItem(THEME_KEY);
+            if (savedTheme === 'dark' || savedTheme === 'light') return savedTheme;
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
 
         function toggleDarkMode() {
-            html.classList.toggle('dark');
-            updateIcons();
+            const nextTheme = html.classList.contains('dark') ? 'light' : 'dark';
+            localStorage.setItem(THEME_KEY, nextTheme);
+            applyTheme(nextTheme);
         }
 
         function updateIcons() {
@@ -135,6 +169,7 @@
             }
         }
 
+        applyTheme(getPreferredTheme());
         if (darkModeBtn) darkModeBtn.addEventListener('click', toggleDarkMode);
         if (darkModeMobileBtn) darkModeMobileBtn.addEventListener('click', toggleDarkMode);
 

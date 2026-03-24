@@ -86,6 +86,41 @@
                 {% elif block.block_type == 'hr' %}
                 <hr class="my-8 border-gray-200 dark:border-gray-600">
 
+                {% elif block.block_type == 'carousel' %}
+                {% if block.image.all %}
+                <div class="my-8 relative carousel-container" data-slides="{{ block.image.all|length }}">
+                    <div class="relative overflow-hidden rounded-lg shadow-md bg-gray-900 group aspect-video">
+                        {% for img in block.image.all %}
+                        <div class="carousel-slide absolute inset-0 w-full h-full flex items-center justify-center transition-opacity duration-500 {% if forloop.first %}opacity-100 z-10{% else %}opacity-0 z-0{% endif %}" data-index="{{ forloop.counter0 }}">
+                            <img src="{{ img.image.url }}" alt="{{ img.alt_text|default:img.captions }}" class="max-w-full max-h-full object-contain">
+                            {% if img.captions %}
+                            <div class="absolute bottom-0 inset-x-0 bg-black/60 p-4 text-white text-center text-sm backdrop-blur-sm">
+                                {{ img.captions }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <!-- Controles -->
+                        {% if block.image.all|length > 1 %}
+                        <button class="carousel-prev absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 z-20 focus:outline-none">
+                            <i class="bi bi-chevron-left text-xl"></i>
+                        </button>
+                        <button class="carousel-next absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 z-20 focus:outline-none">
+                            <i class="bi bi-chevron-right text-xl"></i>
+                        </button>
+
+                        <!-- Indicadores -->
+                        <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
+                            {% for img in block.image.all %}
+                            <button class="carousel-indicator w-3 h-3 rounded-full transition-all duration-300 focus:outline-none {% if forloop.first %}bg-blue-500 scale-125{% else %}bg-white/50 hover:bg-white/80{% endif %}" data-target="{{ forloop.counter0 }}"></button>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
                 {% elif block.block_type == 'image' %}
                 <div class="my-8">
                     {% for img in block.image.all %}
@@ -159,5 +194,44 @@
 
 {% block body_scripts %}
 {% include 'components/tags_script.html' %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.carousel-container').forEach(container => {
+        const slides = container.querySelectorAll('.carousel-slide');
+        const indicators = container.querySelectorAll('.carousel-indicator');
+        const prevBtn = container.querySelector('.carousel-prev');
+        const nextBtn = container.querySelector('.carousel-next');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        if (totalSlides <= 1) return;
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('opacity-100', 'z-10');
+            slides[currentSlide].classList.add('opacity-0', 'z-0');
+            if (indicators.length) {
+                indicators[currentSlide].classList.remove('bg-blue-500', 'scale-125');
+                indicators[currentSlide].classList.add('bg-white/50');
+            }
+
+            currentSlide = (index + totalSlides) % totalSlides;
+
+            slides[currentSlide].classList.remove('opacity-0', 'z-0');
+            slides[currentSlide].classList.add('opacity-100', 'z-10');
+            if (indicators.length) {
+                indicators[currentSlide].classList.add('bg-blue-500', 'scale-125');
+                indicators[currentSlide].classList.remove('bg-white/50');
+            }
+        }
+
+        if (prevBtn) prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+        
+        indicators.forEach((ind, idx) => {
+            ind.addEventListener('click', () => goToSlide(idx));
+        });
+    });
+});
+</script>
 {% endblock body_scripts %}
 

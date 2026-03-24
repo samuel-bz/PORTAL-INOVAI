@@ -800,6 +800,7 @@
                 // Converter {url, ...} apenas para strings de url para renderCarousel
                 const imageUrls = images.map(img => img.url);
                 container.storedImages = imageUrls;
+                container.storedFiles = imageUrls.map(url => null); // null para imagens já hospedadas no backend
                 renderCarousel(container, imageUrls);
             }
 
@@ -868,7 +869,7 @@
                 const mode = parent.dataset.uploadMode || 'replace'; // 'substituir' ou 'anexar'
 
                 // Manter estilos base
-                parent.className = 'w-full h-96 relative rounded-xl overflow-hidden bg-gray-900 group cursor-default';
+                parent.className = 'w-full h-96 relative rounded-xl overflow-hidden bg-gray-900 group group-carousel cursor-default';
                 parent.onclick = null; // Remove o click global
 
                 const files = Array.from(input.files);
@@ -883,13 +884,17 @@
                 Promise.all(promises).then(newImages => {
                     // Recuperar imagens existentes se modo for append
                     let currentImages = [];
+                    let currentFiles = [];
                     if (mode === 'append' && parent.storedImages) {
                         currentImages = parent.storedImages;
+                        currentFiles = parent.storedFiles || [];
                     }
 
                     // Combinar imagens
                     const allImages = [...currentImages, ...newImages];
+                    const allFiles = [...currentFiles, ...files];
                     parent.storedImages = allImages; // Salvar estado no elemento DOM
+                    parent.storedFiles = allFiles; // Salvar arquivos para upload
 
                     // Resetar input para permitir selecionar o mesmo arquivo novamente se necessário
                     input.value = '';
@@ -1006,6 +1011,11 @@
                         const currentImages = container.storedImages;
                         currentImages.splice(currentSlide, 1);
                         container.storedImages = currentImages;
+                        
+                        const currentFiles = container.storedFiles;
+                        if (currentFiles && currentFiles.length > currentSlide) {
+                            currentFiles.splice(currentSlide, 1);
+                        }
 
                         // Re-renderizar
                         if (currentImages.length === 0) {
@@ -1103,22 +1113,19 @@
                     blockData.content = '';
                 } else if (blockEl.querySelector('.group-carousel')) {
                     blockData.type = 'carousel';
-                    // Imagens do carrossel são manipuladas via propriedade storedImages no container
                     const container = blockEl.querySelector('.group-carousel');
-                    if (container.storedImages) {
-                        // Estas são strings base64 ou URLs. 
-                        // Se base64, precisamos converter para arquivo ou enviar como está? 
-                        // Enviando base64 é pesado. Idealmente enviamos arquivos. 
-                        // Mas previewCarousel lê para DataURL. 
-                        // Vamos assumir por enquanto que pulamos carrossel complexo nesta rodada OU 
-                        // tentamos pegar o input file se ele ainda estiver preenchido (só funciona para último add).
-                        // MELHOR: O input[type=file] multiple pode manter arquivos se não resetado?
-                        // Não, nós o resetamos. 
-                        // WORKAROUND: Para esta iteração, podemos falhar ao salvar NOVAS imagens de carrossel a menos que mudemos como armazenamos.
-                        // Vou adicionar um TODO/Warning. OU posso tentar ver se conseguimos reconstruir.
-                        // Na verdade, posso permitir que o usuário faça upload de apenas um lote?
-                        // Vamos manter blocos simples primeiro.
-                        blockData.content = 'Carousel (WIP)';
+                    if (container.storedFiles) {
+                        let keep_urls = [];
+                        let f_index = 0;
+                        container.storedFiles.forEach((f, i) => {
+                            if (f === null) {
+                                keep_urls.push(container.storedImages[i]);
+                            } else {
+                                formData.append(`block_${index}_carousel_file_${f_index}`, f);
+                                f_index++;
+                            }
+                        });
+                        blockData.content = JSON.stringify({keep_urls: keep_urls});
                     }
                 } else if (blockEl.querySelector('img') && blockEl.querySelector('p')) {
                     blockData.type = 'image-text';

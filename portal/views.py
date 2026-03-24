@@ -164,14 +164,42 @@ def news_editor(request, news_id=None):
                         order=index
                     )
 
-                # 3. Imagens: só substituir quando houver novo upload
-                image_key = f'block_{index}_image'
-                if image_key in request.FILES:
-                    block.image.all().delete()
-                    BlockImage.objects.create(
-                        block=block,
-                        image=request.FILES[image_key]
-                    )
+                # 3. Imagens
+                # Verificar carrossel primeiro
+                carousel_prefix = f'block_{index}_carousel_file_'
+                carousel_files = []
+                f_idx = 0
+                while f'{carousel_prefix}{f_idx}' in request.FILES:
+                    carousel_files.append(request.FILES[f'{carousel_prefix}{f_idx}'])
+                    f_idx += 1
+                
+                if block.block_type == 'carousel':
+                    # Em carrossel, o content do bloco possui JSON com 'keep_urls'
+                    # Mantemos apenas as imagens que estiverem na lista de keep_urls
+                    try:
+                        content_data = json.loads(block.content)
+                        keep_urls = content_data.get('keep_urls', [])
+                        # Excluir imagens antigas que não estão em keep_urls
+                        for img in block.image.all():
+                            if img.image.url not in keep_urls:
+                                img.delete()
+                    except:
+                        block.image.all().delete()
+                    
+                    # Adicionar novas imagens
+                    for img_file in carousel_files:
+                        BlockImage.objects.create(
+                            block=block,
+                            image=img_file
+                        )
+                else:
+                    image_key = f'block_{index}_image'
+                    if image_key in request.FILES:
+                        block.image.all().delete()
+                        BlockImage.objects.create(
+                            block=block,
+                            image=request.FILES[image_key]
+                        )
                 
                 # 4. Anexos: substituir quando houver novo upload
                 attachment_key = f'block_{index}_attachment'

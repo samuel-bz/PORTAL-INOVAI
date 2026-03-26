@@ -150,7 +150,7 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
                 <div class="absolute inset-x-0 bottom-0 top-0 px-8 md:px-20 pt-20 flex flex-col justify-start pointer-events-none">
                     <div class="max-w-2xl text-white animate-fade-in-up pointer-events-auto mb-20"> <!-- Margin bottom to clear button area -->
                         <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pt-4 text-shadow">{{ destaque.title }}</h2>
-                        <p class="text-xl md:text-2xl mb-6 pb-4 text-gray-200 line-clamp-3 md:line-clamp-none">
+                        <p class="text-base md:text-2xl mb-6 text-gray-200 line-clamp-3 md:line-clamp-none">
                             {{ destaque.description }}
                         </p>
                     </div>
@@ -170,11 +170,11 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
 
     <!-- Controles -->
     <button id="prevBtn"
-        class="absolute top-1/2 left-4 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 focus:opacity-100">
+        class="hidden md:block absolute top-1/2 left-4 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 focus:opacity-100">
         <i class="bi bi-chevron-left text-2xl"></i>
     </button>
     <button id="nextBtn"
-        class="absolute top-1/2 right-4 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 focus:opacity-100">
+        class="hidden md:block absolute top-1/2 right-4 -translate-y-1/2 bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition opacity-0 group-hover:opacity-100 focus:opacity-100">
         <i class="bi bi-chevron-right text-2xl"></i>
     </button>
 

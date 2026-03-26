@@ -149,7 +149,7 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
                 <img src="{{ destaque.image.url }}" class="w-full h-full object-cover opacity-60">
                 <div class="absolute inset-x-0 bottom-0 top-0 px-8 md:px-20 pt-20 flex flex-col justify-start pointer-events-none">
                     <div class="max-w-2xl text-white animate-fade-in-up pointer-events-auto mb-20"> <!-- Margin bottom to clear button area -->
-                        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pt-4 text-shadow line-clamp-2">{{ destaque.title }}</h2>
+                        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 pt-4 text-shadow line-clamp-2 break-keep" style="word-break: normal; overflow-wrap: anywhere;">{{ destaque.title }}</h2>
                         <p class="text-base md:text-2xl mb-6 text-gray-200 line-clamp-3 md:line-clamp-none">
                             {{ destaque.description }}
                         </p>

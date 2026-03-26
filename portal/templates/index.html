@@ -12,7 +12,9 @@ const destaquesButton = navbar ? navbar.querySelector('#destaquesButton') : null
 
 function updateNavbar() {
 if (!navbar) return;
-if (window.scrollY > 20) {
+const mobileMenu = document.getElementById('mobileMenu');
+const isMobileMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+if (window.scrollY > 20 || isMobileMenuOpen) {
 // Estado Rolado (Sólido)
 navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
 navbar.classList.add('bg-white', 'dark:bg-gray-800', 'shadow-md');

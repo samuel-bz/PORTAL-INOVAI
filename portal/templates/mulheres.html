@@ -47,7 +47,9 @@ const newsAddBtn = navbar ? navbar.querySelector('#newsAddBtn') : null;
 
 function updateNavbar() {
 if (!navbar) return;
-if (window.scrollY > 20) {
+const mobileMenu = document.getElementById('mobileMenu');
+const isMobileMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+if (window.scrollY > 20 || isMobileMenuOpen) {
 // Estado Rolado (Sólido)
 navbar.classList.remove('bg-transparent', 'text-white', 'border-white/20');
 navbar.classList.add('bg-mulheres-dark', 'dark:bg-[#1a021f]', 'shadow-md');

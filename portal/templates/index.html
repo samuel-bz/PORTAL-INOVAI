@@ -154,30 +154,29 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
 
 {% block content %}
 <!-- Carrossel Principal -->
-<div class="relative w-full h-[400px] md:h-[500px] overflow-hidden group bg-gray-900">
+<div class="relative w-full h-[450px] md:h-[550px] overflow-hidden group bg-gray-900">
     <!-- Interior do Carrossel -->
     <div id="carouselWrapper" class="flex transition-transform duration-700 ease-in-out h-full">
         {% for destaque in destaques %}
             <div class="min-w-full h-full relative">
                 <img src="{{ destaque.image.url }}" class="w-full h-full object-cover opacity-60">
-                <div class="absolute inset-x-0 bottom-0 top-0 px-8 md:px-20 pt-20 flex flex-col justify-start pointer-events-none">
-                    <div class="max-w-2xl text-white animate-fade-in-up pointer-events-auto mb-20"> <!-- Margin bottom to clear button area -->
-                        <h2 class="text-3xl md:text-5xl lg:text-5xl font-bold mb-2 pt-4 text-shadow leading-relaxed">
+                <div class="absolute inset-x-0 bottom-0 top-0 px-8 md:px-20 py-12 flex flex-col justify-center z-10 pointer-events-none">
+                    <div class="max-w-2xl text-white animate-fade-in-up pointer-events-auto flex flex-col gap-4">
+                        <h2 class="text-3xl md:text-5xl lg:text-5xl font-bold pt-4 text-shadow leading-relaxed">
                             <span class="pb-2">{{ destaque.title }}</span>
                         </h2>
-                        <p class="text-base md:text-2xl mb-6 text-gray-200 line-clamp-3 md:line-clamp-none">
+                        <p class="text-base md:text-2xl text-gray-200 line-clamp-3 md:line-clamp-none">
                             {{ destaque.description }}
                         </p>
+                        <div class="mt-2">
+                            <a
+                            {% if destaque.points_to_noticia and destaque.related_post %} href="{% url 'portal:news_detail' destaque.related_post.pk %}" {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
+                            class="dynamic-color-btn text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition-all duration-300 shadow-lg inline-block w-fit max-w-full truncate"
+                            data-button-color="{{ destaque.button_color }}">
+                            {{destaque.button_text }}
+                            </a>
+                        </div>
                     </div>
-                </div>
-
-                <div class="absolute bottom-12 left-8 md:left-20 animate-fade-in-up z-10">
-                    <a
-                    {% if destaque.points_to_noticia and destaque.related_post %} href="{% url 'portal:news_detail' destaque.related_post.pk %}" {% else %} href="{{ destaque.link_url|default:'#' }}" {% endif %}
-                    class="dynamic-color-btn text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-bold text-sm md:text-lg transition-all duration-300 shadow-lg inline-block max-w-full truncate"
-                    data-button-color="{{ destaque.button_color }}">
-                    {{destaque.button_text }}
-                    </a>
                 </div>
             </div>
         {% endfor %}

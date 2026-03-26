@@ -154,13 +154,13 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
 
 {% block content %}
 <!-- Carrossel Principal -->
-<div class="relative w-full h-[450px] md:h-[550px] overflow-hidden group bg-gray-900">
+<div class="relative w-full h-[550px] md:h-[650px] overflow-hidden group bg-gray-900">
     <!-- Interior do Carrossel -->
     <div id="carouselWrapper" class="flex transition-transform duration-700 ease-in-out h-full">
         {% for destaque in destaques %}
             <div class="min-w-full h-full relative">
                 <img src="{{ destaque.image.url }}" class="w-full h-full object-cover opacity-60">
-                <div class="absolute inset-x-0 bottom-0 top-0 px-8 md:px-20 pt-28 pb-16 flex flex-col justify-end z-10 pointer-events-none">
+                <div class="absolute inset-x-0 bottom-0 top-0 px-8 md:px-20 pt-20 flex flex-col justify-center z-10 pointer-events-none">
                     <div class="max-w-2xl text-white animate-fade-in-up pointer-events-auto flex flex-col gap-4">
                         <h2 class="text-3xl md:text-5xl lg:text-5xl font-bold pt-4 text-shadow leading-relaxed">
                             <span class="pb-2">{{ destaque.title }}</span>

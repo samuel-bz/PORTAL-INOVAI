@@ -147,7 +147,7 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
         {% for destaque in destaques %}
             <div class="min-w-full h-full relative">
                 <img src="{{ destaque.image.url }}" class="w-full h-full object-cover opacity-60">
-                <div class="absolute inset-x-0 bottom-0 top-0 px-8 md:px-20 py-12 flex flex-col justify-center z-10 pointer-events-none">
+                <div class="absolute inset-x-0 bottom-0 top-0 px-8 md:px-20 pt-28 pb-16 flex flex-col justify-end z-10 pointer-events-none">
                     <div class="max-w-2xl text-white animate-fade-in-up pointer-events-auto flex flex-col gap-4">
                         <h2 class="text-3xl md:text-5xl lg:text-5xl font-bold pt-4 text-shadow leading-relaxed">
                             <span class="pb-2">{{ destaque.title }}</span>

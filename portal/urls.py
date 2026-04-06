@@ -12,6 +12,7 @@ urlpatterns = [
     path('sobre/', sobre, name='sobre'),
     path('home/', index, name='home'),
     path('mulheres/', mulheres, name='mulheres'),
+    path('mulheres/<str:portal>/', news_by_portal, name="news_woman_by_portal"),
     path('editor/', news_editor, name='news_editor'),
     path('editor/<int:news_id>/', news_editor, name='news_editor_edit'),
     path('login/', PortalLoginView.as_view(), name='login'),

@@ -307,7 +307,6 @@ def news_by_portal(request, portal):
 
     return render(request, 'news_list.html', context)
 
-
 def news_detail(request, pk):
     post = get_object_or_404(NewsPost, pk=pk)
     if not post.active and not request.user.is_authenticated:

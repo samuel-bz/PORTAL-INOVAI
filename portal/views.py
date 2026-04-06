@@ -5,7 +5,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -294,6 +294,19 @@ def news_list(request):
         'news_list': news_query,
     }
     return render(request, 'news_list.html', context)
+
+def news_by_portal(request, portal):
+    if request.method != 'GET':
+        return HttpResponse(405)
+    
+    news = NewsPost.objects.filter(portal=portal)
+
+    context = {
+        'news_list': news,
+    }
+
+    return render(request, 'news_list.html', context)
+
 
 def news_detail(request, pk):
     post = get_object_or_404(NewsPost, pk=pk)

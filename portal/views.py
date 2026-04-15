@@ -296,16 +296,14 @@ def news_list(request):
     return render(request, 'news_list.html', context)
 
 def news_by_portal(request, portal):
-    if request.method != 'GET':
-        return HttpResponse(405)
-    
-    news = NewsPost.objects.filter(portal=portal)
-
-    context = {
-        'news_list': news,
-    }
-
-    return render(request, 'news_list.html', context)
+    if request.method == 'GET':
+        news = NewsPost.objects.filter(portal=portal)
+        
+        context = {
+            'news_list': news,
+        }
+        
+        return render(request, 'news_list.html', context)
 
 def news_detail(request, pk):
     post = get_object_or_404(NewsPost, pk=pk)

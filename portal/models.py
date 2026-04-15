@@ -21,7 +21,7 @@ PORTAIS = (
 
 # Modelo de noticias
 class NewsPost(models.Model):
-    title = models.CharField("Titulo", max_length=127)
+    title = models.CharField("Titulo", max_length=127, blank=False, null=False)
     description = models.CharField("Descrição", max_length=255)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='news_post', null=True, blank=True)
     thumbnail = models.ImageField("Thumbnail", upload_to='news/', null=True, blank=True)
@@ -29,7 +29,7 @@ class NewsPost(models.Model):
     tags = models.CharField("Tags", max_length=255, null=True, blank=True)
     active = models.BooleanField("Ativa", default=True)
     draft = models.BooleanField("Rascunho", default=False)
-    portal = models.CharField("Portal", max_length=31, choices=PORTAIS, default="portal_inovai")
+    portal = models.CharField("Portal", max_length=31, choices=PORTAIS, blank=False, null=False)
 
     class Meta:
         verbose_name = "Notícia"

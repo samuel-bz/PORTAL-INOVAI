@@ -5,10 +5,11 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib import messages
 
 from .forms import DestaqueForm
 from .models import Attachment, NewsPost, NewsBlock, BlockImage, Destaque
@@ -118,12 +119,15 @@ def news_editor(request, news_id=None):
             else:
                 news_item = NewsPost()
             
-            news_item.title = title
-            news_item.description = description
-            news_item.tags = tags
-            news_item.author = request.user
-            news_item.portal = portal
-            news_item.active = active
+            if news_item.title and news_item.portal:
+                news_item.title = title
+                news_item.description = description
+                news_item.tags = tags
+                news_item.author = request.user
+                news_item.portal = portal
+                news_item.active = active
+            else:
+                messages.warning(request, "Os campos título e portal são obrigatórios.")
             
             if 'thumbnail' in request.FILES:
                 news_item.thumbnail = request.FILES['thumbnail']
@@ -262,9 +266,10 @@ def news_list(request):
     """
     View to list, filter and sort news posts.
     """
+    portal = request.GET.get('portal')
     news_query = NewsPost.objects.all()
     if not request.user.is_authenticated:
-        news_query = news_query.filter(active=True)
+        news_query = news_query.filter(active=True, portal=portal)
 
     # Filtros
     title_query = request.GET.get('title')
@@ -282,6 +287,12 @@ def news_list(request):
     date_query = request.GET.get('date')
     if date_query:
         news_query = news_query.filter(publish_date=date_query)
+    
+    portal_query = portal
+    if portal_query:
+        news_query = news_query.filter(portal__icontains=portal)
+    else:
+        news_query = NewsPost.objects.filter(active=True)
 
     # Ordenação
     sort_order = request.GET.get('sort', 'desc')
@@ -294,16 +305,6 @@ def news_list(request):
         'news_list': news_query,
     }
     return render(request, 'news_list.html', context)
-
-def news_by_portal(request, portal):
-    if request.method == 'GET':
-        news = NewsPost.objects.filter(portal=portal)
-        
-        context = {
-            'news_list': news,
-        }
-        
-        return render(request, 'news_list.html', context)
 
 def news_detail(request, pk):
     post = get_object_or_404(NewsPost, pk=pk)

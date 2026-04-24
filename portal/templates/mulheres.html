@@ -194,7 +194,7 @@ document.querySelectorAll('.dynamic-color-btn').forEach(btn => {
         <div class="h-1 flex-grow bg-mulheres-pink rounded-full opacity-50">
             <div class="h-full w-24 bg-mulheres-purple dark:bg-mulheres-pink"></div>
         </div>
-        <a href="{% url 'portal:news_by_portal' 'portal_mulheres_ciencia' %}" class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline"> Ver mais Notícias </a>
+        <a href="{% url 'portal:news_list' %}?portal=portal_mulheres_ciencia" class="inline-flex items-center text-brand-blue dark:text-blue-400 font-semibold hover:underline"> Ver mais Notícias </a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">

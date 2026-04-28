@@ -113,21 +113,21 @@ def news_editor(request, news_id=None):
             tags = data.get('tags')
             portal = data.get('portal')
             active = data.get('active') == 'on'
+
+            if not title or not portal:
+               return JsonResponse({"campos_invalidos": "Os campos Titulo e Portal sao obrigatorios."})
             
             if news_id:
                 news_item = get_object_or_404(NewsPost, pk=news_id)
             else:
                 news_item = NewsPost()
             
-            if news_item.title and news_item.portal:
-                news_item.title = title
-                news_item.description = description
-                news_item.tags = tags
-                news_item.author = request.user
-                news_item.portal = portal
-                news_item.active = active
-            else:
-                messages.warning(request, "Os campos título e portal são obrigatórios.")
+            news_item.title = title
+            news_item.description = description
+            news_item.tags = tags
+            news_item.author = request.user
+            news_item.portal = portal
+            news_item.active = active
             
             if 'thumbnail' in request.FILES:
                 news_item.thumbnail = request.FILES['thumbnail']

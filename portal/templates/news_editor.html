@@ -1174,7 +1174,12 @@
                 if (data.success) {
                     window.location.href = data.redirect_url;
                 } else {
-                    alert('Erro ao salvar: ' + (data.error || 'Erro desconhecido'));
+                    if(data.campos_invalidos){
+                        alert(data.campos_invalidos);
+                    }
+                    else{
+                        alert('Erro ao salvar: ' + (data.error || 'Erro desconhecido'));
+                    }
                 }
             } else {
                 alert('Erro na requisição.');

@@ -27,6 +27,9 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+def curso(request):
+    return render(request, 'curso.html')
+
 def mulheres(request):
     noticias = NewsPost.objects.filter(portal='portal_mulheres_ciencia').exclude(draft=True)
     if not request.user.is_authenticated:

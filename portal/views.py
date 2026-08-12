@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib import messages
 
 from .forms import DestaqueForm
 from .models import Attachment, NewsPost, NewsBlock, BlockImage, Destaque
@@ -112,6 +113,9 @@ def news_editor(request, news_id=None):
             tags = data.get('tags')
             portal = data.get('portal')
             active = data.get('active') == 'on'
+
+            if not title or not portal:
+               return JsonResponse({"campos_invalidos": "Os campos Titulo e Portal sao obrigatorios."})
             
             if news_id:
                 news_item = get_object_or_404(NewsPost, pk=news_id)
@@ -262,9 +266,10 @@ def news_list(request):
     """
     View to list, filter and sort news posts.
     """
+    portal = request.GET.get('portal')
     news_query = NewsPost.objects.all()
     if not request.user.is_authenticated:
-        news_query = news_query.filter(active=True)
+        news_query = news_query.filter(active=True, portal=portal)
 
     # Filtros
     title_query = request.GET.get('title')
@@ -282,6 +287,12 @@ def news_list(request):
     date_query = request.GET.get('date')
     if date_query:
         news_query = news_query.filter(publish_date=date_query)
+    
+    portal_query = portal
+    if portal_query:
+        news_query = news_query.filter(portal__icontains=portal)
+    else:
+        news_query = NewsPost.objects.filter(active=True)
 
     # Ordenação
     sort_order = request.GET.get('sort', 'desc')
